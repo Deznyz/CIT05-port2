@@ -1,271 +1,298 @@
 ﻿using System.Net;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
-namespace Assignment4.Tests
+namespace Assignment4.Tests;
+
+
+public class WebServiceTests
 {
-    
-    public class WebServiceTests
+    private const string CategoriesApi = "http://localhost:5001/api/categories";
+    private const string ProductsApi = "http://localhost:5001/api/products";
+
+    /* /api/categories */
+
+    [Fact]
+    public async Task ApiCategories_GetWithNoArguments_OkAndAllCategories()
     {
-        private const string CategoriesApi = "http://localhost:5001/api/categories";
-        private const string ProductsApi = "http://localhost:5001/api/products";
+        var (data, statusCode) = await GetArray(CategoriesApi);
 
-        /* /api/categories */
-        public void ApiCategories_GetWithNoArguments_OkAndAllCategories()
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+        Assert.Equal(8, data?.Count);
+        Assert.Equal("Beverages", data?.FirstElement("name"));
+        Assert.Equal("Seafood", data?.LastElement("name"));
+    }
+
+    [Fact]
+    public async Task ApiCategories_GetWithValidCategoryId_OkAndCategory()
+    {
+        var (category, statusCode) = await GetObject($"{CategoriesApi}/1");
+
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+        Assert.Equal("Beverages", category?.Value("name"));
+    }
+
+    [Fact]
+    public async Task ApiCategories_GetWithInvalidCategoryId_NotFound()
+    {
+        var (_, statusCode) = await GetObject($"{CategoriesApi}/0");
+
+        Assert.Equal(HttpStatusCode.NotFound, statusCode);
+    }
+
+    [Fact]
+    public async Task ApiCategories_PostWithCategory_Created()
+    {
+        var newCategory = new
         {
-            var (data, statusCode) = GetArray(CategoriesApi);
+            Name = "Created",
+            Description = ""
+        };
+        var (category, statusCode) = await PostData(CategoriesApi, newCategory);
 
-            Assert.Equal(HttpStatusCode.OK, statusCode);
-            Assert.Equal(8, data.Count);
-            Assert.Equal("Beverages", data.First()["name"]);
-            Assert.Equal("Seafood", data.Last()["name"]);
-        }
-
-        [Fact]
-        public void ApiCategories_GetWithValidCategoryId_OkAndCategory()
+        string? id = null;
+        if (category?.Value("id") == null)
         {
-            var (category, statusCode) = GetObject($"{CategoriesApi}/1");
-
-            Assert.Equal(HttpStatusCode.OK, statusCode);
-            Assert.Equal("Beverages", category["name"]);
-        }
-
-        [Fact]
-        public void ApiCategories_GetWithInvalidCategoryId_NotFound()
-        {
-            var (_, statusCode) = GetObject($"{CategoriesApi}/0");
-
-            Assert.Equal(HttpStatusCode.NotFound, statusCode);
-        }
-
-        [Fact]
-        public void ApiCategories_PostWithCategory_Created()
-        {
-            var newCategory = new
+            var url = category?.Value("url");
+            if (url != null)
             {
-                Name = "Created",
-                Description = ""
-            };
-            var (category, statusCode) = PostData(CategoriesApi, newCategory);
-            
-            string id = null;
-            if (category["id"] == null)
-            {
-                var url = category["url"].ToString();
                 id = url.Substring(url.LastIndexOf('/') + 1);
             }
-            else
-            {
-                id = category["id"].ToString();
-            }
-
-            Assert.Equal(HttpStatusCode.Created, statusCode);
-
-            DeleteData($"{CategoriesApi}/{id}");
+        }
+        else
+        {
+            id = category.Value("id");
         }
 
-        [Fact]
-        public void ApiCategories_PutWithValidCategory_Ok()
+        Assert.Equal(HttpStatusCode.Created, statusCode);
+
+        await DeleteData($"{CategoriesApi}/{id}");
+    }
+
+    [Fact]
+    public async Task ApiCategories_PutWithValidCategory_Ok()
+    {
+
+        var data = new
         {
+            Name = "Created",
+            Description = "Created"
+        };
+        var (category, _) = await PostData($"{CategoriesApi}", data);
 
-            var data = new
+        string? id = null;
+        if (category?.Value("id") == null)
+        {
+            var url = category?.Value("url");
+            if (url != null)
             {
-                Name = "Created",
-                Description = "Created"
-            };
-            var (category, _) = PostData($"{CategoriesApi}", data);
-
-            string id = null;
-            if (category["id"] == null)
-            {
-                var url = category["url"].ToString();
                 id = url.Substring(url.LastIndexOf('/') + 1);
             }
-            else
-            {
-                id = category["id"].ToString();
-            }
-
-
-            var update = new
-            {
-                Id = category["id"],
-                Name = category["name"] + "Updated",
-                Description = category["description"] + "Updated"
-            };
-
-            var statusCode = PutData($"{CategoriesApi}/{id}", update);
-
-            Assert.Equal(HttpStatusCode.OK, statusCode);
-
-            var (cat, _) = GetObject($"{CategoriesApi}/{id}");
-
-            Assert.Equal(category["name"] + "Updated", cat["name"]);
-            Assert.Equal(category["description"] + "Updated", cat["description"]);
-
-            DeleteData($"{CategoriesApi}/{id}");
+        }
+        else
+        {
+            id = category?.Value("id");
         }
 
-        [Fact]
-        public void ApiCategories_PutWithInvalidCategory_NotFound()
+
+        var update = new
         {
-            var update = new
-            {
-                Id = -1,
-                Name = "Updated",
-                Description = "Updated"
-            };
+            Id = category.Value("id"),
+            Name = category.Value("name") + "Updated",
+            Description = category.Value("description") + "Updated"
+        };
 
-            var statusCode = PutData($"{CategoriesApi}/-1", update);
+        var statusCode = await PutData($"{CategoriesApi}/{id}", update);
 
-            Assert.Equal(HttpStatusCode.NotFound, statusCode);
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+
+        var (cat, _) = await GetObject($"{CategoriesApi}/{id}");
+
+        Assert.Equal(category.Value("name") + "Updated", cat?.Value("name"));
+        Assert.Equal(category.Value("description") + "Updated", cat?.Value("description"));
+
+        await DeleteData($"{CategoriesApi}/{id}");
+    }
+
+    [Fact]
+    public async Task ApiCategories_PutWithInvalidCategory_NotFound()
+    {
+        var update = new
+        {
+            Id = -1,
+            Name = "Updated",
+            Description = "Updated"
+        };
+
+        var statusCode = await PutData($"{CategoriesApi}/-1", update);
+
+        Assert.Equal(HttpStatusCode.NotFound, statusCode);
+    }
+
+    [Fact]
+    public async Task ApiCategories_DeleteWithValidId_Ok()
+    {
+
+        var data = new
+        {
+            Name = "Created",
+            Description = "Created"
+        };
+        var (category, _) = await PostData($"{CategoriesApi}", data);
+
+        string id = null;
+        if (category?.Value("id") == null)
+        {
+            var url = category?.Value("url");
+            id = url.Substring(url.LastIndexOf('/') + 1);
+        }
+        else
+        {
+            id = category?.Value("id");
         }
 
-        [Fact]
-        public void ApiCategories_DeleteWithValidId_Ok()
-        {
+        var statusCode = await DeleteData($"{CategoriesApi}/{id}");
 
-            var data = new
-            {
-                Name = "Created",
-                Description = "Created"
-            };
-            var (category, _) = PostData($"{CategoriesApi}", data);
-            
-            string id = null;
-            if (category["id"] == null)
-            {
-                var url = category["url"].ToString();
-                id = url.Substring(url.LastIndexOf('/') + 1);
-            }
-            else
-            {
-                id = category["id"].ToString();
-            }
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+    }
 
-            var statusCode = DeleteData($"{CategoriesApi}/{id}");
+    [Fact]
+    public async Task ApiCategories_DeleteWithInvalidId_NotFound()
+    {
 
-            Assert.Equal(HttpStatusCode.OK, statusCode);
-        }
+        var statusCode = await DeleteData($"{CategoriesApi}/-1");
 
-        [Fact]
-        public void ApiCategories_DeleteWithInvalidId_NotFound()
-        {
+        Assert.Equal(HttpStatusCode.NotFound, statusCode);
+    }
 
-            var statusCode = DeleteData($"{CategoriesApi}/-1");
+    /* /api/products */
 
-            Assert.Equal(HttpStatusCode.NotFound, statusCode);
-        }
+    [Fact]
+    public async Task ApiProducts_ValidId_CompleteProduct()
+    {
+        var (product, statusCode) = await GetObject($"{ProductsApi}/1");
 
-        /* /api/products */
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+        Assert.Equal("Chai", product?.Value("name"));
+        Assert.Equal("Beverages", product?.Value("categoryName"));
+    }
 
-        [Fact]
-        public void ApiProducts_ValidId_CompleteProduct()
-        {
-            var (product, statusCode) = GetObject($"{ProductsApi}/1");
 
-            Assert.Equal(HttpStatusCode.OK, statusCode);
-            Assert.Equal("Chai", product["name"]);
-            Assert.Equal("Beverages", product["category"]["name"]);
-        }
+    [Fact]
+    public async Task ApiProducts_InvalidId_CompleteProduct()
+    {
+        var (_, statusCode) = await GetObject($"{ProductsApi}/-1");
 
-        [Fact]
-        public void ApiProducts_InvalidId_CompleteProduct()
-        {
-            var (_, statusCode) = GetObject($"{ProductsApi}/-1");
+        Assert.Equal(HttpStatusCode.NotFound, statusCode);
+    }
 
-            Assert.Equal(HttpStatusCode.NotFound, statusCode);
-        }
+    [Fact]
+    public async Task ApiProducts_CategoryValidId_ListOfProduct()
+    {
+        var (products, statusCode) = await GetArray($"{ProductsApi}/category/1");
 
-        [Fact]
-        public void ApiProducts_CategoryValidId_ListOfProduct()
-        {
-            var (products, statusCode) = GetArray($"{ProductsApi}/category/1");
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+        Assert.Equal(12, products?.Count);
+        Assert.Equal("Chai", products?.FirstElement("name"));
+        Assert.Equal("Beverages", products?.FirstElement("categoryName"));
+        Assert.Equal("Lakkalikööri", products?.LastElement("name"));
+    }
 
-            Assert.Equal(HttpStatusCode.OK, statusCode);
-            Assert.Equal(12, products.Count);
-            Assert.Equal("Chai", products.First()["name"]);
-            Assert.Equal("Beverages", products.First()["categoryName"]);
-            Assert.Equal("Lakkalikööri", products.Last()["name"]);
-        }
+    [Fact]
+    public async Task ApiProducts_CategoryInvalidId_EmptyListOfProductAndNotFound()
+    {
+        var (products, statusCode) = await GetArray($"{ProductsApi}/category/1000001");
 
-        [Fact]
-        public void ApiProducts_CategoryInvalidId_EmptyListOfProductAndNotFound()
-        {
-            var (products, statusCode) = GetArray($"{ProductsApi}/category/1000001");
+        Assert.Equal(HttpStatusCode.NotFound, statusCode);
+        Assert.Equal(0, products?.Count);
+    }
 
-            Assert.Equal(HttpStatusCode.NotFound, statusCode);
-            Assert.Equal(0, products.Count);
-        }
+    [Fact]
+    public async Task ApiProducts_NameContained_ListOfProduct()
+    {
+        var (products, statusCode) = await GetArray($"{ProductsApi}/name/em");
 
-        [Fact]
-        public void ApiProducts_NameContained_ListOfProduct()
-        {
-            var (products, statusCode) = GetArray($"{ProductsApi}/name/em");
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+        Assert.Equal(4, products?.Count);
+        Assert.Equal("NuNuCa Nuß-Nougat-Creme", products?.FirstElement("productName"));
+        Assert.Equal("Flotemysost", products?.LastElement("productName"));
+    }
 
-            Assert.Equal(HttpStatusCode.OK, statusCode);
-            Assert.Equal(4, products.Count);
-            Assert.Equal("NuNuCa Nuß-Nougat-Creme", products.First()["productName"]);
-            Assert.Equal("Flotemysost", products.Last()["productName"]);
-        }
+    [Fact]
+    public async Task ApiProducts_NameNotContained_EmptyListOfProductAndNotFound()
+    {
+        var (products, statusCode) = await GetArray($"{ProductsApi}/name/CIT");
 
-        [Fact]
-        public void ApiProducts_NameNotContained_EmptyListOfProductAndNotFound()
-        {
-            var (products, statusCode) = GetArray($"{ProductsApi}/name/CIT");
+        Assert.Equal(HttpStatusCode.NotFound, statusCode);
+        Assert.Equal(0, products?.Count);
+    }
 
-            Assert.Equal(HttpStatusCode.NotFound, statusCode);
-            Assert.Equal(0, products.Count);
-        }
+    // Helpers
 
-        // Helpers
+    async Task<(JsonArray?, HttpStatusCode)> GetArray(string url)
+    {
+        var client = new HttpClient();
+        var response = client.GetAsync(url).Result;
+        var data = await response.Content.ReadAsStringAsync();
+        return (JsonSerializer.Deserialize<JsonArray>(data), response.StatusCode);
+    }
 
-        (JArray, HttpStatusCode) GetArray(string url)
-        {
-            var client = new HttpClient();
-            var response = client.GetAsync(url).Result;
-            var data = response.Content.ReadAsStringAsync().Result;
-            return ((JArray)JsonConvert.DeserializeObject(data), response.StatusCode);
-        }
+    async Task<(JsonObject?, HttpStatusCode)> GetObject(string url)
+    {
+        var client = new HttpClient();
+        var response = client.GetAsync(url).Result;
+        var data = await response.Content.ReadAsStringAsync();
+        return (JsonSerializer.Deserialize<JsonObject>(data), response.StatusCode);
+    }
 
-        (JObject, HttpStatusCode) GetObject(string url)
-        {
-            var client = new HttpClient();
-            var response = client.GetAsync(url).Result;
-            var data = response.Content.ReadAsStringAsync().Result;
-            return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
-        }
+    async Task<(JsonObject?, HttpStatusCode)> PostData(string url, object content)
+    {
+        var client = new HttpClient();
+        var requestContent = new StringContent(
+            JsonSerializer.Serialize(content),
+            Encoding.UTF8,
+            "application/json");
+        var response = await client.PostAsync(url, requestContent);
+        var data = await response.Content.ReadAsStringAsync();
+        return (JsonSerializer.Deserialize<JsonObject>(data), response.StatusCode);
+    }
 
-        (JObject, HttpStatusCode) PostData(string url, object content)
-        {
-            var client = new HttpClient();
-            var requestContent = new StringContent(
-                JsonConvert.SerializeObject(content),
+    async Task<HttpStatusCode> PutData(string url, object content)
+    {
+        var client = new HttpClient();
+        var response = await client.PutAsync(
+            url,
+            new StringContent(
+                JsonSerializer.Serialize(content),
                 Encoding.UTF8,
-                "application/json");
-            var response = client.PostAsync(url, requestContent).Result;
-            var data = response.Content.ReadAsStringAsync().Result;
-            return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
-        }
+                "application/json"));
+        return response.StatusCode;
+    }
 
-        HttpStatusCode PutData(string url, object content)
-        {
-            var client = new HttpClient();
-            var response = client.PutAsync(
-                url,
-                new StringContent(
-                    JsonConvert.SerializeObject(content),
-                    Encoding.UTF8,
-                    "application/json")).Result;
-            return response.StatusCode;
-        }
+    async Task<HttpStatusCode> DeleteData(string url)
+    {
+        var client = new HttpClient();
+        var response = await client.DeleteAsync(url);
+        return response.StatusCode;
+    }
+}
 
-        HttpStatusCode DeleteData(string url)
-        {
-            var client = new HttpClient();
-            var response = client.DeleteAsync(url).Result;
-            return response.StatusCode;
-        }
+static class HelperExt
+{
+    public static string? Value(this JsonNode node, string name)
+    {
+        var value = node[name];
+        return value?.ToString();
+    }
+
+    public static string? FirstElement(this JsonArray node, string name)
+    {
+        return node.First()?.Value(name);
+    }
+
+    public static string? LastElement(this JsonArray node, string name)
+    {
+        return node.Last()?.Value(name);
     }
 }
