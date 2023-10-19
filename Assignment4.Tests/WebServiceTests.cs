@@ -211,7 +211,7 @@ public class WebServiceTests
     [Fact]
     public async Task ApiProducts_NameContained_ListOfProduct()
     {
-        var (products, statusCode) = await GetArray($"{ProductsApi}/name/em");
+        var (products, statusCode) = await GetArray($"{ProductsApi}?name=em");
 
         Assert.Equal(HttpStatusCode.OK, statusCode);
         Assert.Equal(4, products?.Count);
@@ -222,7 +222,7 @@ public class WebServiceTests
     [Fact]
     public async Task ApiProducts_NameNotContained_EmptyListOfProductAndNotFound()
     {
-        var (products, statusCode) = await GetArray($"{ProductsApi}/name/CIT");
+        var (products, statusCode) = await GetArray($"{ProductsApi}?name=CIT");
 
         Assert.Equal(HttpStatusCode.NotFound, statusCode);
         Assert.Equal(0, products?.Count);
