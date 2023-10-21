@@ -7,36 +7,40 @@ public class DataServiceTests
     [Fact]
     public void Category_Object_HasIdNameDescription()
     {
+        //changed category.Name to category.CategoryName due to how we created the object
         var category = new Category();
         Assert.Equal(0, category.Id);
-        Assert.Null(category.Name);
+        Assert.Null(category.CategoryName);
         Assert.Null(category.Description);
     }
 
+    //changed category.Name to category.CategoryName due to how we created the object
     [Fact]
     public void GetAllCategories_NoArgument_ReturnsAllCategories()
     {
         var service = new DataService();
         var categories = service.GetCategories();
         Assert.Equal(8, categories.Count);
-        Assert.Equal("Beverages", categories.First().Name);
+        Assert.Equal("Beverages", categories.First().CategoryName);
     }
 
+    //changed category.Name to category.CategoryName due to how we created the object
     [Fact]
     public void GetCategory_ValidId_ReturnsCategoryObject()
     {
         var service = new DataService();
         var category = service.GetCategory(1);
-        Assert.Equal("Beverages", category.Name);
+        Assert.Equal("Beverages", category.CategoryName);
     }
 
+    //changed category.Name to category.CategoryName due to how we created the object
     [Fact]
     public void CreateCategory_ValidData_CreteCategoryAndReturnsNewObject()
     {
         var service = new DataService();
         var category = service.CreateCategory("Test", "CreateCategory_ValidData_CreteCategoryAndReturnsNewObject");
         Assert.True(category.Id > 0);
-        Assert.Equal("Test", category.Name);
+        Assert.Equal("Test", category.CategoryName);
         Assert.Equal("CreateCategory_ValidData_CreteCategoryAndReturnsNewObject", category.Description);
 
         // cleanup
@@ -62,6 +66,7 @@ public class DataServiceTests
         Assert.False(result);
     }
 
+    //changed category.Name to category.CategoryName due to how we created the object
     [Fact]
     public void UpdateCategory_NewNameAndDescription_UpdateWithNewValues()
     {
@@ -73,7 +78,7 @@ public class DataServiceTests
 
         category = service.GetCategory(category.Id);
 
-        Assert.Equal("UpdatedName", category.Name);
+        Assert.Equal("UpdatedName", category.CategoryName);
         Assert.Equal("UpdatedDescription", category.Description);
 
         // cleanup
@@ -119,7 +124,7 @@ public class DataServiceTests
         Assert.Equal(12, products.Count);
         Assert.Equal("Chai", products.First().Name);
         Assert.Equal("Beverages", products.First().CategoryName);
-        Assert.Equal("Lakkalik��ri", products.Last().Name);
+        Assert.Equal("Lakkalikööri", products.Last().Name);
     }
 
     [Fact]
@@ -128,24 +133,26 @@ public class DataServiceTests
         var service = new DataService();
         var products = service.GetProductByName("em");
         Assert.Equal(4, products.Count);
-        Assert.Equal("NuNuCa Nu�-Nougat-Creme", products.First().ProductName);
+        Assert.Equal("NuNuCa Nuß-Nougat-Creme", products.First().ProductName);
         Assert.Equal("Confections", products.First().CategoryName);
         Assert.Equal("Flotemysost", products.Last().ProductName);
     }
 
     /* orders */
+    //changed order.Required to order.Require due to how we created the object
     [Fact]
     public void Order_Object_HasIdDatesAndOrderDetails()
     {
         var order = new Order();
         Assert.Equal(0, order.Id);
         Assert.Equal(new DateTime(), order.Date);
-        Assert.Equal(new DateTime(), order.Required);
+        Assert.Equal(new DateTime(), order.Require);
         Assert.Null(order.OrderDetails);
         Assert.Null(order.ShipName);
         Assert.Null(order.ShipCity);
     }
 
+    //changed category.Name to category.CategoryName due to how we created the object
     [Fact]
     public void GetOrder_ValidId_ReturnsCompleteOrder()
     {
@@ -153,7 +160,7 @@ public class DataServiceTests
         var order = service.GetOrder(10248);
         Assert.Equal(3, order.OrderDetails?.Count);
         Assert.Equal("Queso Cabrales", order.OrderDetails?.First().Product?.Name);
-        Assert.Equal("Dairy Products", order.OrderDetails?.First().Product?.Category?.Name);
+        Assert.Equal("Dairy Products", order.OrderDetails?.First().Product?.Category?.CategoryName);
     }
 
     [Fact]
