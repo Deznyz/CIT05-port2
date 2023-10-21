@@ -246,7 +246,7 @@ public class DataService
         }
     }
 
-    public void CreateCategory(Category category)
+    public IEnumerable<Category> GetCategoriesByName(string name)
     {
         throw new NotImplementedException();
     }
