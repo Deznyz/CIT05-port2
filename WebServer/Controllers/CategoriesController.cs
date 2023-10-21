@@ -21,13 +21,19 @@ public class CategoriesController : ControllerBase
     public IActionResult GetCetagories(string? name = null)
     {
         IEnumerable<CategoryModel> result = null;
-        
+        if (!string.IsNullOrEmpty(name))
+        {
+            result = _dataService.GetCategoriesByName(name)
+                .Select(CreateCategoryModel);
+        }
+        else
+        {
             result = _dataService.GetCategories()
                 .Select(CreateCategoryModel);
-        
+        }
         return Ok(result);
     }
-    
+
     [HttpGet("{id}", Name = nameof(GetCategory))]
     public IActionResult GetCategory(int id)
     {

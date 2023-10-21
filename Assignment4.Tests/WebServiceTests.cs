@@ -7,7 +7,7 @@ namespace Assignment4.Tests;
 
 
 public class WebServiceTests
-{
+{//test
     private const string CategoriesApi = "http://localhost:5001/api/categories";
     private const string ProductsApi = "http://localhost:5001/api/products";
 
