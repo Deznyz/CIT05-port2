@@ -194,6 +194,22 @@ public class DataService
         return newCategory;
         }
 
+    //overload af 11
+    public Category CreateCategory(Category givenCategory)
+    {
+        var db = new NorthwindContex();
+        var id = db.Categories.Max(x => x.Id) + 1;
+        var newCategory = new Category
+        {
+            Id = id,
+            CategoryName = givenCategory.CategoryName,
+            Description = givenCategory.Description
+        };
+        db.Add(newCategory);
+        db.SaveChanges();
+        return newCategory;
+    }
+
     //12
     public bool UpdateCategory(int id, string newName, string newDescription)
     {

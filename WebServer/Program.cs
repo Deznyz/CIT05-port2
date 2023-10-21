@@ -1,8 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
-
 // Add services to the container.
 builder.Services.AddMvcCore();
+builder.Services.AddScoped<DataLayer.DataService>();
 
 var app = builder.Build();
 
