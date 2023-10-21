@@ -230,4 +230,8 @@ public class DataService
         }
     }
 
+    public void CreateCategory(Category category)
+    {
+        throw new NotImplementedException();
+    }
 }
