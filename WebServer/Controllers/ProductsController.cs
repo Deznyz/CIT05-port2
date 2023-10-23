@@ -16,42 +16,42 @@ public class ProductsController : ControllerBase
         _dataService = dataService;
         _linkGenerator = linkGenerator;
     }
-    [HttpGet]
-    public IActionResult GetProducts(int id)
-    {
-        IEnumerable<ProductModel> result = null;
+    //[HttpGet]
+    //public IActionResult GetProducts(int id)
+    //{
+    //    IEnumerable<ProductModel> result = null;
             
-            result = _dataService.GetProduct(id)
-                .Select(CreateProductModel);
+    //        result = _dataService.GetProduct(id)
+    //            .Select(CreateProductModel);
 
-        return Ok(result);
-    }
-
-
-
-    [HttpGet("{id}", Name = nameof(GetProduct))]
-    public IActionResult GetProduct(int id)
-    {
-        var product = _dataService.GetProduct(id);
-        if (product == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(CreateProductModel(product));
-    }
+    //    return Ok(result);
+    //}
 
 
-    private ProductModel? CreateProductModel(ProductWithCategoryName product)
-    {
-        return new ProductModel
-        {
-            //Url = $"http://localhost:5001/api/products/{product.Id}",
-            Url = GetUrl(nameof(GetProduct), new { product.Id }),
-            Name = product.Name,
-            CategoryName = product.CategoryName
-        };
-    }
+
+    //[HttpGet("{id}", Name = nameof(GetProduct))]
+    //public IActionResult GetProduct(int id)
+    //{
+    //    var product = _dataService.GetProduct(id);
+    //    if (product == null)
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    return Ok(CreateProductModel(product));
+    //}
+
+
+    //private ProductModel? CreateProductModel(ProductWithCategoryName product)
+    //{
+    //    return new ProductModel
+    //    {
+    //        //Url = $"http://localhost:5001/api/products/{product.Id}",
+    //        Url = GetUrl(nameof(GetProduct), new { product.Id }),
+    //        Name = product.Name,
+    //        CategoryName = product.CategoryName
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

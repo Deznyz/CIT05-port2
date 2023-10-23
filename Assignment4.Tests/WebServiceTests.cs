@@ -70,6 +70,7 @@ public class WebServiceTests
         await DeleteData($"{CategoriesApi}/{id}");
     }
 
+    //my console says that the id requested by the test is "0"
     [Fact]
     public async Task ApiCategories_PutWithValidCategory_Ok()
     {
@@ -95,7 +96,6 @@ public class WebServiceTests
             id = category?.Value("id");
         }
 
-
         var update = new
         {
             Id = category.Value("id"),
@@ -114,6 +114,8 @@ public class WebServiceTests
 
         await DeleteData($"{CategoriesApi}/{id}");
     }
+
+
 
     [Fact]
     public async Task ApiCategories_PutWithInvalidCategory_NotFound()
