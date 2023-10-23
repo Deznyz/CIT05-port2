@@ -16,6 +16,19 @@ public class ProductsController : ControllerBase
         _dataService = dataService;
         _linkGenerator = linkGenerator;
     }
+    [HttpGet]
+    public IActionResult GetProducts(int id)
+    {
+        IEnumerable<ProductModel> result = null;
+            
+            result = _dataService.GetProduct(id)
+                .Select(CreateProductModel);
+
+        return Ok(result);
+    }
+
+
+
     [HttpGet("{id}", Name = nameof(GetProduct))]
     public IActionResult GetProduct(int id)
     {
@@ -27,9 +40,6 @@ public class ProductsController : ControllerBase
 
         return Ok(CreateProductModel(product));
     }
-    //Den vil gerne have ProductWithCategoryName af en eller anden grund i stedet for product
-
-
 
 
     private ProductModel? CreateProductModel(ProductWithCategoryName product)

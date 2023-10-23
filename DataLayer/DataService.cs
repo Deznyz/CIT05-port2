@@ -101,18 +101,18 @@ public class DataService
         var product = db.Products
                 .Include(x => x.Category)
                 .FirstOrDefault(a => a.Id == Id);
-        if (product != null)
-        {
-            var productWithCategoryName = new ProductWithCategoryName
+            if (product != null)
             {
-                Product = product,
-                Name = product.Name,
-                CategoryName = product.Category.CategoryName
-            };
-            return productWithCategoryName;
-        }
+                var productWithCategoryName = new ProductWithCategoryName
+                {
+                    Product = product,
+                    Name = product.Name,
+                    CategoryName = product.Category.CategoryName
+                };
+                return productWithCategoryName;
+            }
 
-        return null;
+            return null;
     }
 
     //7
