@@ -13,6 +13,7 @@ namespace DataLayer
         public string Name { get; set; }
         public string ProductName { get; set; }
         public string CategoryName { get; set; }
+        public object Id { get; set; }
 
         public override string ToString()
         {

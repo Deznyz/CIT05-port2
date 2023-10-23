@@ -124,7 +124,6 @@ public class DataService
                     where product.Name.Contains(substring)
                     select new ProductWithCategoryName
                     {
-                        Product = product,
                         ProductName = product.Name,
                         CategoryName = product.Category.CategoryName
                     };
