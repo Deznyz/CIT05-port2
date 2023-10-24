@@ -65,39 +65,49 @@ public class CategoriesController : ControllerBase
         return Created(categoryUri, category);
     }
 
-    [HttpPut("{id}")]
-    public IActionResult PutData(Category model)
+    [HttpPut("{id}", Name = nameof(UpdateCategory))]
+    public IActionResult UpdateCategory(CategoryModel model, int? id)
     {
-        var existingCategory = _dataService.GetCategory(model.Id);
-
-        if (existingCategory != null)
+        var existCategory = _dataService.GetCategory(id.Value);
+        Console.WriteLine(id.Value);
+        //checks for nullvalue
+        if (existCategory != null)
         {
-            if (model.CategoryName != null)
+            //pre-updates categoryname (if submitted)
+            if (model.Name != null)
             {
-                existingCategory.CategoryName = model.CategoryName;
+                existCategory.CategoryName = model.Name;
             }
-
+            //pre-updates desciprion (if submitted)
             if (model.Description != null)
             {
-                existingCategory.Description = model.Description;
+                existCategory.Description = model.Description;
             }
-            Console.WriteLine("test");
 
-            _dataService.UpdateCategory(existingCategory.Id, existingCategory.CategoryName, existingCategory.Description);
-
-            Console.WriteLine("test2");
-
-            var categoryUri = Url.Link("GetCategory", new { id = existingCategory.Id });
-
-            Console.WriteLine("test3");
-            return Ok(existingCategory);
-    }else
+            _dataService.UpdateCategory(existCategory.Id, existCategory.CategoryName, existCategory.Description);
+            return Ok(existCategory);
+        }else
         {
-            Console.WriteLine("test-notfound");
             return NotFound();
-}
-
+        }
         
+    }
+
+    [HttpDelete("{id}", Name = nameof(DeleteData))]
+    public IActionResult DeleteData(int id)
+    {
+        Console.WriteLine("DeleteData: "+id);
+        var existCategory = _dataService.GetCategory(id);
+
+        //checks for null value
+        if (existCategory == null)
+        {
+            return NotFound();
+        }
+
+        //deletes category
+        _dataService.DeleteCategory(id);
+        return Ok();
     }
 
     private CategoryModel CreateCategoryModel(Category category)

@@ -231,6 +231,7 @@ public class DataService
     //13
     public bool DeleteCategory(int categoryId)
     {
+        Console.WriteLine(categoryId);
         var db = new NorthwindContex();
         var category = db.Categories.FirstOrDefault(x => x.Id == categoryId);
         if (category != null)
@@ -248,5 +249,24 @@ public class DataService
     public IEnumerable<Category> GetCategoriesByName(string name)
     {
         throw new NotImplementedException();
+    }
+
+    public IEnumerable<Category> GetProductsByName(string name)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IList<ProductWithCategoryName> GetProducts()
+    {
+        var db = new NorthwindContex();
+
+        var query = from product in db.Products
+                    select new ProductWithCategoryName
+                    {
+                        ProductName = product.Name,
+                        CategoryName = product.Category.CategoryName
+                    };
+
+        return query.ToList();
     }
 }

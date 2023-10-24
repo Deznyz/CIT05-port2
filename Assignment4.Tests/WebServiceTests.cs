@@ -132,6 +132,7 @@ public class WebServiceTests
         Assert.Equal(HttpStatusCode.NotFound, statusCode);
     }
 
+    //
     [Fact]
     public async Task ApiCategories_DeleteWithValidId_Ok()
     {
@@ -153,10 +154,10 @@ public class WebServiceTests
         {
             id = category?.Value("id");
         }
+        
+            var statusCode = await DeleteData($"{CategoriesApi}/{id}");
 
-        var statusCode = await DeleteData($"{CategoriesApi}/{id}");
-
-        Assert.Equal(HttpStatusCode.OK, statusCode);
+            Assert.Equal(HttpStatusCode.OK, statusCode);
     }
 
     [Fact]

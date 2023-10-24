@@ -13,7 +13,7 @@ namespace DataLayer
         public string Name { get; set; }
         public string ProductName { get; set; }
         public string CategoryName { get; set; }
-        public object Id { get; set; }
+        public int Id { get; set; }
 
         public Category Category { get; set; }
         public ICollection<OrderDetails> OrderDetails { get; set; }
