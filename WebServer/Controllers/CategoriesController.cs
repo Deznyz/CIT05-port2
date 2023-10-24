@@ -58,10 +58,8 @@ public class CategoriesController : ControllerBase
 
         _dataService.CreateCategory(category);
 
-        // Generate the URI for the newly created category.
         var categoryUri = Url.Link("GetCategory", new { id = category.Id });
 
-        // Return a Created response with the generated URI.
         return Created(categoryUri, category);
     }
 
