@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.Models
+namespace WebServer.Models
 {
-    public class Aliases
+    public class CreateAliasesModel
     {
         public string TitleId { get; set; }
         public int Ordering { get; set; }
@@ -17,12 +17,7 @@ namespace DataLayer.Models
         public bool IsOriginalTitle { get; set; }
         public string Types { get; set; }
         public string Attributes { get; set; }
-        public MovieTitles MovieTitles { get; set; }
-
-        public override string ToString()
-        {
-            return $"{TitleId}, {Ordering}, {Title}, {Region}, {Language}, {IsOriginalTitle}, {Types}, {Attributes}";
-        }
+        
     }
 }
 
