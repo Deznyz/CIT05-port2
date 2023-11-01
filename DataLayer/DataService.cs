@@ -44,7 +44,7 @@ public class DataService : IDataService
 
     public Aliases CreateAliases(Aliases newAlias)
     {
-        var db = new PostgresDB();
+        using var db = new PostgresDB();
         //var newAlias = new Aliases
         //{
         //    TitleId = titleId,
@@ -64,9 +64,12 @@ public class DataService : IDataService
     public bool DeleteAliases(Aliases alias)
     {
         var db = new PostgresDB();
-        var deleteAlias = db.Aliases.Where(x => x.Ordering == alias.Ordering).FirstOrDefault(x => x.TitleId == alias.TitleId);
+        var l = db.Aliases.Where(x => x.TitleId == alias.TitleId).ToList();
+        var deleteAlias = db.Aliases
+            .FirstOrDefault(x => x.TitleId == alias.TitleId && x.Ordering == alias.Ordering);
         if (alias != null)
         {
+            //db.Aliases.Update
             db.Aliases.Remove(alias);
             return db.SaveChanges() > 0;
         }
