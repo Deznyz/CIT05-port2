@@ -4,22 +4,26 @@ using System.Linq;
 using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace DataLayer;
 
-public class DataService
+public class DataService : IDataService
 {
-    public IList<Aliases> GetAliases()
+    public (IList<Aliases>, int count) GetAliases(int page, int pageSize)
     {
         var db = new PostgresDB();
-        var result = db.Aliases.ToList();
-        return result;
+        //var result = db.Aliases.ToList();
+        //return result;
+
+        var aliases = db.Aliases.Skip(page*pageSize).Take(pageSize).ToList();
+        return (aliases, db.Aliases.Count());
     }
 
-    public IList<Aliases> GetAliases(string titleId)
+    public (IList<Aliases>, int count) GetAliases(string titleId, int page, int pageSize)
     {
         var db = new PostgresDB();
-        var result = db.Aliases.Where(x => x.TitleId == titleId).ToList();
-        return result;
+        var result = db.Aliases.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.Aliases.Count());
     }
 
     public Aliases? GetAlias(string titleId, int? ordering)

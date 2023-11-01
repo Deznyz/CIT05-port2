@@ -2,37 +2,54 @@ using DataLayer;
 using DataLayer.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebServer.Models;
 
 namespace WebServer.Controllers;
 
 [Route("api/aliases")]
 [ApiController]
-public class AliasesController : ControllerBase
+public class AliasesController : BaseController
 {
-    private readonly DataService _dataService;
-    private readonly LinkGenerator _linkGenerator;
+    private readonly IDataService _dataService;
 
-    public AliasesController(DataService dataService, LinkGenerator linkGenerator)
+    public AliasesController(IDataService dataService, LinkGenerator linkGenerator)
+        : base(linkGenerator)
     {
         _dataService = dataService;
-        _linkGenerator = linkGenerator;
+
     }
 
-    [HttpGet]
-    public IActionResult GetAliases()
+    [HttpGet(Name = nameof(GetAliases))]
+    public IActionResult GetAliases(int page=0, int pageSize=10)
     {
-        var result = _dataService.GetAliases().Select(CreateAliasesModel);
-            return Ok( result);
-        
+        //var result = _dataService.GetAliases().Select(CreateAliasesModel);
+        //return Ok( result);
+
+        (var aliases, var total) = _dataService.GetAliases(page, pageSize);
+
+        var items = aliases.Select(CreateAliasesModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetAliases));
+
+        return Ok(result);
+
     }
 
     [HttpGet("{titleId}")]
-    public IActionResult GetAliases(string titleId)
+    public IActionResult GetAliases(string titleId, int page, int pageSize)
     {
-            var result = _dataService.GetAliases(titleId).Select(CreateAliasesModel);
-            return Ok(result);
-        
+            //var result = _dataService.GetAliases(titleId, 0, 10).Select(CreateAliasesModel);
+            //return Ok(result);
+
+        (var aliases, var total) = _dataService.GetAliases(titleId, page, pageSize);
+
+        var items = aliases.Select(CreateAliasesModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetAliases));
+
+        return Ok(result);
+
     }
 
     [HttpGet("{titleId}/{ordering}", Name = nameof(GetAlias))]
@@ -85,9 +102,9 @@ public class AliasesController : ControllerBase
         };
     }
 
-    private string? GetUrl(string name, object values)
-    {
-        return _linkGenerator.GetUriByName(HttpContext, name, values);
-    }
+    //private string? GetUrl(string name, object values)
+    //{
+    //    return _linkGenerator.GetUriByName(HttpContext, name, values);
+    //}
 
 }

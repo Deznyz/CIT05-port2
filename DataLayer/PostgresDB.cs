@@ -153,12 +153,17 @@ namespace DataLayer
             ---------------------------------------------------------------------------------*/
             modelBuilder.Entity<Models.MovieRatings>().ToTable("movie_ratings");
             modelBuilder.Entity<Models.MovieRatings>().HasKey(x => new { x.TitleId });
+            
             modelBuilder.Entity<Models.MovieRatings>()
                 .Property(x => x.TitleId).HasColumnName("title_id");
             modelBuilder.Entity<Models.MovieRatings>()
                 .Property(x => x.AverageRating).HasColumnName("average_rating");
             modelBuilder.Entity<Models.MovieRatings>()
                 .Property(x => x.NumVotes).HasColumnName("num_votes");
+            modelBuilder.Entity<Models.MovieRatings>()
+                .HasOne(rating => rating.MovieTitles)
+                .WithOne(title => title.MovieRatings)  
+                .HasForeignKey<Models.MovieRatings>(rating => rating.TitleId);
 
 
             /*-------------------------------------------------------------------------------
