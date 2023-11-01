@@ -38,7 +38,7 @@ namespace DataLayer
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder
                 .LogTo(Console.Out.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-            optionsBuilder.UseNpgsql("host=localhost;db=portfolio1;uid=postgres;pwd=postgres");
+            optionsBuilder.UseNpgsql("host=localhost;db=Portfolio1;uid=postgres;pwd=jtu67qpt");
         }
 
 

@@ -18,10 +18,26 @@ public class AliasesController : ControllerBase
         _linkGenerator = linkGenerator;
     }
 
-    [HttpGet("{titleId}&{ordering}", Name = nameof(GetAliases))]
-    public IActionResult GetAliases(string titleId, int ordering)
+    [HttpGet]
+    public IActionResult GetAliases()
     {
-        var aliases = _dataService.GetAliases(titleId, ordering);
+        var result = _dataService.GetAliases().Select(CreateAliasesModel);
+            return Ok( result);
+        
+    }
+
+    [HttpGet("{titleId}")]
+    public IActionResult GetAliases(string titleId)
+    {
+            var result = _dataService.GetAliases(titleId).Select(CreateAliasesModel);
+            return Ok(result);
+        
+    }
+
+    [HttpGet("{titleId}/{ordering}", Name = nameof(GetAlias))]
+    public IActionResult GetAlias(string titleId, int ordering)
+    {
+        var aliases = _dataService.GetAlias(titleId, ordering);
         if (aliases == null)
         {
             return NotFound();
@@ -30,12 +46,33 @@ public class AliasesController : ControllerBase
         return Ok(CreateAliasesModel(aliases));
     }
 
+    [HttpPost]
+    public IActionResult CreateAliases(CreateAliasesModel model)
+    {
+        var alias = new Aliases
+        {
+            TitleId = model.TitleId,
+            Ordering = model.Ordering,
+            Title = model.Title,
+            Region = model.Region,
+            Language = model.Language,
+            IsOriginalTitle = model.IsOriginalTitle,
+            Types = model.Types,
+            Attributes = model.Attributes
+        };
+
+        _dataService.CreateAliases(alias);
+
+        var aliasUri = Url.Link("GetAlias", new { titleId = alias.TitleId, ordering = alias.Ordering });
+
+        return Created(aliasUri, alias);
+    }
 
     private AliasesModel CreateAliasesModel(Aliases aliases)
     {
         return new AliasesModel
         {
-            Url = GetUrl(nameof(GetAliases), new { aliases.TitleId, aliases.Ordering }),
+            Url = GetUrl(nameof(GetAlias), new { aliases.TitleId, aliases.Ordering }),
             TitleId = aliases.TitleId,
             Ordering = aliases.Ordering,
             Title = aliases.Title,
@@ -44,7 +81,7 @@ public class AliasesController : ControllerBase
             IsOriginalTitle = aliases.IsOriginalTitle,
             Types = aliases.Types,
             Attributes = aliases.Attributes
-        };//
+        };
     }
 
     private string? GetUrl(string name, object values)

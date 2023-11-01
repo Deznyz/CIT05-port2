@@ -8,7 +8,21 @@ namespace DataLayer;
 
 public class DataService
 {
-    public Aliases? GetAliases(string titleId, int ordering)
+    public IList<Aliases> GetAliases()
+    {
+        var db = new PostgresDB();
+        var result = db.Aliases.ToList();
+        return result;
+    }
+
+    public IList<Aliases> GetAliases(string titleId)
+    {
+        var db = new PostgresDB();
+        var result = db.Aliases.Where(x => x.TitleId == titleId).ToList();
+        return result;
+    }
+
+    public Aliases? GetAlias(string titleId, int? ordering)
     {
         var db = new PostgresDB();
         var result = db.Aliases.Where(x => x.Ordering == ordering).FirstOrDefault(x => x.TitleId == titleId);
@@ -20,6 +34,26 @@ public class DataService
         {
             return null;
         }
+    }
 
+
+
+    public Aliases CreateAliases(Aliases newAlias)
+    {
+        var db = new PostgresDB();
+        //var newAlias = new Aliases
+        //{
+        //    TitleId = titleId,
+        //    Ordering = ordering,
+        //    Title = title,
+        //    Region = region,
+        //    Language = language,
+        //    IsOriginalTitle = isOriginalTitle,
+        //    Types = types,
+        //    Attributes = attributes
+        //};
+        db.Add(newAlias);
+        db.SaveChanges();
+        return newAlias;
     }
 }
