@@ -20,23 +20,23 @@ public class AliasesController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAliases(string? titleId = null, int? ordering = null)
+    public IActionResult GetAliases()
     {
-        IEnumerable<AliasesModel> result = null;
-        if (!string.IsNullOrEmpty(titleId) && ordering != null)
-        {
-            result = _dataService.GetAlias(titleId, ordering)
-                .Select(CreateAliasesModel);
-        }
-        else
-        {
-            result = _dataService.GetAliases()
-                .Select(CreateAliasesModel);
-        }
-        return Ok(result);
+        
+            return Ok( _dataService.GetAliases()
+                .Select(CreateAliasesModel));
+        
     }
 
-    [HttpGet("{titleId}&{ordering}", Name = nameof(GetAlias))]
+    [HttpGet("{titleId}")]
+    public IActionResult GetAliases(string titleId)
+    {
+            var result = _dataService.GetAlias(titleId);
+            return Ok(CreateAliasesModel(result));
+        
+    }
+
+    [HttpGet("{titleId}/{ordering}", Name = nameof(GetAlias))]
     public IActionResult GetAlias(string titleId, int ordering)
     {
         var aliases = _dataService.GetAlias(titleId, ordering);
