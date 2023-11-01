@@ -18,7 +18,7 @@ public class AliasesController : ControllerBase
         _linkGenerator = linkGenerator;
     }
 
-    [HttpGet("{titleId}?{ordering}", Name = nameof(GetAliases))]
+    [HttpGet("{titleId}&{ordering}", Name = nameof(GetAliases))]
     public IActionResult GetAliases(string titleId, int ordering)
     {
         var aliases = _dataService.GetAliases(titleId, ordering);
