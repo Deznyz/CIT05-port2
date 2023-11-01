@@ -21,15 +21,15 @@ public class KnownForController : ControllerBase
 
 
 
-    private KnownForModel CreateKnownForModel(KnownFor knownFor)
-    {
-        return new KnownForModel
-        {
-            Url = GetUrl(nameof(GetKnownFor), new { knownFor.TitleId, knownFor.NameId }),
-            NameId = knownFor.NameId,
-            TitleId = knownFor.TitleId
-        };
-    }
+    //private KnownForModel CreateKnownForModel(KnownFor knownFor)
+    //{
+    //    return new KnownForModel
+    //    {
+    //        Url = GetUrl(nameof(GetKnownFor), new { knownFor.TitleId, knownFor.NameId }),
+    //        NameId = knownFor.NameId,
+    //        TitleId = knownFor.TitleId
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

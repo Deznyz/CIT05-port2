@@ -21,15 +21,15 @@ public class NameWorkedAsController : ControllerBase
 
 
 
-    private NameWorkedAsModel CreateNameWorkedAsModel(NameWorkedAs nameWorkedAs)
-    {
-        return new NameWorkedAsModel
-        {
-            Url = GetUrl(nameof(GetNameWorkedAs), new { nameWorkedAs.NameId, nameWorkedAs.Profession}),
-            NameId = nameWorkedAs.NameId,
-            Profession = nameWorkedAs.Profession
-        };
-    }
+    //private NameWorkedAsModel CreateNameWorkedAsModel(NameWorkedAs nameWorkedAs)
+    //{
+    //    return new NameWorkedAsModel
+    //    {
+    //        Url = GetUrl(nameof(GetNameWorkedAs), new { nameWorkedAs.NameId, nameWorkedAs.Profession}),
+    //        NameId = nameWorkedAs.NameId,
+    //        Profession = nameWorkedAs.Profession
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

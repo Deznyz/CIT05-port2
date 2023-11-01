@@ -21,16 +21,16 @@ public class UserRatingsController : ControllerBase
 
 
 
-    private UserRatingsModel CreateUserRatingsModel(UserRatings userRatings)
-    {
-        return new UserRatingsModel
-        {
-            Url = GetUrl(nameof(GetUserRatings), new { userRatings.TitleId, userRatings.UserId }),
-            TitleId = userRatings.TitleId,
-            UserId = userRatings.UserId,
-            UserRating = userRatings.UserRating
-        };
-    }
+    //private UserRatingsModel CreateUserRatingsModel(UserRatings userRatings)
+    //{
+    //    return new UserRatingsModel
+    //    {
+    //        Url = GetUrl(nameof(GetUserRatings), new { userRatings.TitleId, userRatings.UserId }),
+    //        TitleId = userRatings.TitleId,
+    //        UserId = userRatings.UserId,
+    //        UserRating = userRatings.UserRating
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

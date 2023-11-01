@@ -21,16 +21,16 @@ public class MovieRatingsController : ControllerBase
 
 
 
-    private MovieRatingsModel CreateMovieRatingsModel(MovieRatings movieRatings)
-    {
-        return new MovieRatingsModel
-        {
-            Url = GetUrl(nameof(GetMovieRatings), new { movieRatings.TitleId}),
-            TitleId = movieRatings.TitleId,
-            AverageRating = movieRatings.AverageRating,
-            NumVotes = movieRatings.NumVotes
-        };
-    }
+    //private MovieRatingsModel CreateMovieRatingsModel(MovieRatings movieRatings)
+    //{
+    //    return new MovieRatingsModel
+    //    {
+    //        Url = GetUrl(nameof(GetMovieRatings), new { movieRatings.TitleId}),
+    //        TitleId = movieRatings.TitleId,
+    //        AverageRating = movieRatings.AverageRating,
+    //        NumVotes = movieRatings.NumVotes
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

@@ -21,15 +21,15 @@ public class GenresController : ControllerBase
 
 
 
-    private GenresModel CreateGenresModel(Genres genres)
-    {
-        return new GenresModel
-        {
-            Url = GetUrl(nameof(GetGenres), new { genres.TitleId, genres.Genre }),
-            TitleId = genres.TitleId,
-            Genre = genres.Genre
-        };
-    }
+    //private GenresModel CreateGenresModel(Genres genres)
+    //{
+    //    return new GenresModel
+    //    {
+    //        Url = GetUrl(nameof(GetGenres), new { genres.TitleId, genres.Genre }),
+    //        TitleId = genres.TitleId,
+    //        Genre = genres.Genre
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

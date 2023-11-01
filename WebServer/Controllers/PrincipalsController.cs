@@ -21,20 +21,20 @@ public class PrincipalsController : ControllerBase
 
 
 
-    private PrincipalsModel CreatePrincipalsModel(Principals principals)
-    {
-        return new PrincipalsModel
-        {
-            Url = GetUrl(nameof(GetPrincipals), new { principals.PrincipalsId }),
-            PrincipalsId = principals.PrincipalsId,
-            TitleId = principals.TitleId,
-            Ordering = principals.Ordering,
-            NameId = principals.NameId,
-            JobCategory = principals.JobCategory,
-            Job = principals.Job,
-            Role = principals.Role
-        };
-    }
+    //private PrincipalsModel CreatePrincipalsModel(Principals principals)
+    //{
+    //    return new PrincipalsModel
+    //    {
+    //        Url = GetUrl(nameof(GetPrincipals), new { principals.PrincipalsId }),
+    //        PrincipalsId = principals.PrincipalsId,
+    //        TitleId = principals.TitleId,
+    //        Ordering = principals.Ordering,
+    //        NameId = principals.NameId,
+    //        JobCategory = principals.JobCategory,
+    //        Job = principals.Job,
+    //        Role = principals.Role
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {
