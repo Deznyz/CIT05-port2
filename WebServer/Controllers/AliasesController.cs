@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using WebServer.Models;
 
 namespace WebServer.Controllers;
-
 [Route("api/aliases")]
 [ApiController]
 public class AliasesController : ControllerBase
