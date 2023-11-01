@@ -19,22 +19,22 @@ public class AliasesController : ControllerBase
         _linkGenerator = linkGenerator;
     }
 
-    //[HttpGet]
-    //public IActionResult GetAliases(string? titleId = null, int? ordering=null)
-    //{
-    //    IEnumerable<AliasesModel> result = null;
-    //    if (!string.IsNullOrEmpty(titleId) && ordering != null)
-    //    {
-    //        result = _dataService.GetAlias(titleId, ordering)
-    //            .Select(CreateAliasesModel);
-    //    }
-    //    else
-    //    {
-    //        result = _dataService.GetAliases()
-    //            .Select(CreateAliasesModel);
-    //    }
-    //    return Ok(result);
-    //}
+    [HttpGet]
+    public IActionResult GetAliases(string? titleId = null, int? ordering = null)
+    {
+        IEnumerable<AliasesModel> result = null;
+        if (!string.IsNullOrEmpty(titleId) && ordering != null)
+        {
+            result = _dataService.GetAlias(titleId, ordering)
+                .Select(CreateAliasesModel);
+        }
+        else
+        {
+            result = _dataService.GetAliases()
+                .Select(CreateAliasesModel);
+        }
+        return Ok(result);
+    }
 
     [HttpGet("{titleId}&{ordering}", Name = nameof(GetAlias))]
     public IActionResult GetAlias(string titleId, int ordering)
