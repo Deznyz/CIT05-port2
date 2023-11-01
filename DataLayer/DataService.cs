@@ -60,4 +60,16 @@ public class DataService : IDataService
         db.SaveChanges();
         return newAlias;
     }
+
+    public bool DeleteAliases(Aliases alias)
+    {
+        var db = new PostgresDB();
+        var deleteAlias = db.Aliases.Where(x => x.Ordering == alias.Ordering).FirstOrDefault(x => x.TitleId == alias.TitleId);
+        if (alias != null)
+        {
+            db.Aliases.Remove(alias);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
 }

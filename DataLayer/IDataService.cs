@@ -9,6 +9,7 @@ namespace DataLayer
         (IList<Aliases>, int count) GetAliases(string titleId, int page, int pageSize);
         Aliases GetAlias(string titleId, int? ordering);
         Aliases CreateAliases(Aliases alias);
+        bool DeleteAliases(Aliases alias);
      
     }
 }
