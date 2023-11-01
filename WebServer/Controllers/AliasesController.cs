@@ -18,7 +18,18 @@ public class AliasesController : ControllerBase
         _linkGenerator = linkGenerator;
     }
 
-    
+    [HttpGet("{titleId}?{ordering}", Name = nameof(GetAliases))]
+    public IActionResult GetAliases(string titleId, int ordering)
+    {
+        var aliases = _dataService.GetAliases(titleId, ordering);
+        if (aliases == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(CreateAliasesModel(aliases));
+    }
+
 
     private AliasesModel CreateAliasesModel(Aliases aliases)
     {
@@ -33,7 +44,7 @@ public class AliasesController : ControllerBase
             IsOriginalTitle = aliases.IsOriginalTitle,
             Types = aliases.Types,
             Attributes = aliases.Attributes
-        };
+        };//
     }
 
     private string? GetUrl(string name, object values)
