@@ -21,16 +21,16 @@ public class UsersController : ControllerBase
 
 
 
-    private UsersModel CreateUsersModel(Users users)
-    {
-        return new UsersModel
-        {
-            Url = GetUrl(nameof(GetUsers), new { users.UserId }),
-            UserId = users.UserId,
-            UserName = users.UserName,
-            Password = users.Password
-        };
-    }
+    //private UsersModel CreateUsersModel(Users users)
+    //{
+    //    return new UsersModel
+    //    {
+    //        Url = GetUrl(nameof(GetUsers), new { users.UserId }),
+    //        UserId = users.UserId,
+    //        UserName = users.UserName,
+    //        Password = users.Password
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

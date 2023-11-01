@@ -21,17 +21,17 @@ public class EpisodeBelongsToController : ControllerBase
 
 
 
-    private EpisodeBelongsToModel CreateEpisodeBelongsToModel(EpisodeBelongsTo episodeBelongsTo)
-    {
-        return new EpisodeBelongsToModel
-        {
-            Url = GetUrl(nameof(GetEpisodeBelongsTo), new { episodeBelongsTo.EpisodeTitleId, episodeBelongsTo.ParentTvShowTitleId }),
-            EpisodeTitleId = episodeBelongsTo.EpisodeTitleId,
-            ParentTvShowTitleId = episodeBelongsTo.ParentTvShowTitleId,
-            SeasonNumber = episodeBelongsTo.SeasonNumber,
-            EpisodeNumber = episodeBelongsTo.EpisodeNumber
-        };
-    }
+    //private EpisodeBelongsToModel CreateEpisodeBelongsToModel(EpisodeBelongsTo episodeBelongsTo)
+    //{
+    //    return new EpisodeBelongsToModel
+    //    {
+    //        Url = GetUrl(nameof(GetEpisodeBelongsTo), new { episodeBelongsTo.EpisodeTitleId, episodeBelongsTo.ParentTvShowTitleId }),
+    //        EpisodeTitleId = episodeBelongsTo.EpisodeTitleId,
+    //        ParentTvShowTitleId = episodeBelongsTo.ParentTvShowTitleId,
+    //        SeasonNumber = episodeBelongsTo.SeasonNumber,
+    //        EpisodeNumber = episodeBelongsTo.EpisodeNumber
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

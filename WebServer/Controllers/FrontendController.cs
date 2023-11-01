@@ -21,16 +21,16 @@ public class FrontendController : ControllerBase
 
 
 
-    private FrontendModel CreateFrontendModel(Frontend frontend)
-    {
-        return new FrontendModel
-        {
-            Url = GetUrl(nameof(GetFrontend), new { frontend.TitleId, frontend.Poster }),
-            TitleId = frontend.TitleId,
-            Poster = frontend.Poster,
-            Plot = frontend.Plot
-        };
-    }
+    //private FrontendModel CreateFrontendModel(Frontend frontend)
+    //{
+    //    return new FrontendModel
+    //    {
+    //        Url = GetUrl(nameof(GetFrontend), new { frontend.TitleId, frontend.Poster }),
+    //        TitleId = frontend.TitleId,
+    //        Poster = frontend.Poster,
+    //        Plot = frontend.Plot
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

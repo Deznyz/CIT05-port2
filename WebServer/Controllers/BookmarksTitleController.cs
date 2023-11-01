@@ -21,15 +21,15 @@ public class BookmarksTitleController : ControllerBase
 
 
 
-    private BookmarksTitleModel CreateBookmarksTitleModel(BookmarksTitle bookmarksTitle)
-    {
-        return new BookmarksTitleModel
-        {
-            Url = GetUrl(nameof(GetBookmarksName), new { bookmarksTitle.UserId, bookmarksTitle.TitleId }),
-            TitleId = bookmarksTitle.TitleId,
-            UserId = bookmarksTitle.UserId
-        };
-    }
+    //private BookmarksTitleModel CreateBookmarksTitleModel(BookmarksTitle bookmarksTitle)
+    //{
+    //    return new BookmarksTitleModel
+    //    {
+    //        Url = GetUrl(nameof(GetBookmarksName), new { bookmarksTitle.UserId, bookmarksTitle.TitleId }),
+    //        TitleId = bookmarksTitle.TitleId,
+    //        UserId = bookmarksTitle.UserId
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

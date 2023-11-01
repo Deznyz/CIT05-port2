@@ -21,16 +21,16 @@ public class SearchHistoryController : ControllerBase
 
 
 
-    private SearchHistoryModel CreateSearchHistoryModel(SearchHistory searchHistory)
-    {
-        return new SearchHistoryModel
-        {
-            Url = GetUrl(nameof(GetSearchHistory), new { searchHistory.SearchHistoryId }),
-            SearchHistoryId = searchHistory.SearchHistoryId,
-            UserId = searchHistory.UserId,
-            Searched = searchHistory.Searched
-        };
-    }
+    //private SearchHistoryModel CreateSearchHistoryModel(SearchHistory searchHistory)
+    //{
+    //    return new SearchHistoryModel
+    //    {
+    //        Url = GetUrl(nameof(GetSearchHistory), new { searchHistory.SearchHistoryId }),
+    //        SearchHistoryId = searchHistory.SearchHistoryId,
+    //        UserId = searchHistory.UserId,
+    //        Searched = searchHistory.Searched
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

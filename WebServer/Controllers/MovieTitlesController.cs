@@ -21,21 +21,21 @@ public class MovieTitlesController : ControllerBase
 
 
 
-    private MovieTitlesModel CreateMovieTitlesModel(MovieTitles movieTitles)
-    {
-        return new MovieTitlesModel
-        {
-            Url = GetUrl(nameof(GetMovieTitles), new { movieTitles.TitleId}),
-            TitleId = movieTitles.TitleId,
-            TitleType = movieTitles.TitleType,
-            PrimaryTitle = movieTitles.PrimaryTitle,
-            OriginalTitle = movieTitles.OriginalTitle,
-            IsAdult = movieTitles.IsAdult,
-            StartYear = movieTitles.StartYear,
-            EndYear = movieTitles.EndYear,
-            RuntimeMinutes = movieTitles.RuntimeMinutes
-        };
-    }
+    //private MovieTitlesModel CreateMovieTitlesModel(MovieTitles movieTitles)
+    //{
+    //    return new MovieTitlesModel
+    //    {
+    //        Url = GetUrl(nameof(GetMovieTitles), new { movieTitles.TitleId}),
+    //        TitleId = movieTitles.TitleId,
+    //        TitleType = movieTitles.TitleType,
+    //        PrimaryTitle = movieTitles.PrimaryTitle,
+    //        OriginalTitle = movieTitles.OriginalTitle,
+    //        IsAdult = movieTitles.IsAdult,
+    //        StartYear = movieTitles.StartYear,
+    //        EndYear = movieTitles.EndYear,
+    //        RuntimeMinutes = movieTitles.RuntimeMinutes
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {

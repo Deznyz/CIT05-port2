@@ -21,18 +21,18 @@ public class NamesController : ControllerBase
 
 
 
-    private NamesModel CreateNamesModel(Names names)
-    {
-        return new NamesModel
-        {
-            Url = GetUrl(nameof(GetNames), new { names.NameId }),
-            NameId = names.NameId,
-            Name = names.Name,
-            BirthYear = names.BirthYear,
-            DeathYear = names.DeathYear,
-            AvgNameRating = names.AvgNameRating
-        };
-    }
+    //private NamesModel CreateNamesModel(Names names)
+    //{
+    //    return new NamesModel
+    //    {
+    //        Url = GetUrl(nameof(GetNames), new { names.NameId }),
+    //        NameId = names.NameId,
+    //        Name = names.Name,
+    //        BirthYear = names.BirthYear,
+    //        DeathYear = names.DeathYear,
+    //        AvgNameRating = names.AvgNameRating
+    //    };
+    //}
 
     private string? GetUrl(string name, object values)
     {
