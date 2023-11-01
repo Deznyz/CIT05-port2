@@ -34,7 +34,7 @@ public class AliasesController : ControllerBase
             IsOriginalTitle = aliases.IsOriginalTitle,
             Types = aliases.Types,
             Attributes = aliases.Attributes
-        };
+        };//
     }
 
     private string? GetUrl(string name, object values)
