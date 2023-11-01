@@ -22,17 +22,16 @@ public class AliasesController : ControllerBase
     [HttpGet]
     public IActionResult GetAliases()
     {
-        
-            return Ok( _dataService.GetAliases()
-                .Select(CreateAliasesModel));
+        var result = _dataService.GetAliases().Select(CreateAliasesModel);
+            return Ok( result);
         
     }
 
     [HttpGet("{titleId}")]
     public IActionResult GetAliases(string titleId)
     {
-            var result = _dataService.GetAlias(titleId);
-            return Ok(CreateAliasesModel(result));
+            var result = _dataService.GetAliases(titleId).Select(CreateAliasesModel);
+            return Ok(result);
         
     }
 

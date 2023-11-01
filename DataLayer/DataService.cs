@@ -15,6 +15,13 @@ public class DataService
         return result;
     }
 
+    public IList<Aliases> GetAliases(string titleId)
+    {
+        var db = new PostgresDB();
+        var result = db.Aliases.Where(x => x.TitleId == titleId).ToList();
+        return result;
+    }
+
     public Aliases? GetAlias(string titleId, int? ordering)
     {
         var db = new PostgresDB();
@@ -27,8 +34,9 @@ public class DataService
         {
             return null;
         }
-
     }
+
+
 
     public Aliases CreateAliases(Aliases newAlias)
     {
