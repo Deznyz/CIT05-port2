@@ -8,33 +8,75 @@ namespace WebServer.Controllers;
 
 [Route("api/movieratings")]
 [ApiController]
-public class MovieRatingsController : ControllerBase
+public class MovieRatingsController : BaseController
 {
-    private readonly DataService _dataService;
-    private readonly LinkGenerator _linkGenerator;
+    private readonly IDataService _dataService;
 
-    public MovieRatingsController(DataService dataService, LinkGenerator linkGenerator)
+    public MovieRatingsController(IDataService dataService, LinkGenerator linkGenerator)
+        : base(linkGenerator)
     {
         _dataService = dataService;
-        _linkGenerator = linkGenerator;
+
     }
 
-
-
-    //private MovieRatingsModel CreateMovieRatingsModel(MovieRatings movieRatings)
-    //{
-    //    return new MovieRatingsModel
-    //    {
-    //        Url = GetUrl(nameof(GetMovieRatings), new { movieRatings.TitleId}),
-    //        TitleId = movieRatings.TitleId,
-    //        AverageRating = movieRatings.AverageRating,
-    //        NumVotes = movieRatings.NumVotes
-    //    };
-    //}
-
-    private string? GetUrl(string name, object values)
+    [HttpGet(Name = nameof(GetMovieRatings))]
+    public IActionResult GetMovieRatings(int page = 0, int pageSize = 10)
     {
-        return _linkGenerator.GetUriByName(HttpContext, name, values);
+
+
+        (var movieRating, var total) = _dataService.GetMovieRatings(page, pageSize);
+
+        var items = knownFor.Select(CreateMovieRatingsModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetMovieRatings));
+
+        return Ok(result);
+
     }
+
+    [HttpGet("{titleRatingsId}")]
+    public IActionResult GetMovieRatings(string titleRatingsId, int page, int pageSize)
+    {
+
+        (var movieRating, var total) = _dataService.GetMovieRatings(titleRatingsId, page, pageSize);
+
+        var items = movieRating.Select(CreateMovieRatingsModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetMovieRatings));
+
+        return Ok(result);
+
+    }
+
+    [HttpPost]
+    public IActionResult CreatemovieRating(CreatemovieRatingsModel model)
+    {
+        var movieRating = new MovieRatings();
+        {
+            TitleId = model.TitleId,
+            NameId = model.NameId
+        };
+
+        _dataService.CreateMovieRating(movieRating);
+
+        var movieRatingUri = Url.Link("GetMovierating", new { titleId = knownFor.TitleId, nameId = knownFor.NameId });
+
+        return Created(movieRatingUri, movieRating);
+    }
+
+    private MovieRatingsModel CreateMovieRatingsModel(MovieRatings movierating)
+    {
+        return new MovieRatingsModel
+        {
+            Url = GetUrl(nameof(GetMovierating), new { movierating.TitleId, movierating.NameId }),
+            TitleId = movierating.TitleId,
+            NameId = movierating.NameId
+        };
+    }
+
+    //private string? GetUrl(string name, object values)
+    //{
+    //    return _linkGenerator.GetUriByName(HttpContext, name, values);
+    //}
 
 }

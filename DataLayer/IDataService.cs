@@ -15,6 +15,11 @@ namespace DataLayer
         Genres GetGenre(string titleId, string genre);
         Genres CreateGenres(Genres genre);
         bool DeleteGenres(Genres genre);
+        (IList<KnownFor>, int count) GetKnownFors(int page, int pageSize);
+        (IList<KnownFor>, int count) GetKnownFors(string titleId, int page, int pageSize);
+        KnownFor GetKnownFor(string titleId, string nameId);
+        KnownFor CreateKnownFor(KnownFor knownfor);
+        bool DeleteKnownFor(KnownFor knownfor);
 
     }
 }
