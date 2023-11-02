@@ -205,4 +205,120 @@ public class DataService : IDataService
         }
         return false;
     }
+
+    public (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        //var result = db.Aliases.ToList();
+        //return result;
+
+        var movieRatings = db.MoviesRatings.Skip(page * pageSize).Take(pageSize).ToList();
+        return (movieRatings, db.MoviesRatings.Count());
+    }
+
+
+    public MovieRatings? GetMovieRating(string MovieRatingId)
+    {
+        var db = new PostgresDB();
+        var result = db.MoviesRatings.FirstOrDefault(x => x.TitleId == MovieRatingId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public MovieRatings CreateMovieRating(MovieRatings movieRating)
+    {
+        using var db = new PostgresDB();
+        //var newAlias = new Aliases
+        //{
+        //    TitleId = titleId,
+        //    Ordering = ordering,
+        //    Title = title,
+        //    Region = region,
+        //    Language = language,
+        //    IsOriginalTitle = isOriginalTitle,
+        //    Types = types,
+        //    Attributes = attributes
+        //};
+        db.Add(movieRating);
+        db.SaveChanges();
+        return movieRating;
+    }
+
+    public bool DeleteMovieRating(MovieRatings movieRating)
+    {
+        var db = new PostgresDB();
+        var DeletemovieRating = db.MoviesRatings
+            .FirstOrDefault(x => x.TitleId == movieRating.TitleId);
+        if (movieRating != null)
+        {
+            //db.Aliases.Update
+            db.MoviesRatings.Remove(movieRating);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+    public (IList<MovieTitles>, int count) GetMovieTitles(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        //var result = db.Aliases.ToList();
+        //return result;
+
+        var movieTitles = db.MoviesTitles.Skip(page * pageSize).Take(pageSize).ToList();
+        return (movieTitles, db.MoviesTitles.Count());
+    }
+
+
+    public MovieTitles? GetMovieTitle(string MovieTitleId)
+    {
+        var db = new PostgresDB();
+        var result = db.MoviesTitles.FirstOrDefault(x => x.TitleId == MovieTitleId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public MovieTitles CreateMovieTitle(MovieTitles movieTitle)
+    {
+        using var db = new PostgresDB();
+        //var newAlias = new Aliases
+        //{
+        //    TitleId = titleId,
+        //    Ordering = ordering,
+        //    Title = title,
+        //    Region = region,
+        //    Language = language,
+        //    IsOriginalTitle = isOriginalTitle,
+        //    Types = types,
+        //    Attributes = attributes
+        //};
+        db.Add(movieTitle);
+        db.SaveChanges();
+        return movieTitle;
+    }
+
+    public bool DeleteMovieTitle(MovieTitles movieTitles)
+    {
+        var db = new PostgresDB();
+        var DeletemovieRating = db.MoviesTitles
+            .FirstOrDefault(x => x.TitleId == movieTitles.TitleId);
+        if (movieTitles != null)
+        {
+            //db.Aliases.Update
+            db.MoviesTitles.Remove(movieTitles);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
 }

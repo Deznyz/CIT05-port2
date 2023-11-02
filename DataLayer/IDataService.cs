@@ -20,6 +20,14 @@ namespace DataLayer
         KnownFor GetKnownFor(string titleId, string nameId);
         KnownFor CreateKnownFor(KnownFor knownfor);
         bool DeleteKnownFor(KnownFor knownfor);
+        (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize);
+        MovieRatings GetMovieRating(string MovieRatingId);
+        MovieRatings CreateMovieRating(MovieRatings movieRatings);
+        bool DeleteMovieRating(MovieRatings movieRatings);
+        (IList<MovieTitles>, int count) GetMovieTitles(int page, int pageSize);
+        MovieTitles GetMovieTitle(string movieTitleId);
+        MovieTitles CreateMovieTitle(MovieTitles movieTitles);
+        bool DeleteMovieTitle(MovieTitles movieTitles);
 
     }
 }
