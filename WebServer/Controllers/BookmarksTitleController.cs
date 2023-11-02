@@ -8,32 +8,89 @@ namespace WebServer.Controllers;
 
 [Route("api/bookmarkstitle")]
 [ApiController]
-public class BookmarksTitleController : ControllerBase
+public class BookmarksTitleController : BaseController
 {
-    private readonly DataService _dataService;
-    private readonly LinkGenerator _linkGenerator;
+    private readonly IDataService _dataService;
 
-    public BookmarksTitleController(DataService dataService, LinkGenerator linkGenerator)
+    public BookmarksTitleController(IDataService dataService, LinkGenerator linkGenerator)
+        : base(linkGenerator)
     {
         _dataService = dataService;
-        _linkGenerator = linkGenerator;
+
     }
 
-
-
-    //private BookmarksTitleModel CreateBookmarksTitleModel(BookmarksTitle bookmarksTitle)
-    //{
-    //    return new BookmarksTitleModel
-    //    {
-    //        Url = GetUrl(nameof(GetBookmarksName), new { bookmarksTitle.UserId, bookmarksTitle.TitleId }),
-    //        TitleId = bookmarksTitle.TitleId,
-    //        UserId = bookmarksTitle.UserId
-    //    };
-    //}
-
-    private string? GetUrl(string name, object values)
+    [HttpGet(Name = nameof(GetBookmarksTitles))]
+    public IActionResult GetBookmarksTitles(int page = 0, int pageSize = 10)
     {
-        return _linkGenerator.GetUriByName(HttpContext, name, values);
+        //var result = _dataService.GetAliases().Select(CreateAliasesModel);
+        //return Ok( result);
+
+        (var bookmarksTitle, var total) = _dataService.GetBookmarksTitles(page, pageSize);
+
+        var items = bookmarksTitle.Select(CreateBookmarksTitleModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetBookmarksTitles));
+
+        return Ok(result);
+
     }
+
+    [HttpGet("{userId}")]
+    public IActionResult GetBookmarksTitles(int userId, int page, int pageSize)
+    {
+        //var result = _dataService.GetAliases(titleId, 0, 10).Select(CreateAliasesModel);
+        //return Ok(result);
+
+        (var bookmarksTitles, var total) = _dataService.GetBookmarksTitles(userId, page, pageSize);
+
+        var items = bookmarksTitles.Select(CreateBookmarksTitleModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetBookmarksTitles));
+
+        return Ok(result);
+
+    }
+
+    [HttpGet("{userId}/{nameId}", Name = nameof(GetSpecificBookmarksTitle))]
+    public IActionResult GetSpecificBookmarksTitle(int userId, string titleId)
+    {
+        var bookmarksTitle = _dataService.GetSpecificBookmarksTitle(userId, titleId);
+        if (bookmarksTitle == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(CreateBookmarksTitleModel(bookmarksTitle));
+    }
+
+    [HttpPost]
+    public IActionResult CreateBookmarksTitle(CreateBookmarksTitleModel model)
+    {
+        var bookmarksTitle = new BookmarksTitle
+        {
+            UserId = model.UserId,
+            TitleId = model.TitleId
+        };
+
+        _dataService.CreateBookmarksTitle(bookmarksTitle);
+
+        var bookmarksTitleUri = Url.Link("GetBookmarksTitle", new { userId = bookmarksTitle.UserId, nameId = bookmarksTitle.TitleId });
+
+        return Created(bookmarksTitleUri, bookmarksTitleUri);
+    }
+
+
+
+    private BookmarksTitleModel CreateBookmarksTitleModel(BookmarksTitle bookmarksTitle)
+    {
+        return new BookmarksTitleModel
+        {
+            Url = GetUrl(nameof(GetSpecificBookmarksTitle), new { bookmarksTitle.UserId, bookmarksTitle.TitleId }),
+            TitleId = bookmarksTitle.TitleId,
+            UserId = bookmarksTitle.UserId
+        };
+    }
+
+
 
 }
