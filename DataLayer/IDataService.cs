@@ -10,6 +10,11 @@ namespace DataLayer
         Aliases GetAlias(string titleId, int? ordering);
         Aliases CreateAliases(Aliases alias);
         bool DeleteAliases(Aliases alias);
-     
+        (IList<Genres>, int count) GetGenres(int page, int pageSize);
+        (IList<Genres>, int count) GetGenres(string titleId, int page, int pageSize);
+        Genres GetGenre(string titleId, string genre);
+        Genres CreateGenres(Genres genre);
+        bool DeleteGenres(Genres genre);
+
     }
 }

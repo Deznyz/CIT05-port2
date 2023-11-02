@@ -75,4 +75,70 @@ public class DataService : IDataService
         }
         return false;
     }
+    public (IList<Genres>, int count) GetGenres(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        //var result = db.Aliases.ToList();
+        //return result;
+
+        var genres = db.Genres.Skip(page * pageSize).Take(pageSize).ToList();
+        return (genres, db.Genres.Count());
+    }
+
+    public (IList<Genres>, int count) GetGenres(string titleId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.Genres.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.Genres.Count());
+    }
+
+    public Genres? GetGenres(string titleId, string genre)
+    {
+        var db = new PostgresDB();
+        var result = db.Genres.Where(x => x.Genre == genre).FirstOrDefault(x => x.TitleId == titleId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+
+    public Genres CreateGenres(Genres newGenre)
+    {
+        using var db = new PostgresDB();
+        //var newAlias = new Aliases
+        //{
+        //    TitleId = titleId,
+        //    Ordering = ordering,
+        //    Title = title,
+        //    Region = region,
+        //    Language = language,
+        //    IsOriginalTitle = isOriginalTitle,
+        //    Types = types,
+        //    Attributes = attributes
+        //};
+        db.Add(newGenre);
+        db.SaveChanges();
+        return newGenre;
+    }
+
+    public bool DeleteGenres(Genres genre)
+    {
+        var db = new PostgresDB();
+        var l = db.Genres.Where(x => x.TitleId == genre.TitleId).ToList();
+        var deleteGenre = db.Genres
+            .FirstOrDefault(x => x.TitleId == genre.TitleId && x.Genre == genre.Genre);
+        if (genre != null)
+        {
+            //db.Aliases.Update
+            db.Genres.Remove(genre);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
 }
