@@ -34,7 +34,7 @@ public class MovieTitlesController : BaseController
 
     }
 
-    [HttpGet("´{Id}", Name = nameof(GetMovieTitle))]
+    [HttpGet("{Id}", Name = nameof(GetMovieTitle))]
     public IActionResult GetMovieTitle(string movieTitleId)
     {
         var movieTitle = _dataService.GetMovieTitle(movieTitleId);

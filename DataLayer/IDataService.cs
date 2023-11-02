@@ -28,6 +28,11 @@ namespace DataLayer
         MovieTitles GetMovieTitle(string movieTitleId);
         MovieTitles CreateMovieTitle(MovieTitles movieTitles);
         bool DeleteMovieTitle(MovieTitles movieTitles);
+        (IList<Names>, int count) GetNames(int page, int pageSize);
+        Names GetName(string nameId);
+        Names CreateName(Names name);
+        bool DeleteName(Names name);
+
 
     }
 }

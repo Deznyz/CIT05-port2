@@ -321,4 +321,62 @@ public class DataService : IDataService
         }
         return false;
     }
+
+    public (IList<Names>, int count) GetNames(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        //var result = db.Aliases.ToList();
+        //return result;
+
+        var names = db.Names.Skip(page * pageSize).Take(pageSize).ToList();
+        return (names, db.Names.Count());
+    }
+
+
+    public Names? GetName(string nameId)
+    {
+        var db = new PostgresDB();
+        var result = db.Names.FirstOrDefault(x => x.NameId == nameId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public Names CreateName(Names name)
+    {
+        using var db = new PostgresDB();
+        //var newAlias = new Aliases
+        //{
+        //    TitleId = titleId,
+        //    Ordering = ordering,
+        //    Title = title,
+        //    Region = region,
+        //    Language = language,
+        //    IsOriginalTitle = isOriginalTitle,
+        //    Types = types,
+        //    Attributes = attributes
+        //};
+        db.Add(name);
+        db.SaveChanges();
+        return name;
+    }
+
+    public bool DeleteName(Names name)
+    {
+        var db = new PostgresDB();
+        var DeletemovieRating = db.Names
+            .FirstOrDefault(x => x.NameId == name.NameId);
+        if (name != null)
+        {
+            //db.Aliases.Update
+            db.Names.Remove(name);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
 }
