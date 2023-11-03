@@ -20,6 +20,10 @@ namespace DataLayer
         KnownFor GetKnownFor(string titleId, string nameId);
         KnownFor CreateKnownFor(KnownFor knownfor);
         bool DeleteKnownFor(KnownFor knownfor);
+
+
+
+        //Skal rettes
         (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize);
         MovieRatings GetMovieRating(string MovieRatingId);
         MovieRatings CreateMovieRating(MovieRatings movieRatings);
@@ -32,6 +36,13 @@ namespace DataLayer
         Names GetName(string nameId);
         Names CreateName(Names name);
         bool DeleteName(Names name);
+
+
+        //Ida skriver under
+        //Known for lave 3 lister.
+        //Henter alle
+        //Finde på name id
+        //finde på Titel id
 
 
     }

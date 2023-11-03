@@ -379,4 +379,166 @@ public class DataService : IDataService
         }
         return false;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+    //Skal laves dobbles
+
+
+    public (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var nameWorkedas = db.NameWorkedAs.Skip(page * pageSize).Take(pageSize).ToList();
+
+        return (nameWorkedas, db.NameWorkedAs.Count());
+    }
+
+
+    public NameWorkedAs? GetNameWorkedAs(string NameId)
+    {
+        var db = new PostgresDB();
+        var result = db.NameWorkedAs.FirstOrDefault(x => x.NameId == NameId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public NameWorkedAs CreateNameWorkAs(NameWorkedAs nameWorkedAs)
+    {
+        using var db = new PostgresDB();
+        
+        db.Add(nameWorkedAs);
+        db.SaveChanges();
+        return nameWorkedAs;
+    }
+
+    public bool DeleteNameWorkedAs(NameWorkedAs nameWorkedAs)
+    {
+        var db = new PostgresDB();
+        var DeleteNameWorkAs = db.NameWorkedAs
+            .FirstOrDefault(x => x.NameId == nameWorkedAs.NameId);
+        if (nameWorkedAs != null)
+        {
+            db.NameWorkedAs.Remove(nameWorkedAs);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+
+
+
+
+
+    public (IList<Principals>, int count) GetPrincipals(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var principals = db.Principals.Skip(page * pageSize).Take(pageSize).ToList();
+
+        return (principals, db.Principals.Count());
+    }
+
+    public Principals? GetPrincipals(int principalsId)
+    {
+        var db = new PostgresDB();
+        var result = db.Principals.FirstOrDefault(x => x.PrincipalsId == principalsId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public Principals CreatePrincipals(Principals principals)
+    {
+        using var db = new PostgresDB();
+
+        db.Add(principals);
+        db.SaveChanges();
+        return principals;
+    }
+
+    public bool DeletePrincipals(Principals principals)
+    {
+        var db = new PostgresDB();
+        var DeletePrincipals = db.Principals
+            .FirstOrDefault(x => x.PrincipalsId == principals.PrincipalsId);
+        if (principals != null)
+        {
+            db.Principals.Remove(principals);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+
+
+
+
+    public (IList<SearchHistory>, int count) GetSearchHistory(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var searchHistory = db.SearchHistories.Skip(page * pageSize).Take(pageSize).ToList();
+
+        return (searchHistory, db.SearchHistories.Count());
+    }
+
+    public SearchHistory? GetSearchHistory(int searchHistoryId)
+    {
+        var db = new PostgresDB();
+        var result = db.SearchHistories.FirstOrDefault(x => x.SearchHistoryId == searchHistoryId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public SearchHistory CreateSearchHistory(SearchHistory searchHistory)
+    {
+        using var db = new PostgresDB();
+
+        db.Add(searchHistory);
+        db.SaveChanges();
+        return searchHistory;
+    }
+
+    public bool DeleteSearchHistory(SearchHistory searchHistory)
+    {
+        var db = new PostgresDB();
+        var DeleteSearchHistory = db.SearchHistories
+            .FirstOrDefault(x => x.SearchHistoryId == searchHistory.SearchHistoryId);
+        if (searchHistory != null)
+        {
+            db.SearchHistories.Remove(searchHistory);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+
+    //User Rating skal være dobbel
+
+    //Users skal være single
+
 }
