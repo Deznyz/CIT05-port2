@@ -38,7 +38,7 @@ namespace DataLayer
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder
                 .LogTo(Console.Out.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-            optionsBuilder.UseNpgsql("host=localhost;db=postgres;uid=postgres;pwd=jtu67qpt");
+            optionsBuilder.UseNpgsql("host=localhost;db=Portfolio1;uid=postgres;pwd=jtu67qpt");
         }
 
 
@@ -108,6 +108,15 @@ namespace DataLayer
                 .Property(x => x.SeasonNumber).HasColumnName("season_number");
             modelBuilder.Entity<Models.EpisodeBelongsTo>()
                 .Property(x => x.EpisodeNumber).HasColumnName("episode_number");
+            //modelBuilder.Entity<Models.EpisodeBelongsTo>()
+            //    .HasOne(episodeBelongsTo => episodeBelongsTo.MovieTitlesChild)
+            //    .WithMany()
+            //    .HasForeignKey(episodeBelongsTo => episodeBelongsTo.EpisodeTitleId);
+            //modelBuilder.Entity<Models.EpisodeBelongsTo>()
+            //    .HasOne(episodeBelongsTo => episodeBelongsTo.MovieTitlesParent)
+            //    .WithMany()
+            //    .HasForeignKey(episodeBelongsTo => episodeBelongsTo.ParentTvShowTitleId);
+
 
 
 

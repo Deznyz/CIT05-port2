@@ -204,8 +204,6 @@ public class DataService : IDataService
     public (IList<EpisodeBelongsTo>, int count) GetEpisodeBelongsTos(int page, int pageSize)
     {
         var db = new PostgresDB();
-        //var result = db.Aliases.ToList();
-        //return result;
 
         var episodeBelongsTos = db.EpisodeBelongsTos.Skip(page * pageSize).Take(pageSize).ToList();
         return (episodeBelongsTos, db.EpisodeBelongsTos.Count());
@@ -265,6 +263,62 @@ public class DataService : IDataService
         if (deleteEpisodeBelongsTo != null)
         {
             db.EpisodeBelongsTos.Remove(deleteEpisodeBelongsTo);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+    /*-------------------------------------------------------------------------------
+                                    ------Frontend------
+    ---------------------------------------------------------------------------------*/
+    public (IList<Frontend>, int count) GetFrontends(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+
+        var frontends = db.Frontends.Skip(page * pageSize).Take(pageSize).ToList();
+        return (frontends, db.Frontends.Count());
+    }
+
+    public (IList<Frontend>, int count) GetFrontendsByTitleId(string titleId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.Frontends.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.Frontends.Count());
+    }
+
+    public Frontend? GetFrontend(string titleId, string poster)
+    {
+        var db = new PostgresDB();
+        var result = db.Frontends.FirstOrDefault(x => x.TitleId == titleId && x.Poster == poster);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public Frontend CreateFrontend(Frontend newFrontend)
+    {
+        using var db = new PostgresDB();
+        db.Add(newFrontend);
+        db.SaveChanges();
+        return newFrontend;
+    }
+
+    public bool DeleteFrontend(Frontend frontend)
+    {
+        var db = new PostgresDB();
+        var deleteFrontend = db.Frontends
+            .FirstOrDefault(x => x.TitleId == frontend.TitleId
+                            && x.Poster == frontend.Poster);
+
+
+        if (deleteFrontend != null)
+        {
+            db.Frontends.Remove(deleteFrontend);
             return db.SaveChanges() > 0;
         }
         return false;

@@ -76,7 +76,7 @@ public class BookmarksTitleController : BaseController
 
         var bookmarksTitleUri = Url.Link("GetBookmarksTitle", new { userId = bookmarksTitle.UserId, nameId = bookmarksTitle.TitleId });
 
-        return Created(bookmarksTitleUri, bookmarksTitleUri);
+        return Created(bookmarksTitleUri, bookmarksTitle);
     }
 
 

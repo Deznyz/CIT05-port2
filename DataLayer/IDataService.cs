@@ -26,7 +26,7 @@ namespace DataLayer
 
 
         /*-------------------------------------------------------------------------------
-                                    ------BookmarksName------
+                                    ------BookmarksTitle------
         ---------------------------------------------------------------------------------*/
         (IList<BookmarksTitle>, int count) GetBookmarksTitles(int page, int pageSize);
         (IList<BookmarksTitle>, int count) GetBookmarksTitles(int userId, int page, int pageSize);
@@ -36,7 +36,7 @@ namespace DataLayer
 
 
         /*-------------------------------------------------------------------------------
-                                    ------BookmarksName------
+                                    ------GetEpisodeBelongsTo------
         ---------------------------------------------------------------------------------*/
         (IList<EpisodeBelongsTo>, int count) GetEpisodeBelongsTos(int page, int pageSize);
         (IList<EpisodeBelongsTo>, int count) GetEpisodeBelongsTosByParentTvShowTitleId(string parentTvShowTitleId, int page, int pageSize);
@@ -44,5 +44,14 @@ namespace DataLayer
         EpisodeBelongsTo GetEpisodeBelongsTo(string episodeTitleId, string parentTvShowTitleId);
         EpisodeBelongsTo CreateEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
         bool DeleteEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
+
+        /*-------------------------------------------------------------------------------
+                                    ------Frontend------
+        ---------------------------------------------------------------------------------*/
+        (IList<Frontend>, int count) GetFrontends(int page, int pageSize);
+        (IList<Frontend>, int count) GetFrontendsByTitleId(string titleId, int page, int pageSize);
+        Frontend GetFrontend(string titleId, string poster);
+        Frontend CreateFrontend(Frontend frontend);
+        bool DeleteFrontend(Frontend frontend);
     }
 }

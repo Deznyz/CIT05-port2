@@ -20,7 +20,8 @@ namespace DataLayer.Models
         public ICollection<Genres> Genres { get; set; }
         public ICollection<Wi> Wi { get; set; }
         public ICollection<Frontend> Frontend { get; set; }
-        public ICollection<EpisodeBelongsTo> EpisodeBelongsTo { get; set; }
+        //public ICollection<EpisodeBelongsTo> EpisodeBelongsToChild { get; set; }
+        //public ICollection<EpisodeBelongsTo> EpisodeBelongsToParent { get; set; }
         //måske en EpisdodeBelongsTo mere
         public ICollection<Principals> Principals { get; set; }
         public ICollection<KnownFor> KnownFor { get; set; }
