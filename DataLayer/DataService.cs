@@ -391,22 +391,27 @@ public class DataService : IDataService
 
 
 
-    //Skal laves dobbles
-
+    //NameWorkedAs
 
     public (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize)
     {
         var db = new PostgresDB();
-        var nameWorkedas = db.NameWorkedAs.Skip(page * pageSize).Take(pageSize).ToList();
-
-        return (nameWorkedas, db.NameWorkedAs.Count());
+      
+        var nameWorkedAs = db.NameWorkedAs.Skip(page * pageSize).Take(pageSize).ToList();
+        return (nameWorkedAs, db.NameWorkedAs.Count());
     }
 
-
-    public NameWorkedAs? GetNameWorkedAs(string NameId)
+    public (IList<NameWorkedAs>, int count) GetNameWorkedAs(string nameId, int page, int pageSize)
     {
         var db = new PostgresDB();
-        var result = db.NameWorkedAs.FirstOrDefault(x => x.NameId == NameId);
+        var result = db.NameWorkedAs.Where(x => x.NameId == nameId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.NameWorkedAs.Count());
+    }
+
+    public NameWorkedAs? GetNameWorkedAs(string nameId, string? profession)
+    {
+        var db = new PostgresDB();
+        var result = db.NameWorkedAs.Where(x => x.NameId == nameId).FirstOrDefault(x => x.Profession == profession);
         if (result != null)
         {
             return result;
@@ -417,20 +422,20 @@ public class DataService : IDataService
         }
     }
 
-    public NameWorkedAs CreateNameWorkAs(NameWorkedAs nameWorkedAs)
+    public NameWorkedAs CreateNamedWorkedAs(NameWorkedAs newNameWorkedas)
     {
         using var db = new PostgresDB();
-        
-        db.Add(nameWorkedAs);
+        db.Add(newNameWorkedas);
         db.SaveChanges();
-        return nameWorkedAs;
+        return newNameWorkedas;
     }
 
-    public bool DeleteNameWorkedAs(NameWorkedAs nameWorkedAs)
+    public bool DeleteNameworkedAs(NameWorkedAs nameWorkedAs)
     {
         var db = new PostgresDB();
-        var DeleteNameWorkAs = db.NameWorkedAs
-            .FirstOrDefault(x => x.NameId == nameWorkedAs.NameId);
+        var l = db.NameWorkedAs.Where(x => x.NameId == nameWorkedAs.NameId).ToList();
+        var deleteNameworkedAs = db.NameWorkedAs
+            .FirstOrDefault(x => x.NameId == nameWorkedAs.NameId && x.Profession == nameWorkedAs.Profession);
         if (nameWorkedAs != null)
         {
             db.NameWorkedAs.Remove(nameWorkedAs);
@@ -441,8 +446,7 @@ public class DataService : IDataService
 
 
 
-
-
+// Pricipals
 
     public (IList<Principals>, int count) GetPrincipals(int page, int pageSize)
     {
@@ -490,7 +494,7 @@ public class DataService : IDataService
 
 
 
-
+    //Search History
 
     public (IList<SearchHistory>, int count) GetSearchHistory(int page, int pageSize)
     {
@@ -537,8 +541,105 @@ public class DataService : IDataService
     }
 
 
-    //User Rating skal være dobbel
+    //User Rating
+    public (IList<UserRatings>, int count) GetUserRating(int page, int pageSize)
+    {
+        var db = new PostgresDB();
 
-    //Users skal være single
+        var userRatings = db.UserRatings.Skip(page * pageSize).Take(pageSize).ToList();
+        return (userRatings, db.UserRatings.Count());
+    }
+
+    public (IList<UserRatings>, int count) GetUserRatings(int? userId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.UserRatings.Where(x => x.UserId == userId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.UserRatings.Count());
+    }
+
+    public UserRatings? GetUserRatings(int userId, string? titleId)
+    {
+        var db = new PostgresDB();
+        var result = db.UserRatings.Where(x => x.UserId == userId).FirstOrDefault(x => x.TitleId == titleId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public UserRatings CreateUserRatings(UserRatings newUserRating)
+    {
+        using var db = new PostgresDB();
+        db.Add(newUserRating);
+        db.SaveChanges();
+        return newUserRating;
+    }
+
+    public bool DeleteUserRatings(UserRatings userRatings)
+    {
+        var db = new PostgresDB();
+        var l = db.UserRatings.Where(x => x.UserId == userRatings.UserId).ToList();
+        var deleteUserRatings = db.UserRatings
+            .FirstOrDefault(x => x.UserId == userRatings.UserId && x.TitleId == userRatings.TitleId);
+        if (userRatings != null)
+        {
+            db.UserRatings.Remove(userRatings);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+
+
+
+
+    //Users
+    public (IList<Users>, int count) GetUsers(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var users = db.Users.Skip(page * pageSize).Take(pageSize).ToList();
+
+        return (users, db.Users.Count());
+    }
+
+    public Users? GetUsers(int userId)
+    {
+        var db = new PostgresDB();
+        var result = db.Users.FirstOrDefault(x => x.UserId == userId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public Users CreateUsers(Users users)
+    {
+        using var db = new PostgresDB();
+
+        db.Add(users);
+        db.SaveChanges();
+        return users;
+    }
+
+    public bool DeleteUsers(Users users)
+    {
+        var db = new PostgresDB();
+        var DeleteUsers = db.Users
+            .FirstOrDefault(x => x.UserId == users.UserId);
+        if (users != null)
+        {
+            db.Users.Remove(users);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
 
 }
