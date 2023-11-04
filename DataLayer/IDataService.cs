@@ -44,6 +44,38 @@ namespace DataLayer
         //Finde på name id
         //finde på Titel id
 
+        (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize);
+        (IList<NameWorkedAs>, int count) GetNameWorkedAs(string nameId, int page, int pageSize);
+        NameWorkedAs GetNameWorkedAs(string nameId, string? profession);
+        NameWorkedAs GetNameWorkedAs(NameWorkedAs nameWorkedAs);
+        bool DeleteNameWorkedAs(NameWorkedAs nameWorkedAs);
+
+
+
+        (IList<Principals>, int count) GetPrincipals(int page, int pageSize);
+        Names GetPrinciapls(int principalsId);
+        Names CreatePrincipals(Principals principals);
+        bool DeletePrincipals(Principals principals);
+
+
+        (IList<SearchHistory>, int count) GetSearchHistory(int page, int pageSize);
+        SearchHistory GetSearchHistory(int searchHistoryId);
+        SearchHistory CreateSearchHistory(SearchHistory searchHistory);
+        bool DeleteSearchHistory(SearchHistory searchHistory);
+
+
+
+        (IList<UserRatings>, int count) GetUserRatings(int page, int pageSize);
+        (IList<UserRatings>, int count) GetUserRatings(int? userId, int page, int pageSize);
+        UserRatings GetUserRatings(int userId, string? titleId);
+        UserRatings GetUserRatings(UserRatings userRatings);
+        bool DeleteUserRatings(UserRatings userRatings);
+
+
+        (IList<Users>, int count) GetUsers(int page, int pageSize);
+        Users GetUsers(int userId);
+        Users CreateUsers(Users users);
+        bool DeleteUsers(Users users);
 
     }
 }
