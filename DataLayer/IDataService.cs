@@ -47,13 +47,13 @@ namespace DataLayer
         (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize);
         (IList<NameWorkedAs>, int count) GetNameWorkedAs(string nameId, int page, int pageSize);
         NameWorkedAs GetNameWorkedAs(string nameId, string? profession);
-        NameWorkedAs GetNameWorkedAs(NameWorkedAs nameWorkedAs);
+        NameWorkedAs CreateNameWorkedAs(NameWorkedAs nameWorkedAs);
         bool DeleteNameWorkedAs(NameWorkedAs nameWorkedAs);
 
 
 
         (IList<Principals>, int count) GetPrincipals(int page, int pageSize);
-        Names GetPrinciapls(int principalsId);
+        Names GetPrincipals(int principalsId);
         Names CreatePrincipals(Principals principals);
         bool DeletePrincipals(Principals principals);
 

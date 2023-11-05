@@ -8,33 +8,76 @@ namespace WebServer.Controllers;
 
 [Route("api/users")]
 [ApiController]
-public class UsersController : ControllerBase
+public class UsersController : BaseController
 {
-    private readonly DataService _dataService;
-    private readonly LinkGenerator _linkGenerator;
+    private readonly IDataService _dataService;
 
-    public UsersController(DataService dataService, LinkGenerator linkGenerator)
+    public UsersController(IDataService dataService, LinkGenerator linkGenerator)
+        : base(linkGenerator)
     {
         _dataService = dataService;
-        _linkGenerator = linkGenerator;
+
     }
 
+    [HttpGet(Name = nameof(GetUsers))]
+    public IActionResult GetUsers(int page = 0, int pageSize = 10)
+    {
+        (var users, var total) = _dataService.GetUsers(page, pageSize);
 
+        var items = users.Select(CreateUsersModel);
 
-    //private UsersModel CreateUsersModel(Users users)
+        var result = Paging(items, total, page, pageSize, nameof(GetUsers));
+
+        return Ok(result);
+
+    }
+
+    [HttpGet("{userId}")]
+    public IActionResult GetUsers(int userId, int page, int pageSize)
+    {
+        (var users, var total) = _dataService.GetUsers(userId, page, pageSize);
+
+        var items = users.Select(CreateUsersModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetUsers));
+
+        return Ok(result);
+
+    }
+
+    //[HttpGet("{nameId}/{profession}", Name = nameof(GetNameWorkedAs))]
+    //public IActionResult GetNameWorkedAs(string nameId, string? profession)
     //{
-    //    return new UsersModel
+    //    var nameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);
+    //    if (nameId == null)
     //    {
-    //        Url = GetUrl(nameof(GetUsers), new { users.UserId }),
-    //        UserId = users.UserId,
-    //        UserName = users.UserName,
-    //        Password = users.Password
-    //    };
+    //        return NotFound();
+    //    }
+
+    //    return Ok(CreateNameWorkedAsModel(nameWorkedAs));
     //}
 
-    private string? GetUrl(string name, object values)
+    [HttpPost]
+    public IActionResult CreateUsers(CreateUsersModel model)
     {
-        return _linkGenerator.GetUriByName(HttpContext, name, values);
+        var users = new Users
+        {
+            UserId = model.UserId,
+        };
+
+        _dataService.CreateUsers(users);
+
+        var usersUri = Url.Link("GetUsers", new { userId = users.UserId});
+
+        return Created(usersUri, users);
     }
 
+    private UsersModel CreateUsersModel(Users users)
+    {
+        return new UsersModel
+        {
+            Url = GetUrl(nameof(GetUsers), new { users.UserId}),
+            UserId = users.UserId,
+        };
+    }
 }
