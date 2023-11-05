@@ -48,17 +48,7 @@ public class DataService : IDataService
     public Aliases CreateAliases(Aliases newAlias)
     {
         using var db = new PostgresDB();
-        //var newAlias = new Aliases
-        //{
-        //    TitleId = titleId,
-        //    Ordering = ordering,
-        //    Title = title,
-        //    Region = region,
-        //    Language = language,
-        //    IsOriginalTitle = isOriginalTitle,
-        //    Types = types,
-        //    Attributes = attributes
-        //};
+       
         db.Add(newAlias);
         db.SaveChanges();
         return newAlias;
@@ -77,6 +67,53 @@ public class DataService : IDataService
             return db.SaveChanges() > 0;
         }
         return false;
+    }
+
+    public bool UpdateAliases(string titleId, int ordering, Aliases updateInfo)
+    {
+        var db = new PostgresDB();
+        var alias = db.Aliases.FirstOrDefault(x => x.TitleId == titleId && x.Ordering == ordering);
+        if (alias != null)
+        {
+            if (updateInfo.TitleId != null){
+                alias.TitleId = updateInfo.TitleId;
+            }
+            if (updateInfo.Ordering != null)
+            {
+                alias.Ordering = updateInfo.Ordering;
+            }
+            if (updateInfo.Title != null)
+            {
+                alias.Title = updateInfo.Title;
+            }
+            if (updateInfo.Region != null)
+            {
+                alias.Region = updateInfo.Region;
+            }
+            if (updateInfo.Language != null)
+            {
+                alias.Language = updateInfo.Language;
+            }
+            if (updateInfo.IsOriginalTitle != null)
+            {
+                alias.IsOriginalTitle = updateInfo.IsOriginalTitle;
+            }
+            if (updateInfo.Types != null)
+            {
+                alias.Types = updateInfo.Types;
+            }
+            if (updateInfo.Attributes != null)
+            {
+                alias.Attributes = updateInfo.Attributes;
+            }
+            db.SaveChanges();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
     /*-------------------------------------------------------------------------------

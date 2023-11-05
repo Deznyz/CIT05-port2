@@ -3,17 +3,18 @@ using System.Collections.Generic;
 
 namespace DataLayer
 {
-    /*-------------------------------------------------------------------------------
-                                         ------Aliases------
-    ---------------------------------------------------------------------------------*/
+    
     public interface IDataService
     {
+        /*-------------------------------------------------------------------------------
+                                         ------Aliases------
+        ---------------------------------------------------------------------------------*/
         (IList<Aliases>, int count) GetAliases(int page, int pageSize);
         (IList<Aliases>, int count) GetAliases(string titleId, int page, int pageSize);
         Aliases GetAlias(string titleId, int? ordering);
         Aliases CreateAliases(Aliases alias);
         bool DeleteAliases(Aliases alias);
-
+        bool UpdateAliases(string titleId, int ordering, Aliases updateInfo);
 
         /*-------------------------------------------------------------------------------
                                     ------BookmarksName------
