@@ -379,4 +379,19 @@ public class DataService : IDataService
         }
         return false;
     }
+
+    public Users CreateUsers(Users user)
+    {
+        using var db = new PostgresDB();
+
+        var newUser = new Users
+        {
+            UserName = user.UserName,
+            Password = user.Password
+        };
+
+        db.Add(newUser);
+        db.SaveChanges();
+        return newUser;
+    }
 }

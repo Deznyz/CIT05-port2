@@ -8,33 +8,46 @@ namespace WebServer.Controllers;
 
 [Route("api/users")]
 [ApiController]
-public class UsersController : ControllerBase
+public class UsersController : BaseController
 {
-    private readonly DataService _dataService;
-    private readonly LinkGenerator _linkGenerator;
+    private readonly IDataService _dataService;
 
-    public UsersController(DataService dataService, LinkGenerator linkGenerator)
+    public UsersController(IDataService dataService, LinkGenerator linkGenerator)
+        : base(linkGenerator)
     {
         _dataService = dataService;
-        _linkGenerator = linkGenerator;
+
     }
 
+    // TODO: GET
 
 
-    //private UsersModel CreateUsersModel(Users users)
-    //{
-    //    return new UsersModel
-    //    {
-    //        Url = GetUrl(nameof(GetUsers), new { users.UserId }),
-    //        UserId = users.UserId,
-    //        UserName = users.UserName,
-    //        Password = users.Password
-    //    };
-    //}
+    // POST
+    [HttpPost]
+    public IActionResult CreateUser(CreateUsersModel model)
+    {
+        var user = new Users
+        {
+            UserName = model.UserName,
+            Password = model.Password
+        };
 
+        _dataService.CreateUsers(user);
+
+        return Ok(user);
+    }
+
+    // TODO: PUT
+
+    // TODO: DELETE
+
+
+
+    /*
     private string? GetUrl(string name, object values)
     {
         return _linkGenerator.GetUriByName(HttpContext, name, values);
     }
+    */
 
 }
