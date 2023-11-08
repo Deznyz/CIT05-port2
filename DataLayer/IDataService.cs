@@ -46,6 +46,7 @@ namespace DataLayer
         EpisodeBelongsTo GetEpisodeBelongsTo(string episodeTitleId, string parentTvShowTitleId);
         EpisodeBelongsTo CreateEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
         bool DeleteEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
+        bool UpdateEpisodeBelongsTo(string episodeTitleId, string ParentTvShowTitleId, EpisodeBelongsTo updateInfo);
 
         /*-------------------------------------------------------------------------------
                                     ------Frontend------
@@ -55,12 +56,24 @@ namespace DataLayer
         Frontend GetFrontend(string titleId, string poster);
         Frontend CreateFrontend(Frontend frontend);
         bool DeleteFrontend(Frontend frontend);
+        bool UpdateFrontend(string titleId, string poster, Frontend frontend);
 
 
         /*-------------------------------------------------------------------------------
-                                    ------GetCoActors------
+                                    ------Actors------
         ---------------------------------------------------------------------------------*/
+        //D5
+        (IList<NameSearchResult>, int count) NameSearch(string name, int page, int pageSize);
+        //D6
         (IList <CoActors>, int count) GetCoActors(string givenName, int page, int pageSize);
+        //D7
+        WeightedAverage GetWeightedAverage(string nameId);
+        //D8.1
+        public (IList<CastRatingsMovieId>, int count) GetCastRatingsMovieId(string movieId, int page, int pageSize);
+        //D8.2
+        public (IList<CastRatingsMovieTitles>, int count) GetCastRatingsMovieTitles(string movieTitle, int page, int pageSize);
+
+
     }
 
 

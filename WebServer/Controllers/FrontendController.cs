@@ -86,4 +86,27 @@ public class FrontendController : BaseController
         };
     }
 
+    [HttpPut("{titleId}/{poster}", Name = nameof(UpdateFrontend))]
+    public IActionResult UpdateFrontend(string titleId, string poster, CreateFrontendModel model)
+    {
+        var existFrontend = _dataService.GetFrontend(titleId, poster);
+
+        if (existFrontend != null)
+        {
+            var updateFrontend = new Frontend
+            {
+                TitleId = model.TitleId,
+                Plot = model.Plot,
+                Poster = model.Poster               
+            };
+
+            _dataService.UpdateFrontend(titleId, poster, updateFrontend);
+            return Ok(existFrontend);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
 }

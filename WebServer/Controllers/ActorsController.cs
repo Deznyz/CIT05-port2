@@ -21,10 +21,26 @@ public class ActorsController : BaseController
 
     }
 
+    [HttpGet("{name}")]
+    public IActionResult NameSearch(string name, int page = 0, int pageSize =10)
+    {
+        (var nameSearchResult, var total) = _dataService.NameSearch(name, page, pageSize);
+        return Ok(nameSearchResult);
+
+    }
+
     [HttpGet("{name}/coactors")]
     public IActionResult GetCoActors(string name) {
         (var coActors, var total) = _dataService.GetCoActors(name, 0, 10);
         return Ok(coActors);
+
+    }
+
+    [HttpGet("{id}/weightedaverage")]
+    public IActionResult GetWeightedAverage(string id)
+    {
+        var weightedAverage = _dataService.GetWeightedAverage(id);
+        return Ok(weightedAverage);
 
     }
 
