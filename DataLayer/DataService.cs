@@ -350,17 +350,6 @@ public class DataService : IDataService
     public Names CreateName(Names name)
     {
         using var db = new PostgresDB();
-        //var newAlias = new Aliases
-        //{
-        //    TitleId = titleId,
-        //    Ordering = ordering,
-        //    Title = title,
-        //    Region = region,
-        //    Language = language,
-        //    IsOriginalTitle = isOriginalTitle,
-        //    Types = types,
-        //    Attributes = attributes
-        //};
         db.Add(name);
         db.SaveChanges();
         return name;
@@ -373,7 +362,6 @@ public class DataService : IDataService
             .FirstOrDefault(x => x.NameId == name.NameId);
         if (name != null)
         {
-            //db.Aliases.Update
             db.Names.Remove(name);
             return db.SaveChanges() > 0;
         }

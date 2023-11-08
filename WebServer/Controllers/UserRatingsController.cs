@@ -49,7 +49,7 @@ public class UserRatingsController : BaseController
     public IActionResult GetNameWorkedAs(int userId, string? titleId)
     {
         var nameWorkedAs = _dataService.GetNameWorkedAs(userId, titleId);
-        if (titleId == null)
+        if (userId == null)
         {
             return NotFound();
         }

@@ -68,7 +68,8 @@ namespace DataLayer
         (IList<UserRatings>, int count) GetUserRatings(int page, int pageSize);
         (IList<UserRatings>, int count) GetUserRatings(int? userId, int page, int pageSize);
         UserRatings GetUserRatings(int userId, string? titleId);
-        UserRatings GetUserRatings(UserRatings userRatings);
+        UserRatings UserRatings(UserRatings userRatings);
+        UserRatings CreateUserRatings(UserRatings userRatings);
         bool DeleteUserRatings(UserRatings userRatings);
 
 
