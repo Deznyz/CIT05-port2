@@ -7,12 +7,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer;
 
+
 public class DataService : IDataService
 {
+    string connectionString = "host=localhost;db=portfolio1;uid=postgres;pwd=postgres";
 
     public (IList<Aliases>, int count) GetAliases(int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         //var result = db.Aliases.ToList();
         //return result;
 
@@ -22,14 +24,14 @@ public class DataService : IDataService
 
     public (IList<Aliases>, int count) GetAliases(string titleId, int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.Aliases.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
         return (result, db.Aliases.Count());
     }
 
     public Aliases? GetAlias(string titleId, int? ordering)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.Aliases.Where(x => x.Ordering == ordering).FirstOrDefault(x => x.TitleId == titleId);
         if (result != null)
         {
@@ -45,7 +47,7 @@ public class DataService : IDataService
 
     public Aliases CreateAliases(Aliases newAlias)
     {
-        using var db = new PostgresDB();
+        using var db = new PostgresDB(connectionString);
         //var newAlias = new Aliases
         //{
         //    TitleId = titleId,
@@ -64,7 +66,7 @@ public class DataService : IDataService
 
     public bool DeleteAliases(Aliases alias)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var l = db.Aliases.Where(x => x.TitleId == alias.TitleId).ToList();
         var deleteAlias = db.Aliases
             .FirstOrDefault(x => x.TitleId == alias.TitleId && x.Ordering == alias.Ordering);
@@ -78,7 +80,7 @@ public class DataService : IDataService
     }
     public (IList<Genres>, int count) GetGenres(int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         //var result = db.Aliases.ToList();
         //return result;
 
@@ -88,14 +90,14 @@ public class DataService : IDataService
 
     public (IList<Genres>, int count) GetGenres(string titleId, int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.Genres.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
         return (result, db.Genres.Count());
     }
 
     public Genres? GetGenre(string titleId, string genre)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.Genres.Where(x => x.Genre == genre).FirstOrDefault(x => x.TitleId == titleId);
         if (result != null)
         {
@@ -111,7 +113,7 @@ public class DataService : IDataService
 
     public Genres CreateGenres(Genres newGenre)
     {
-        using var db = new PostgresDB();
+        using var db = new PostgresDB(connectionString);
         //var newAlias = new Aliases
         //{
         //    TitleId = titleId,
@@ -130,7 +132,7 @@ public class DataService : IDataService
 
     public bool DeleteGenres(Genres genre)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var l = db.Genres.Where(x => x.TitleId == genre.TitleId).ToList();
         var deleteGenre = db.Genres
             .FirstOrDefault(x => x.TitleId == genre.TitleId && x.Genre == genre.Genre);
@@ -144,7 +146,7 @@ public class DataService : IDataService
     }
     public (IList<KnownFor>, int count) GetKnownFors(int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         //var result = db.Aliases.ToList();
         //return result;
 
@@ -154,14 +156,14 @@ public class DataService : IDataService
 
     public (IList<KnownFor>, int count) GetKnownFors(string titleId, int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.KnownFors.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
         return (result, db.Genres.Count());
     }
 
     public KnownFor? GetKnownFor(string titleId, string nameId)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.KnownFors.Where(x => x.NameId == nameId).FirstOrDefault(x => x.TitleId == titleId);
         if (result != null)
         {
@@ -175,7 +177,7 @@ public class DataService : IDataService
 
     public KnownFor CreateKnownFor(KnownFor newKnownFor)
     {
-        using var db = new PostgresDB();
+        using var db = new PostgresDB(connectionString);
         //var newAlias = new Aliases
         //{
         //    TitleId = titleId,
@@ -194,7 +196,7 @@ public class DataService : IDataService
 
     public bool DeleteKnownFor(KnownFor knownfor)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var DeleteKnownFor = db.KnownFors
             .FirstOrDefault(x => x.TitleId == knownfor.TitleId && x.NameId == knownfor.NameId);
         if (knownfor != null)
@@ -208,7 +210,7 @@ public class DataService : IDataService
 
     public (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         //var result = db.Aliases.ToList();
         //return result;
 
@@ -219,7 +221,7 @@ public class DataService : IDataService
 
     public MovieRatings? GetMovieRating(string MovieRatingId)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.MoviesRatings.FirstOrDefault(x => x.TitleId == MovieRatingId);
         if (result != null)
         {
@@ -233,7 +235,7 @@ public class DataService : IDataService
 
     public MovieRatings CreateMovieRating(MovieRatings movieRating)
     {
-        using var db = new PostgresDB();
+        using var db = new PostgresDB(connectionString);
         //var newAlias = new Aliases
         //{
         //    TitleId = titleId,
@@ -252,7 +254,7 @@ public class DataService : IDataService
 
     public bool DeleteMovieRating(MovieRatings movieRating)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var DeletemovieRating = db.MoviesRatings
             .FirstOrDefault(x => x.TitleId == movieRating.TitleId);
         if (movieRating != null)
@@ -266,7 +268,7 @@ public class DataService : IDataService
 
     public (IList<MovieTitles>, int count) GetMovieTitles(int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         //var result = db.Aliases.ToList();
         //return result;
 
@@ -277,7 +279,7 @@ public class DataService : IDataService
 
     public MovieTitles? GetMovieTitle(string MovieTitleId)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.MoviesTitles.FirstOrDefault(x => x.TitleId == MovieTitleId);
         if (result != null)
         {
@@ -291,7 +293,7 @@ public class DataService : IDataService
 
     public MovieTitles CreateMovieTitle(MovieTitles movieTitle)
     {
-        using var db = new PostgresDB();
+        using var db = new PostgresDB(connectionString);
         //var newAlias = new Aliases
         //{
         //    TitleId = titleId,
@@ -310,7 +312,7 @@ public class DataService : IDataService
 
     public bool DeleteMovieTitle(MovieTitles movieTitles)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var DeletemovieRating = db.MoviesTitles
             .FirstOrDefault(x => x.TitleId == movieTitles.TitleId);
         if (movieTitles != null)
@@ -324,7 +326,7 @@ public class DataService : IDataService
 
     public (IList<Names>, int count) GetNames(int page, int pageSize)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         //var result = db.Aliases.ToList();
         //return result;
 
@@ -335,7 +337,7 @@ public class DataService : IDataService
 
     public Names? GetName(string nameId)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var result = db.Names.FirstOrDefault(x => x.NameId == nameId);
         if (result != null)
         {
@@ -349,7 +351,7 @@ public class DataService : IDataService
 
     public Names CreateName(Names name)
     {
-        using var db = new PostgresDB();
+        using var db = new PostgresDB(connectionString);
         //var newAlias = new Aliases
         //{
         //    TitleId = titleId,
@@ -368,7 +370,7 @@ public class DataService : IDataService
 
     public bool DeleteName(Names name)
     {
-        var db = new PostgresDB();
+        var db = new PostgresDB(connectionString);
         var DeletemovieRating = db.Names
             .FirstOrDefault(x => x.NameId == name.NameId);
         if (name != null)
