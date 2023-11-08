@@ -35,6 +35,7 @@ namespace DataLayer
         public DbSet<PostgresModels.WeightedAverage> WeightedAverages { get; set; }
         public DbSet<PostgresModels.CastRatingsMovieId> CastRatingsMovieIds { get; set; }
         public DbSet<PostgresModels.CastRatingsMovieTitles> CastRatingsMovieTitles { get; set; }
+        public DbSet<PostgresModels.SearchTitleResult> SearchTitleResults { get; set; }
 
 
 
@@ -361,6 +362,15 @@ namespace DataLayer
                 .Property(x => x.Name).HasColumnName("name");
             modelBuilder.Entity<PostgresModels.CastRatingsMovieTitles>()
                 .Property(x => x.Rating).HasColumnName("rating");
+
+            /*-------------------------------------------------------------------------------
+                                    ------SearchTitleResults------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.SearchTitleResult>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.SearchTitleResult>()
+                .Property(x => x.TitleId).HasColumnName("title_id");
+            modelBuilder.Entity<PostgresModels.SearchTitleResult>()
+                .Property(x => x.PrimaryTitle).HasColumnName("primary_title");
         }
 
 

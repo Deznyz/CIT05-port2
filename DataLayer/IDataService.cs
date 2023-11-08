@@ -62,6 +62,11 @@ namespace DataLayer
         /*-------------------------------------------------------------------------------
                                     ------Actors------
         ---------------------------------------------------------------------------------*/
+        //D1
+        bool CreateUser(string username, string password);
+        bool UpdateUserPassword(int id, string newPassword);
+        //D2
+        (IList<SearchTitleResult>, int count) SearchTitle(int userId, string queryString, int page, int pageSize);
         //D5
         (IList<NameSearchResult>, int count) NameSearch(string name, int page, int pageSize);
         //D6
@@ -69,9 +74,9 @@ namespace DataLayer
         //D7
         WeightedAverage GetWeightedAverage(string nameId);
         //D8.1
-        public (IList<CastRatingsMovieId>, int count) GetCastRatingsMovieId(string movieId, int page, int pageSize);
+        (IList<CastRatingsMovieId>, int count) GetCastRatingsMovieId(string movieId, int page, int pageSize);
         //D8.2
-        public (IList<CastRatingsMovieTitles>, int count) GetCastRatingsMovieTitles(string movieTitle, int page, int pageSize);
+        (IList<CastRatingsMovieTitles>, int count) GetCastRatingsMovieTitles(string movieTitle, int page, int pageSize);
 
 
     }

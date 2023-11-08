@@ -19,6 +19,14 @@ public class MovieTitlesController : BaseController
 
     }
 
+    [HttpGet("searchtitle/{userId}/{title}")]
+    public IActionResult SearchTitle(int userId, string title, int page = 0, int pageSize = 10)
+    {
+
+        (var searchTitleResult, var total) = _dataService.SearchTitle(userId, title, page, pageSize);
+        return Ok(searchTitleResult);
+    }
+
     [HttpGet("castrating/titleid/{movieId}")]
     public IActionResult GetCastRatingsMovieId(string movieId, int page = 0, int pageSize = 10)
     {

@@ -460,8 +460,25 @@ public class DataService : IDataService
 
         return result ?? false;
     }
-    
-    
+
+    //D2
+    public (IList<SearchTitleResult>, int count) SearchTitle(int userId, string queryString, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.SearchTitleResults
+            .FromSqlInterpolated($"select * from SearchTitle({userId}, {queryString})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.SearchTitleResults
+            .FromSqlInterpolated($"select * from SearchTitle({userId}, {queryString})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
     //D5
     public (IList<NameSearchResult>, int count) NameSearch(string givenName, int page, int pageSize)
     {
@@ -473,7 +490,7 @@ public class DataService : IDataService
             .Take(pageSize)
             .ToList();
 
-        var totalCount = db.CoActors
+        var totalCount = db.NameSearchResults
             .FromSqlInterpolated($"select * from name_search({givenName})")
             .Count();
 
