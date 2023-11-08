@@ -2,6 +2,7 @@ using DataLayer;
 using DataLayer.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebServer.Models;
 
 namespace WebServer.Controllers;
@@ -57,7 +58,32 @@ public class NameWorkedAsController : BaseController
             return Ok(CreateNameWorkedAsModel(nameWorkedAs));
         }
 
-        [HttpPost]
+
+
+    [HttpPut("{nameId}", Name = nameof(UpdateNameWorkedAs))]
+    public IActionResult UpdateNameWorkedAs(string nameId, CreateNameWorkedAsModel model)
+    {
+        var existNameWorkedAs = _dataService.GetNameWorkedAs(nameId);
+
+        if (existNameWorkedAs != null)
+        {
+            var updateNameWorkedAs = new NameWorkedAs
+            {
+                NameId = model.NameId,
+                Profession = model.Profession
+            };
+
+            _dataService.UpdateNameWorkedAs(nameId, updateNameWorkedAs);
+            return Ok(existNameWorkedAs);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
+
+    [HttpPost]
         public IActionResult CreateNameWorkedAs(CreateNameWorkedAsModel model)
         {
             var nameWorkedAs = new NameWorkedAs

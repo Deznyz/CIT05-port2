@@ -57,7 +57,33 @@ public class SearchHistoryController : BaseController
             return Ok(CreateSearchHistoryModel(searchHistory));
         }
 
-        [HttpPost]
+
+    [HttpPut("{searchHistoryd}", Name = nameof(UpdateSearchHistory))]
+    public IActionResult UpdateSearchHistory(int searchHistoryId, CreateSearchHistoryModel model)
+    {
+        var existSearchHistory = _dataService.GetSearchHistory(searchHistoryId);
+
+        if (existSearchHistory != null)
+        {
+            var updateSearchHistory = new SearchHistory
+            {
+                SearchHistoryId = model.SearchHistoryId,
+                UserId = model.UserId,
+                Searched = model.Searched
+            };
+
+            _dataService.UpdateSearchHistory(searchHistoryId, updateSearchHistory);
+            return Ok(existSearchHistory);
+        }
+        else
+        {
+            return NotFound();
+
+        }
+    }
+
+
+            [HttpPost]
         public IActionResult GetSearchHistory(CreateSearchHistoryModel model)
         {
             var searchHistory = new SearchHistory

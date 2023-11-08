@@ -57,6 +57,18 @@ public class UserRatingsController : BaseController
         return Ok(CreateUserRatingsModel(userRatings));
     }
 
+    [HttpGet("{userId}", Name = nameof(GetUserRatings))]
+    public IActionResult GetUserRatings(int userId, string titleId)
+    {
+        var userRatings = _dataService.GetUserRatings(userId);
+        if (userId == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(CreateUserRatingsModel(userRatings));
+    }
+
     [HttpPost]
     public IActionResult CreateUserRatings(CreateUserRatingsModel model)
     {

@@ -45,17 +45,18 @@ public class UsersController : BaseController
 
     }
 
-    //[HttpGet("{nameId}/{profession}", Name = nameof(GetNameWorkedAs))]
-    //public IActionResult GetNameWorkedAs(string nameId, string? profession)
-    //{
-    //    var nameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);
-    //    if (nameId == null)
-    //    {
-    //        return NotFound();
-    //    }
+    [HttpGet("{userId}", Name = nameof(GetUsers))]
+    public IActionResult GetUsers(int userId)
+    {
+        var users = _dataService.GetUsers(userId);
+        if (userId == null)
+        {
+            return NotFound();
+        }
 
-    //    return Ok(CreateNameWorkedAsModel(nameWorkedAs));
-    //}
+        return Ok(CreateUsersModel(users));
+    }
+
 
     [HttpPost]
     public IActionResult CreateUsers(CreateUsersModel model)

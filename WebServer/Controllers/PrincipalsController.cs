@@ -58,6 +58,33 @@ public class PrincipalsController : BaseController
         return Ok(CreatePrincipalsModel(principals));
     }
 
+    [HttpPut("{principalsId}", Name = nameof(UpdatePrincipals))]
+    public IActionResult UpdatePrincipals(int principalsId, CreatePrincipalsModel model)
+    {
+        var existPrincipals = _dataService.GetPrincipals(principalsId);
+
+        if (existPrincipals != null)
+        {
+            var updatePrincipals = new Principals
+            {
+                PrincipalsId = model.PrincipalsId,
+                TitleId = model.TitleId,
+                Ordering = model.Ordering,
+                NameId = model.NameId,
+                JobCategory = model.JobCategory,
+                Job = model.Job,
+                Role = model.Role
+            };
+
+            _dataService.UpdatePrincipals(principalsId, updatePrincipals);
+            return Ok(existPrincipals);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
     [HttpPost]
     public IActionResult CreatePrincipals(CreatePrincipalsModel model)
     {

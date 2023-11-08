@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.Collections.Generic;
 
 namespace DataLayer
@@ -45,10 +46,11 @@ namespace DataLayer
         //finde på Titel id
 
         (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize);
-        (IList<NameWorkedAs>, int count) GetNameWorkedAs(string nameId, int page, int pageSize);
-        NameWorkedAs GetNameWorkedAs(string nameId, string? profession);
+        (IList<NameWorkedAs>, int count) GetNameWorkedAs(string NameId, int page, int pageSize);
+        NameWorkedAs GetNameWorkedAs(string NameId, string? profession);
         NameWorkedAs CreateNameWorkedAs(NameWorkedAs nameWorkedAs);
         bool DeleteNameWorkedAs(NameWorkedAs nameWorkedAs);
+        bool UpdateNameWorkedAs(string nameId, NameWorkedAs updateInfo);
 
 
 
@@ -56,12 +58,17 @@ namespace DataLayer
         Names GetPrincipals(int principalsId);
         Names CreatePrincipals(Principals principals);
         bool DeletePrincipals(Principals principals);
+        bool UpdatePrincipals(int principalsId, Principals updateInfo);
+
+
+
 
 
         (IList<SearchHistory>, int count) GetSearchHistory(int page, int pageSize);
         SearchHistory GetSearchHistory(int searchHistoryId);
         SearchHistory CreateSearchHistory(SearchHistory searchHistory);
         bool DeleteSearchHistory(SearchHistory searchHistory);
+        bool UpdateSearchHistory(int searchHistoryId, SearchHistory updateInfo);
 
 
 
@@ -71,12 +78,14 @@ namespace DataLayer
         UserRatings UserRatings(UserRatings userRatings);
         UserRatings CreateUserRatings(UserRatings userRatings);
         bool DeleteUserRatings(UserRatings userRatings);
+        bool UpdateUserRatings(int userId, string? titleId, SearchHistory updateInfo);
 
 
         (IList<Users>, int count) GetUsers(int page, int pageSize);
         Users GetUsers(int userId);
         Users CreateUsers(Users users);
         bool DeleteUsers(Users users);
+        bool UpdateUsers(int userId, Users updateInfo);
 
     }
 }
