@@ -394,4 +394,20 @@ public class DataService : IDataService
         db.SaveChanges();
         return newUser;
     }
+
+    public Users GetUserByUsername(string username)
+    {
+        using var db = new PostgresDB();
+
+        var user = db.Users.FirstOrDefault(u => u.UserName == username);
+
+        return user;
+    }
+
+    public bool VerifyPassword(Users user, string providedPassword)
+    {
+        // todo: vi bør overveje at gøre brug af hashing her. Vi kan med fordel bruge PasswordHasher
+        // man vil aldrig gemme plain text adgangskoder i produktion
+        return user.Password == providedPassword;
+    }
 }

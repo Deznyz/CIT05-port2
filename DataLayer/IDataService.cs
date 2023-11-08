@@ -33,6 +33,9 @@ namespace DataLayer
         Names CreateName(Names name);
         bool DeleteName(Names name);
         Users CreateUsers(Users user);
+        Users GetUserByUsername(string username);
+
+        bool VerifyPassword(Users user, string providedPassword);
 
     }
 }
