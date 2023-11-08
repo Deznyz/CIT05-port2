@@ -367,6 +367,29 @@ public class DataService : IDataService
                                     ------DB functions------
     ---------------------------------------------------------------------------------*/
 
+
+    //D4
+    public (IList<StructuredStringSearch>, int count) GetStructuredStringSearch(string tconst, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.StructuredStringSearch
+            .FromSqlInterpolated($"StructuredStringSearch")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.StructuredStringSearch
+            .FromSqlInterpolated($"StructuredStringSearch")
+            .Count();
+
+        return (query, totalCount);
+    }
+
+
+
+
+
     //D6
     public (IList<CoActors>, int count) GetCoActors(string givenName, int page, int pageSize)
     {
@@ -380,6 +403,65 @@ public class DataService : IDataService
 
         var totalCount = db.CoActors
             .FromSqlInterpolated($"select * from get_co_actors({givenName})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
+
+
+
+    //D10
+    public (IList<AssociatedWords>, int count) GetAssociatedWords(string titleId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.AssociatedWords
+            .FromSqlInterpolated($"SELECT * FROM associated_words({titleId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.AssociatedWords
+            .FromSqlInterpolated($"SELECT * FROM associated_words({titleId})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
+    //D11  skal rettes i
+    public (IList<ExactSearch>, int count) GetExactSearch(string titleId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.ExactSearch
+            .FromSqlInterpolated($"SELECT wi.tconst, movie_titles.original_title({titleId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.ExactSearch
+            .FromSqlInterpolated($"SELECT wi.tconst, movie_titles.original_title({titleId})")
+            .Count();
+
+        return (query, totalCount);
+
+    }
+
+
+        //D12
+        public (IList<AssociatedTitle>, int count) GetAssociatedTitle(string titleId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.AssociatedTitle
+            .FromSqlInterpolated($"SELECT a.title_id, a.title, count(a.title_id) as number_of_matches({titleId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.AssociatedTitle
+            .FromSqlInterpolated($"SELECT a.title_id, a.title, count(a.title_id) as number_of_matches({titleId})")
             .Count();
 
         return (query, totalCount);

@@ -58,9 +58,36 @@ namespace DataLayer
 
 
         /*-------------------------------------------------------------------------------
+                                   ------GetStructuredStringSearch------
+       ---------------------------------------------------------------------------------*/
+        (IList<StructuredStringSearch>, int count) GetStructuredStringSearch(string tconst, int page, int pageSize);
+
+
+
+        /*-------------------------------------------------------------------------------
                                     ------GetCoActors------
         ---------------------------------------------------------------------------------*/
         (IList <CoActors>, int count) GetCoActors(string givenName, int page, int pageSize);
+
+
+
+        /*-------------------------------------------------------------------------------
+                                  ------GetAssociatedWords------
+      ---------------------------------------------------------------------------------*/
+        (IList<AssociatedWords>, int count) GetAssociatedWords(string titleId, int page, int pageSize);
+
+
+        /*-------------------------------------------------------------------------------
+                         ------GetExactSearch------
+---------------------------------------------------------------------------------*/
+        (IList<AssociatedTitle>, int count) GetExactSearch(string titleId, int page, int pageSize);
+
+
+        /*-------------------------------------------------------------------------------
+                           ------GetAssociatedTitle------
+---------------------------------------------------------------------------------*/
+        (IList<AssociatedTitle>, int count) GetAssociatedTitle(string titleId, int page, int pageSize);
+
     }
 
 
