@@ -155,9 +155,16 @@ public class DataService : IDataService
     public BookmarksName CreateBookmarksName(BookmarksName newBookmarksName)
     {
         using var db = new PostgresDB();
-        db.Add(newBookmarksName);
+
+        var UserId = newBookmarksName.UserId;
+        var nameId = newBookmarksName.NameId;
+
+        db.Database.ExecuteSqlInterpolated($"select CreateBookmarkTitle({UserId}, {nameId})");
+
         db.SaveChanges();
+
         return newBookmarksName;
+
     }
 
     public bool DeleteBookmarksName(BookmarksName bookmarksName)
@@ -170,7 +177,7 @@ public class DataService : IDataService
 
         if (deleteBookmarksName != null)
         {
-            db.BookmarksNames.Remove(deleteBookmarksName);
+            db.Database.ExecuteSqlInterpolated($"select DeleteBookmarkName({bookmarksName.UserId}, {bookmarksName.NameId})");
             return db.SaveChanges() > 0;
         }
         return false;
@@ -215,7 +222,18 @@ public class DataService : IDataService
     public BookmarksTitle CreateBookmarksTitle(BookmarksTitle newBookmarksTitle)
     {
         using var db = new PostgresDB();
-        db.Add(newBookmarksTitle);
+
+        var UserId = newBookmarksTitle.UserId;
+        var titleId = newBookmarksTitle.TitleId;
+
+
+        db.Database.ExecuteSqlInterpolated($"select CreateBookmarkTitle({UserId}, {titleId})");
+
+        var category = db.BookmarksTitles.Find(UserId, titleId);
+
+        Console.WriteLine($"{UserId}, {titleId}");
+
+
         db.SaveChanges();
         return newBookmarksTitle;
     }
@@ -230,7 +248,7 @@ public class DataService : IDataService
 
         if (deleteBookmarksTitle != null)
         {
-            db.BookmarksTitles.Remove(deleteBookmarksTitle);
+            db.Database.ExecuteSqlInterpolated($"select DeleteBookmarkTitle({bookmarksTitle.UserId}, {bookmarksTitle.UserId})");
             return db.SaveChanges() > 0;
         }
         return false;
@@ -362,6 +380,260 @@ public class DataService : IDataService
         }
         return false;
     }
+
+
+    /*-------------------------------------------------------------------------------
+                                    ------Genres------
+    ---------------------------------------------------------------------------------*/
+    public (IList<Genres>, int count) GetGenres(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+
+        var genres = db.Genres.Skip(page * pageSize).Take(pageSize).ToList();
+        return (genres, db.Genres.Count());
+    }
+
+    public (IList<Genres>, int count) GetGenres(string titleId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.Genres.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.Genres.Count());
+    }
+
+    public Genres? GetGenre(string titleId, string genre)
+    {
+        var db = new PostgresDB();
+        var result = db.Genres.Where(x => x.Genre == genre).FirstOrDefault(x => x.TitleId == titleId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+
+    public Genres CreateGenres(Genres newGenre)
+    {
+        using var db = new PostgresDB();
+        db.Add(newGenre);
+        db.SaveChanges();
+        return newGenre;
+    }
+
+    public bool DeleteGenres(Genres genre)
+    {
+        var db = new PostgresDB();
+        var deleteGenre = db.Genres
+            .FirstOrDefault(x => x.TitleId == genre.TitleId && x.Genre == genre.Genre);
+        if (genre != null)
+        {
+            db.Genres.Remove(genre);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+
+    /*-------------------------------------------------------------------------------
+                                    ------KnownFor------
+    ---------------------------------------------------------------------------------*/
+    public (IList<KnownFor>, int count) GetKnownFors(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+
+        var knownFor = db.KnownFors.Skip(page * pageSize).Take(pageSize).ToList();
+        return (knownFor, db.Genres.Count());
+    }
+
+    public (IList<KnownFor>, int count) GetKnownFors(string titleId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.KnownFors.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.Genres.Count());
+    }
+
+    public KnownFor? GetKnownFor(string titleId, string nameId)
+    {
+        var db = new PostgresDB();
+        var result = db.KnownFors.Where(x => x.NameId == nameId).FirstOrDefault(x => x.TitleId == titleId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public KnownFor CreateKnownFor(KnownFor newKnownFor)
+    {
+        using var db = new PostgresDB();
+        db.Add(newKnownFor);
+        db.SaveChanges();
+        return newKnownFor;
+    }
+
+    public bool DeleteKnownFor(KnownFor knownfor)
+    {
+        var db = new PostgresDB();
+        var DeleteKnownFor = db.KnownFors
+            .FirstOrDefault(x => x.TitleId == knownfor.TitleId && x.NameId == knownfor.NameId);
+        if (knownfor != null)
+        {
+            db.KnownFors.Remove(knownfor);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+
+    /*-------------------------------------------------------------------------------
+                                    ------MovieRating------
+    ---------------------------------------------------------------------------------*/
+    public (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+
+        var movieRatings = db.MoviesRatings.Skip(page * pageSize).Take(pageSize).ToList();
+        return (movieRatings, db.MoviesRatings.Count());
+    }
+
+
+    public MovieRatings? GetMovieRating(string MovieRatingId)
+    {
+        var db = new PostgresDB();
+        var result = db.MoviesRatings.FirstOrDefault(x => x.TitleId == MovieRatingId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public MovieRatings CreateMovieRating(MovieRatings movieRating)
+    {
+        using var db = new PostgresDB();
+        db.Add(movieRating);
+        db.SaveChanges();
+        return movieRating;
+    }
+
+    public bool DeleteMovieRating(MovieRatings movieRating)
+    {
+        var db = new PostgresDB();
+        var DeletemovieRating = db.MoviesRatings
+            .FirstOrDefault(x => x.TitleId == movieRating.TitleId);
+        if (movieRating != null)
+        {
+            db.MoviesRatings.Remove(movieRating);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+    /*-------------------------------------------------------------------------------
+                                    ------MovieTitles------
+    ---------------------------------------------------------------------------------*/
+    public (IList<MovieTitles>, int count) GetMovieTitles(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+
+        var movieTitles = db.MoviesTitles.Skip(page * pageSize).Take(pageSize).ToList();
+        return (movieTitles, db.MoviesTitles.Count());
+    }
+
+
+    public MovieTitles? GetMovieTitle(string MovieTitleId)
+    {
+        var db = new PostgresDB();
+        var result = db.MoviesTitles.FirstOrDefault(x => x.TitleId == MovieTitleId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public MovieTitles CreateMovieTitle(MovieTitles movieTitle)
+    {
+        using var db = new PostgresDB();
+        db.Add(movieTitle);
+        db.SaveChanges();
+        return movieTitle;
+    }
+
+    public bool DeleteMovieTitle(MovieTitles movieTitles)
+    {
+        var db = new PostgresDB();
+        var DeletemovieRating = db.MoviesTitles
+            .FirstOrDefault(x => x.TitleId == movieTitles.TitleId);
+        if (movieTitles != null)
+        {
+            db.MoviesTitles.Remove(movieTitles);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+    /*-------------------------------------------------------------------------------
+                                    ------Names------
+    ---------------------------------------------------------------------------------*/
+    public (IList<Names>, int count) GetNames(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+
+        var names = db.Names.Skip(page * pageSize).Take(pageSize).ToList();
+        return (names, db.Names.Count());
+    }
+
+
+    public Names? GetName(string nameId)
+    {
+        var db = new PostgresDB();
+        var result = db.Names.FirstOrDefault(x => x.NameId == nameId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public Names CreateName(Names name)
+    {
+        using var db = new PostgresDB();
+        db.Add(name);
+        db.SaveChanges();
+        return name;
+    }
+
+    public bool DeleteName(Names name)
+    {
+        var db = new PostgresDB();
+        var DeletemovieRating = db.Names
+            .FirstOrDefault(x => x.NameId == name.NameId);
+        if (name != null)
+        {
+            db.Names.Remove(name);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+
 
     /*-------------------------------------------------------------------------------
                                     ------DB functions------

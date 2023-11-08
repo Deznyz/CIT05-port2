@@ -56,7 +56,47 @@ namespace DataLayer
         Frontend CreateFrontend(Frontend frontend);
         bool DeleteFrontend(Frontend frontend);
 
+        /*-------------------------------------------------------------------------------
+                                    ------Genres------
+        ---------------------------------------------------------------------------------*/
+        (IList<Genres>, int count) GetGenres(int page, int pageSize);
+        (IList<Genres>, int count) GetGenres(string titleId, int page, int pageSize);
+        Genres GetGenre(string titleId, string genre);
+        Genres CreateGenres(Genres genre);
+        bool DeleteGenres(Genres genre);
 
+        /*-------------------------------------------------------------------------------
+                                     ------KnownFor------
+        ---------------------------------------------------------------------------------*/
+        (IList<KnownFor>, int count) GetKnownFors(int page, int pageSize);
+        (IList<KnownFor>, int count) GetKnownFors(string titleId, int page, int pageSize);
+        KnownFor GetKnownFor(string titleId, string nameId);
+        KnownFor CreateKnownFor(KnownFor knownfor);
+        bool DeleteKnownFor(KnownFor knownfor);
+
+        /*-------------------------------------------------------------------------------
+                                   ------MovieRating------
+        ---------------------------------------------------------------------------------*/
+        (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize);
+        MovieRatings GetMovieRating(string MovieRatingId);
+        MovieRatings CreateMovieRating(MovieRatings movieRatings);
+        bool DeleteMovieRating(MovieRatings movieRatings);
+
+        /*-------------------------------------------------------------------------------
+                                   ------MovieTitles------
+        ---------------------------------------------------------------------------------*/
+        (IList<MovieTitles>, int count) GetMovieTitles(int page, int pageSize);
+        MovieTitles GetMovieTitle(string movieTitleId);
+        MovieTitles CreateMovieTitle(MovieTitles movieTitles);
+        bool DeleteMovieTitle(MovieTitles movieTitles);
+
+        /*-------------------------------------------------------------------------------
+                                   ------Names------
+        ---------------------------------------------------------------------------------*/
+        (IList<Names>, int count) GetNames(int page, int pageSize);
+        Names GetName(string nameId);
+        Names CreateName(Names name);
+        bool DeleteName(Names name);
         /*-------------------------------------------------------------------------------
                                     ------GetCoActors------
         ---------------------------------------------------------------------------------*/

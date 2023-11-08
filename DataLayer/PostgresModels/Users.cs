@@ -4,14 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assignment4.Tests
+namespace DataLayer.PostgresModels
 {
-    internal class WebServerTests
+    internal class Users
     {
-
-
-
-
-
     }
 }
