@@ -30,6 +30,7 @@ namespace DataLayer
         public DbSet<Models.UserRatings> UserRatings { get; set; }
         public DbSet<Models.Users> Users { get; set; }
         public DbSet<Models.Wi> Wis { get; set; }
+        public DbSet<PostgresModels.CoActors> CoActors { get; set; }
 
 
 
@@ -308,6 +309,19 @@ namespace DataLayer
                 .Property(x => x.Field).HasColumnName("field");
             modelBuilder.Entity < Models.Wi> ()
                 .Property(x => x.Lexeme).HasColumnName("lexeme");
+
+
+            /*-------------------------------------------------------------------------------
+                                    ------GetCoActors------
+            ---------------------------------------------------------------------------------*/
+            //modelBuilder.Entity<PostgresModels.get_co_actors>().ToTable("");
+            modelBuilder.Entity<PostgresModels.CoActors>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.CoActors> ()
+                .Property(x=> x.NameId).HasColumnName("name_id");
+            modelBuilder.Entity<PostgresModels.CoActors>()
+                .Property(x => x.NumberOfCoActors).HasColumnName("num_co_acted");
         }
+
+
     }
 }

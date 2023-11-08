@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Text;
 using DataLayer.Models;
+using DataLayer.PostgresModels;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -359,5 +361,27 @@ public class DataService : IDataService
             return db.SaveChanges() > 0;
         }
         return false;
+    }
+
+    /*-------------------------------------------------------------------------------
+                                    ------DB functions------
+    ---------------------------------------------------------------------------------*/
+
+    //D6
+    public (IList<CoActors>, int count) GetCoActors(string givenName, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.CoActors
+            .FromSqlInterpolated($"select * from get_co_actors({givenName})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.CoActors
+            .FromSqlInterpolated($"select * from get_co_actors({givenName})")
+            .Count();
+
+        return (query, totalCount);
     }
 }

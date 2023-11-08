@@ -1,4 +1,5 @@
 ﻿using DataLayer.Models;
+using DataLayer.PostgresModels;
 using System.Collections.Generic;
 
 namespace DataLayer
@@ -54,5 +55,13 @@ namespace DataLayer
         Frontend GetFrontend(string titleId, string poster);
         Frontend CreateFrontend(Frontend frontend);
         bool DeleteFrontend(Frontend frontend);
+
+
+        /*-------------------------------------------------------------------------------
+                                    ------GetCoActors------
+        ---------------------------------------------------------------------------------*/
+        (IList <CoActors>, int count) GetCoActors(string givenName, int page, int pageSize);
     }
+
+
 }
