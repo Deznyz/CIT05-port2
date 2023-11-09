@@ -34,7 +34,7 @@ public class UsersController : BaseController
     }
 
    
-    [HttpGet(Name = nameof(GetUsers))]
+    [HttpGet]
     public IActionResult GetUsers(int page = 0, int pageSize = 10)
     {
         (var users, var total) = _dataService.GetUsers(page, pageSize);
@@ -94,6 +94,7 @@ public class UsersController : BaseController
         {
             Url = GetUrl(nameof(GetUsers), new { users.UserId}),
             UserId = users.UserId,
+            Password = users.Password
         };
     }
 }

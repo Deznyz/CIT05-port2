@@ -19,7 +19,7 @@ public class UserRatingsController : BaseController
 
     }
 
-    [HttpGet(Name = nameof(GetUserRatings))]
+    [HttpGet]
     public IActionResult GetUserRatings(int page = 0, int pageSize = 10)
     {
         (var UserRatings, var total) = _dataService.GetUserRatings(page, pageSize);

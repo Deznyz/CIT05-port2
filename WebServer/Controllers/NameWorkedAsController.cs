@@ -46,7 +46,7 @@ public class NameWorkedAsController : BaseController
 
         }
 
-        [HttpGet("{nameId}/{profession}", Name = nameof(GetNameWorkedAs))]
+        [HttpGet("{nameId}/{profession}")]
         public IActionResult GetNameWorkedAs(string nameId, string? profession)
         {
             var nameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);

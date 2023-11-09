@@ -45,7 +45,7 @@ public class SearchHistoryController : BaseController
 
         //}
 
-        [HttpGet("{SearchHistoryId}", Name = nameof(GetSearchHistory))]
+        [HttpGet("{SearchHistoryId}")]
         public IActionResult GetSearchHistoryId(int SearchHistoryId)
         {
             var searchHistory = _dataService.GetSearchHistory(SearchHistoryId);
