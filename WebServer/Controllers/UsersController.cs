@@ -47,18 +47,18 @@ public class UsersController : BaseController
 
     }
 
-    [HttpGet("{userId}")]
-    public IActionResult GetUsers(int userId, int page, int pageSize)
-    {
-        (var users, var total) = _dataService.GetUsers(userId, page, pageSize);
+    //[HttpGet("{userId}")]
+    //public IActionResult GetUsers(int userId, int page, int pageSize)
+    //{
+    //    (var users, var total) = _dataService.GetUsers(userId, page, pageSize);
 
-        var items = users.Select(CreateUsersModel);
+    //    var items = users.Select(CreateUsersModel);
 
-        var result = Paging(items, total, page, pageSize, nameof(GetUsers));
+    //    var result = Paging(items, total, page, pageSize, nameof(GetUsers));
 
-        return Ok(result);
+    //    return Ok(result);
 
-    }
+    //}
 
     [HttpGet("{userId}", Name = nameof(GetUsers))]
     public IActionResult GetUsers(int userId)

@@ -32,18 +32,18 @@ public class SearchHistoryController : BaseController
 
         }
 
-        [HttpGet("{nameId}")]
-        public IActionResult GetSearchHistory(int SearchHistoryId, int page, int pageSize)
-        {
-            (var searchHistory, var total) = _dataService.GetSearchHistory(SearchHistoryId, page, pageSize);
+        //[HttpGet("{nameId}")]
+        //public IActionResult GetSearchHistory(int SearchHistoryId, int page, int pageSize)
+        //{
+        //    (var searchHistory, var total) = _dataService.GetSearchHistory(SearchHistoryId, page, pageSize);
 
-            var items = searchHistory.Select(CreateSearchHistoryModel);
+        //    var items = searchHistory.Select(CreateSearchHistoryModel);
 
-            var result = Paging(items, total, page, pageSize, nameof(GetSearchHistory));
+        //    var result = Paging(items, total, page, pageSize, nameof(GetSearchHistory));
 
-            return Ok(result);
+        //    return Ok(result);
 
-        }
+        //}
 
         [HttpGet("{SearchHistoryId}", Name = nameof(GetSearchHistory))]
         public IActionResult GetSearchHistoryId(int SearchHistoryId)

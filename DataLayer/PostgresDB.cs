@@ -317,15 +317,10 @@ namespace DataLayer
            ---------------------------------------------------------------------------------*/
             modelBuilder.Entity<PostgresModels.StructuredStringSearch>().HasNoKey();
             modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
-                .Property(x => x.User_id).HasColumnName("user_id");
+                .Property(x => x.TitleId).HasColumnName("tconst");
             modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
-                .Property(x => x.TitleSearchString).HasColumnName("title_search_string");
-            modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
-                .Property(x => x.CharactersSearchString).HasColumnName("characters_search_string");
-            modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
-                .Property(x => x.PlotSearchString).HasColumnName("plot_search_string");
-            modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
-                .Property(x => x.PersonsSearchString).HasColumnName("persons_search_string");
+                .Property(x => x.PrimaryTitle).HasColumnName("primary_title");
+            
 
 
             /*-------------------------------------------------------------------------------

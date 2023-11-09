@@ -44,7 +44,7 @@ public class MovieTitlesController : BaseController
 
 
     [HttpGet(Name = nameof(GetMovieTitles))]
-    public IActionResult GetMovieTitles(int page = 0, int pageSize = 10)
+    public IActionResult GetMovieTitles(int page = 0, int pageSize = 10) { 
 
         (var movieTitles, var total) = _dataService.GetMovieTitles(page, pageSize);
 

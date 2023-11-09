@@ -9,7 +9,7 @@ namespace WebServer.Models
     public class PrincipalsModel
     {
         public string Url { get; set; }
-        public int? PrincipalsId { get; set; }
+        public int PrincipalsId { get; set; }
         public string? TitleId { get; set; }
         public int? Ordering {  get; set; }
         public string? NameId { get; set; }

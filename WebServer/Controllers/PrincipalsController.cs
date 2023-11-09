@@ -33,30 +33,30 @@ public class PrincipalsController : BaseController
 
     }
 
-    [HttpGet("{principalsId}")]
-    public IActionResult GePrincipals(int principalsId, int page, int pageSize)
-    {
-        (var principals, var total) = _dataService.GetPrincipals(principalsId, page, pageSize);
+    //[HttpGet("{principalsId}")]
+    //public IActionResult GePrincipals(int principalsId, int page, int pageSize)
+    //{
+    //    (var principals, var total) = _dataService.GetPrincipals(principalsId, page, pageSize);
 
-        var items = principals.Select(CreatePrincipalsModel);
+    //    var items = principals.Select(CreatePrincipalsModel);
 
-        var result = Paging(items, total, page, pageSize, nameof(GetPrincipals));
+    //    var result = Paging(items, total, page, pageSize, nameof(GetPrincipals));
 
-        return Ok(result);
+    //    return Ok(result);
 
-    }
+    //}
 
-    [HttpGet("{principalsId}", Name = nameof(GetPrincipals))]
-    public IActionResult GetNameWorkedAs(string nameId, string? profession)
-    {
-        var nameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);
-        if (nameId == null)
-        {
-            return NotFound();
-        }
+    //[HttpGet("{principalsId}", Name = nameof(GetPrincipals))]
+    //public IActionResult GetNameWorkedAs(string nameId, string? profession)
+    //{
+    //    var nameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);
+    //    if (nameId == null)
+    //    {
+    //        return NotFound();
+    //    }
 
-        return Ok(CreatePrincipalsModel(principals));
-    }
+    //    return Ok(CreatePrincipalsModel(principals));
+    //}
 
     [HttpPut("{principalsId}", Name = nameof(UpdatePrincipals))]
     public IActionResult UpdatePrincipals(int principalsId, CreatePrincipalsModel model)
@@ -106,14 +106,13 @@ public class PrincipalsController : BaseController
         return Created(principalsUri, principals);
     }
 
-    private Principals CreatePrincipalsModel(Principals principals)
+    private PrincipalsModel CreatePrincipalsModel(Principals principals)
     {
         return new PrincipalsModel
         {
-            Url = GetUrl(nameof(GetPrincipals), new { Principals.PrincipalsId}),
+            Url = GetUrl(nameof(GetPrincipals), new { principals.PrincipalsId}),
             PrincipalsId = principals.PrincipalsId,
         };
     }
 }
 
-}

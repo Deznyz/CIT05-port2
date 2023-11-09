@@ -23,7 +23,7 @@ namespace DataLayer
         ---------------------------------------------------------------------------------*/
         (IList<BookmarksName>, int count) GetBookmarksName(int page, int pageSize);
         (IList<BookmarksName>, int count) GetBookmarksName(int userId, int page, int pageSize);
-        BookmarksName GetSpecificBookmarksName(int userId, string nameId);
+        BookmarksName? GetSpecificBookmarksName(int userId, string nameId);
         BookmarksName CreateBookmarksName(BookmarksName bookmarksName);
         bool DeleteBookmarksName(BookmarksName bookmarksName);
 
@@ -98,7 +98,7 @@ namespace DataLayer
         /*-------------------------------------------------------------------------------
                          ------GetExactSearch------
         ---------------------------------------------------------------------------------*/
-        (IList<AssociatedTitle>, int count) GetExactSearch(string titleId, int page, int pageSize);
+        (IList<ExactSearch>, int count) GetExactSearch(string titleId, int page, int pageSize);
 
 
         /*-------------------------------------------------------------------------------
@@ -159,17 +159,16 @@ namespace DataLayer
         (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize);
         (IList<NameWorkedAs>, int count) GetNameWorkedAs(string NameId, int page, int pageSize);
         NameWorkedAs GetNameWorkedAs(string NameId, string? profession);
-        NameWorkedAs CreateNameWorkedAs(NameWorkedAs nameWorkedAs);
-        bool DeleteNameWorkedAs(NameWorkedAs nameWorkedAs);
+        NameWorkedAs CreateNameWorkedAs(NameWorkedAs newNameWorkedas);
+        bool DeleteNameworkedAs(NameWorkedAs nameWorkedAs);
         bool UpdateNameWorkedAs(string nameId, NameWorkedAs updateInfo);
-
 
         /*-------------------------------------------------------------------------------
                                     ------Principals------
         ---------------------------------------------------------------------------------*/
         (IList<Principals>, int count) GetPrincipals(int page, int pageSize);
-        Names GetPrincipals(int principalsId);
-        Names CreatePrincipals(Principals principals);
+        Principals? GetPrincipals(int principalsId);
+        Principals CreatePrincipals(Principals principals);
         bool DeletePrincipals(Principals principals);
         bool UpdatePrincipals(int principalsId, Principals updateInfo);
 
@@ -192,10 +191,9 @@ namespace DataLayer
         (IList<UserRatings>, int count) GetUserRatings(int page, int pageSize);
         (IList<UserRatings>, int count) GetUserRatings(int? userId, int page, int pageSize);
         UserRatings GetUserRatings(int userId, string? titleId);
-        UserRatings UserRatings(UserRatings userRatings);
         UserRatings CreateUserRatings(UserRatings userRatings);
         bool DeleteUserRatings(UserRatings userRatings);
-        bool UpdateUserRatings(int userId, string? titleId, SearchHistory updateInfo);
+        bool UpdateUserRating(int userId, string titleId, UserRatings updateInfo);
 
         /*-------------------------------------------------------------------------------
                                     ------Users------
@@ -204,7 +202,7 @@ namespace DataLayer
         Users GetUsers(int userId);
         Users CreateUsers(Users users);
         bool DeleteUsers(Users users);
-        bool UpdateUsers(int userId, Users updateInfo);
+        bool UpdateUser(int userId, Users updateInfo);
         //D1
         bool CreateUser(string username, string password);
         bool UpdateUserPassword(int id, string newPassword);

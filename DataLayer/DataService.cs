@@ -19,9 +19,6 @@ public class DataService : IDataService
     public (IList<Aliases>, int count) GetAliases(int page, int pageSize)
     {
         var db = new PostgresDB();
-        //var result = db.Aliases.ToList();
-        //return result;
-
         var aliases = db.Aliases.Skip(page * pageSize).Take(pageSize).ToList();
         return (aliases, db.Aliases.Count());
     }
@@ -198,10 +195,11 @@ public class DataService : IDataService
         return (result, db.BookmarksNames.Count());
     }
 
-    public BookmarksName? GetSpecificBookmarksName(int userId, string nameId)
+    public BookmarksName GetSpecificBookmarksName(int userId, string nameId)
     {
         var db = new PostgresDB();
         var result = db.BookmarksNames.FirstOrDefault(x => x.UserId == userId && x.NameId == nameId);
+        return result;
      }
 
         public BookmarksName CreateBookmarksName(BookmarksName newBookmarksName)
@@ -234,6 +232,7 @@ public class DataService : IDataService
     ---------------------------------------------------------------------------------*/
     public (IList<KnownFor>, int count) GetKnownFors(int page, int pageSize)
     {
+        var db = new PostgresDB();
         var knownFor = db.KnownFors.Skip(page * pageSize).Take(pageSize).ToList();
         return (knownFor, db.Genres.Count());
     }
@@ -264,17 +263,6 @@ public class DataService : IDataService
     public KnownFor CreateKnownFor(KnownFor newKnownFor)
     {
         using var db = new PostgresDB();
-        //var newAlias = new Aliases
-        //{
-        //    TitleId = titleId,
-        //    Ordering = ordering,
-        //    Title = title,
-        //    Region = region,
-        //    Language = language,
-        //    IsOriginalTitle = isOriginalTitle,
-        //    Types = types,
-        //    Attributes = attributes
-        //};
         db.Add(newKnownFor);
         db.SaveChanges();
         return newKnownFor;
@@ -354,6 +342,7 @@ public class DataService : IDataService
     ---------------------------------------------------------------------------------*/
     public (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize)
     {
+        var db = new PostgresDB();
         var movieRatings = db.MoviesRatings.Skip(page * pageSize).Take(pageSize).ToList();
         return (movieRatings, db.MoviesRatings.Count());
     }
@@ -402,9 +391,6 @@ public class DataService : IDataService
     public (IList<MovieTitles>, int count) GetMovieTitles(int page, int pageSize)
     {
         var db = new PostgresDB();
-        //var result = db.Aliases.ToList();
-        //return result;
-
         var movieTitles = db.MoviesTitles.Skip(page * pageSize).Take(pageSize).ToList();
         return (movieTitles, db.MoviesTitles.Count());
     }
@@ -636,7 +622,7 @@ public class DataService : IDataService
         }
     }
 
-    public NameWorkedAs CreateNamedWorkedAs(NameWorkedAs newNameWorkedas)
+    public NameWorkedAs CreateNameWorkedAs(NameWorkedAs newNameWorkedas)
     {
         using var db = new PostgresDB();
         db.Add(newNameWorkedas);
@@ -647,7 +633,6 @@ public class DataService : IDataService
     public bool DeleteNameworkedAs(NameWorkedAs nameWorkedAs)
     {
         var db = new PostgresDB();
-        var l = db.NameWorkedAs.Where(x => x.NameId == nameWorkedAs.NameId).ToList();
         var deleteNameworkedAs = db.NameWorkedAs
             .FirstOrDefault(x => x.NameId == nameWorkedAs.NameId && x.Profession == nameWorkedAs.Profession);
         if (nameWorkedAs != null)
@@ -908,7 +893,7 @@ public class DataService : IDataService
     /*-------------------------------------------------------------------------------
                                     ------UserRating------
     ---------------------------------------------------------------------------------*/
-    public (IList<UserRatings>, int count) GetUserRating(int page, int pageSize)
+    public (IList<UserRatings>, int count) GetUserRatings(int page, int pageSize)
     {
         var db = new PostgresDB();
 

@@ -45,22 +45,22 @@ public class UserRatingsController : BaseController
 
     }
 
+    //[HttpGet("{userId}/{titleId}", Name = nameof(GetUserRatings))]
+    //public IActionResult GetNameWorkedAs(int userId, string? titleId)
+    //{
+    //    var nameWorkedAs = _dataService.GetNameWorkedAs(userId, titleId);
+    //    if (userId == null)
+    //    {
+    //        return NotFound();
+    //    }
+
+    //    return Ok(CreateUserRatingsModel(userRatings));
+    //}
+
     [HttpGet("{userId}/{titleId}", Name = nameof(GetUserRatings))]
-    public IActionResult GetNameWorkedAs(int userId, string? titleId)
-    {
-        var nameWorkedAs = _dataService.GetNameWorkedAs(userId, titleId);
-        if (userId == null)
-        {
-            return NotFound();
-        }
-
-        return Ok(CreateUserRatingsModel(userRatings));
-    }
-
-    [HttpGet("{userId}", Name = nameof(GetUserRatings))]
     public IActionResult GetUserRatings(int userId, string titleId)
     {
-        var userRatings = _dataService.GetUserRatings(userId);
+        var userRatings = _dataService.GetUserRatings(userId, titleId);
         if (userId == null)
         {
             return NotFound();

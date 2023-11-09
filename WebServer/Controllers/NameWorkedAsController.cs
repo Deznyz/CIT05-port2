@@ -60,10 +60,10 @@ public class NameWorkedAsController : BaseController
 
 
 
-    [HttpPut("{nameId}", Name = nameof(UpdateNameWorkedAs))]
-    public IActionResult UpdateNameWorkedAs(string nameId, CreateNameWorkedAsModel model)
+    [HttpPut("update/{nameId}/profession", Name = nameof(UpdateNameWorkedAs))]
+    public IActionResult UpdateNameWorkedAs(string nameId, string profession, CreateNameWorkedAsModel model)
     {
-        var existNameWorkedAs = _dataService.GetNameWorkedAs(nameId);
+        var existNameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);
 
         if (existNameWorkedAs != null)
         {
