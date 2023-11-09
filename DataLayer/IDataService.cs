@@ -72,8 +72,6 @@ namespace DataLayer
         /*-------------------------------------------------------------------------------
                                     ------Actors------
         ---------------------------------------------------------------------------------*/
-
-        //D2
         (IList<SearchTitleResult>, int count) SearchTitle(int userId, string queryString, int page, int pageSize);
         //D5
         (IList<NameSearchResult>, int count) NameSearch(string name, int page, int pageSize);

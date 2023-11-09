@@ -58,13 +58,12 @@ public class DataService : IDataService
     public bool DeleteAliases(Aliases alias)
     {
         var db = new PostgresDB();
-        var l = db.Aliases.Where(x => x.TitleId == alias.TitleId).ToList();
         var deleteAlias = db.Aliases
             .FirstOrDefault(x => x.TitleId == alias.TitleId && x.Ordering == alias.Ordering);
         if (deleteAlias != null)
         {
             //db.Aliases.Update
-            db.Aliases.Remove(alias);
+            db.Aliases.Remove(deleteAlias);
             return db.SaveChanges() > 0;
         }
         return false;
