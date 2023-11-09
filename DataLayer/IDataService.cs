@@ -204,9 +204,11 @@ namespace DataLayer
         bool DeleteUsers(Users users);
         bool UpdateUser(int userId, Users updateInfo);
         //D1
-        bool CreateUser(string username, string password);
+        //bool CreateUser(string username, string password);
+        Users CreateUser(Users user);
         bool UpdateUserPassword(int id, string newPassword);
-
+        Users GetUserByUsername(string username);
+        bool VerifyPassword(Users user, string providedPassword);
 
     }
 

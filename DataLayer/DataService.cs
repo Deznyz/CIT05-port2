@@ -1022,6 +1022,53 @@ public class DataService : IDataService
         return users;
     }
 
+    public Users CreateUser(Users user)
+    {
+        using var db = new PostgresDB();
+
+        var newUser = new Users
+        {
+            UserName = user.UserName,
+            Password = user.Password
+        };
+
+        try
+        {
+            db.Add(newUser);
+            db.SaveChanges();
+            return newUser;
+        }
+        catch (DbUpdateException ex)
+        {
+            // tjekker om inner exception er en unique constraint violation
+            if (ex.InnerException is PostgresException postgresException &&
+                postgresException.SqlState == "23505") // 23505 er koden for unique violation i PostgreSQL
+            {
+                // vi kaster InvalidOperationException med en sigende besked, der er brugervenlig
+                throw new InvalidOperationException($"En bruger findes allerede med følgende brugernavn {newUser.UserName}.");
+            }
+
+            // Hvis der ikke er tale om en unique constraint violation, rethrow'er vi den originale exception
+            throw;
+        }
+    }
+
+    public Users GetUserByUsername(string username)
+    {
+        using var db = new PostgresDB();
+
+        var user = db.Users.FirstOrDefault(u => u.UserName == username);
+
+        return user ?? throw new KeyNotFoundException($"Der findes ikke nogle brugere med brugernavn {username}");
+    }
+
+    public bool VerifyPassword(Users user, string providedPassword)
+    {
+        // todo: vi bør overveje at gøre brug af hashing her. Vi kan med fordel bruge PasswordHasher
+        // man vil aldrig gemme plain text adgangskoder i produktion
+        return user.Password == providedPassword;
+    }
+
     public bool DeleteUsers(Users users)
     {
         var db = new PostgresDB();

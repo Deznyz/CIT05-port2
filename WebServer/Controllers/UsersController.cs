@@ -19,13 +19,13 @@ public class UsersController : BaseController
 
     }
 
-    [HttpPost("createuser/{username}/{password}")]
+    /*[HttpPost("createuser/{username}/{password}")]
     public IActionResult CreateUser(string username, string password)
     {
         _dataService.CreateUser(username, password);
 
         return Created(username, password);
-    }
+    }*/
 
     [HttpPut("{id}/{newPassword}")]
     public IActionResult UpdateUserPassword(int id, string password) { 
@@ -60,6 +60,36 @@ public class UsersController : BaseController
 
     //}
 
+
+    [HttpPost]
+    public IActionResult CreateUser(CreateUsersModel model)
+    {
+        // todo: man kunne med fordel bruge PasswordHasher, men det vil kræve at man udvider antal tilladte karakter i db
+        // i test-fasen kan vi dog udelade det helt
+        // var hasher = new PasswordHasher<Users>();
+
+        var user = new Users
+        {
+            UserName = model.UserName,
+            Password = model.Password
+        };
+
+        try
+        {
+            var createdUser = _dataService.CreateUser(user);
+            return Ok(new
+            {
+                UserId = createdUser.UserId,
+                Username = createdUser.UserName
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { ex.Message });
+        }
+
+    }
+
     [HttpGet("{userId}", Name = nameof(GetUsers))]
     public IActionResult GetUsers(int userId)
     {
@@ -72,7 +102,7 @@ public class UsersController : BaseController
         return Ok(CreateUsersModel(users));
     }
 
-
+    /*
     [HttpPost]
     public IActionResult CreateUsers(CreateUsersModel model)
     {
@@ -86,7 +116,9 @@ public class UsersController : BaseController
         var usersUri = Url.Link("GetUsers", new { userId = users.UserId});
 
         return Created(usersUri, users);
-    }
+    }*/
+
+
 
     private UsersModel CreateUsersModel(Users users)
     {
