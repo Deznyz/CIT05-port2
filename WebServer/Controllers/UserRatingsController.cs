@@ -8,33 +8,91 @@ namespace WebServer.Controllers;
 
 [Route("api/userratings")]
 [ApiController]
-public class UserRatingsController : ControllerBase
+public class UserRatingsController : BaseController
 {
-    private readonly DataService _dataService;
-    private readonly LinkGenerator _linkGenerator;
+    private readonly IDataService _dataService;
 
-    public UserRatingsController(DataService dataService, LinkGenerator linkGenerator)
+    public UserRatingsController(IDataService dataService, LinkGenerator linkGenerator)
+        : base(linkGenerator)
     {
         _dataService = dataService;
-        _linkGenerator = linkGenerator;
+
     }
 
-
-
-    //private UserRatingsModel CreateUserRatingsModel(UserRatings userRatings)
-    //{
-    //    return new UserRatingsModel
-    //    {
-    //        Url = GetUrl(nameof(GetUserRatings), new { userRatings.TitleId, userRatings.UserId }),
-    //        TitleId = userRatings.TitleId,
-    //        UserId = userRatings.UserId,
-    //        UserRating = userRatings.UserRating
-    //    };
-    //}
-
-    private string? GetUrl(string name, object values)
+    [HttpGet(Name = nameof(GetUserRatings))]
+    public IActionResult GetUserRatings(int page = 0, int pageSize = 10)
     {
-        return _linkGenerator.GetUriByName(HttpContext, name, values);
+        (var UserRatings, var total) = _dataService.GetUserRatings(page, pageSize);
+
+        var items = UserRatings.Select(CreateUserRatingsModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetUserRatings));
+
+        return Ok(result);
+
     }
 
+    [HttpGet("{nameId}")]
+    public IActionResult GetUserRatings(int userId, int page, int pageSize)
+    {
+        (var userRatings, var total) = _dataService.GetUserRatings(userId, page, pageSize);
+
+        var items = userRatings.Select(CreateUserRatingsModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetUserRatings));
+
+        return Ok(result);
+
+    }
+
+    [HttpGet("{userId}/{titleId}", Name = nameof(GetUserRatings))]
+    public IActionResult GetNameWorkedAs(int userId, string? titleId)
+    {
+        var nameWorkedAs = _dataService.GetNameWorkedAs(userId, titleId);
+        if (userId == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(CreateUserRatingsModel(userRatings));
+    }
+
+    [HttpGet("{userId}", Name = nameof(GetUserRatings))]
+    public IActionResult GetUserRatings(int userId, string titleId)
+    {
+        var userRatings = _dataService.GetUserRatings(userId);
+        if (userId == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(CreateUserRatingsModel(userRatings));
+    }
+
+    [HttpPost]
+    public IActionResult CreateUserRatings(CreateUserRatingsModel model)
+    {
+        var userRatings = new UserRatings
+        {
+            UserId = model.UserId,
+            TitleId = model.TitleId
+        };
+
+        _dataService.CreateUserRatings(userRatings);
+
+        var userRatingsUri = Url.Link("GetUserRatings", new { userId = userRatings.UserId, titleId = userRatings.TitleId });
+
+        return Created(userRatingsUri, userRatings);
+    }
+
+    private UserRatingsModel CreateUserRatingsModel(UserRatings userRatings)
+    {
+        return new UserRatingsModel
+        {
+            Url = GetUrl(nameof(GetUserRatings), new { userRatings.UserId, userRatings.TitleId }),
+            UserId = userRatings.UserId,
+            TitleId = userRatings.TitleId,
+        };
+    }
 }
+

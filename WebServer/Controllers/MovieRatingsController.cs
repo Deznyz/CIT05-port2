@@ -57,9 +57,4 @@ public class MovieRatingsController : BaseController
         };
     }
 
-    //private string? GetUrl(string name, object values)
-    //{
-    //    return _linkGenerator.GetUriByName(HttpContext, name, values);
-    //}
-
 }
