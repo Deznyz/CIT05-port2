@@ -16,13 +16,11 @@ namespace WebServer.Controllers;
 public class UsersController : BaseController
 {
     private readonly IDataService _dataService;
-    private readonly IConfiguration _configuration;
 
-    public UsersController(IDataService dataService, LinkGenerator linkGenerator, IConfiguration configuration)
+    public UsersController(IDataService dataService, LinkGenerator linkGenerator)
         : base(linkGenerator)
     {
         _dataService = dataService;
-        _configuration = configuration;
     }
 
     // TODO: GET
@@ -33,6 +31,7 @@ public class UsersController : BaseController
     public IActionResult CreateUser(CreateUsersModel model)
     {
         // todo: man kunne med fordel bruge PasswordHasher, men det vil kræve at man udvider antal tilladte karakter i db
+        // i test-fasen kan vi dog udelade det helt
         // var hasher = new PasswordHasher<Users>();
 
         var user = new Users
@@ -41,57 +40,16 @@ public class UsersController : BaseController
             Password = model.Password
         };
 
-        _dataService.CreateUsers(user);
-
-        return Ok(new { user.UserId, user.UserName });
-    }
-
-    // todo: Vi bør overveje at oprette en Auth Controller i stedet for den er i Users Controller
-    // POST
-    [HttpPost]
-    [Route("login")]
-    public IActionResult Login([FromBody] LoginModel model)
-    {
-        var user = _dataService.GetUserByUsername(model.UserName);
-
-        if (user == null)
+        try
         {
-            return Unauthorized("Forkerte brugeroplysninger");
+            var createdUser = _dataService.CreateUser(user);
+            return Ok(new { createdUser.UserId, createdUser.UserName });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { ex.Message });
         }
 
-        bool isPasswordCorrect = _dataService.VerifyPassword(user, model.Password);
-
-        if (isPasswordCorrect)
-        {
-            var token = GenerateJwtToken(user.UserName);
-            return Ok(new {Token = token});
-        }
-        else
-        {
-            return Unauthorized("Forkerte brugeroplysninger");
-        }
-    }
-
-    private string GenerateJwtToken(string userName)
-    {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, userName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        };
-
-        var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: credentials
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     /*

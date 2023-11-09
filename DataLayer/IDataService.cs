@@ -32,7 +32,7 @@ namespace DataLayer
         Names GetName(string nameId);
         Names CreateName(Names name);
         bool DeleteName(Names name);
-        Users CreateUsers(Users user);
+        Users CreateUser(Users user);
         Users GetUserByUsername(string username);
 
         bool VerifyPassword(Users user, string providedPassword);

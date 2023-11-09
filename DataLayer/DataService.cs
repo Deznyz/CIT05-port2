@@ -3,7 +3,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
-
+using Npgsql;
 
 namespace DataLayer;
 
@@ -380,7 +380,7 @@ public class DataService : IDataService
         return false;
     }
 
-    public Users CreateUsers(Users user)
+    public Users CreateUser(Users user)
     {
         using var db = new PostgresDB();
 
@@ -390,9 +390,25 @@ public class DataService : IDataService
             Password = user.Password
         };
 
-        db.Add(newUser);
-        db.SaveChanges();
-        return newUser;
+        try
+        {
+            db.Add(newUser);
+            db.SaveChanges();
+            return newUser;
+        }
+        catch (DbUpdateException ex)
+        {
+            // tjekker om inner exception er en unique constraint violation
+            if (ex.InnerException is PostgresException postgresException &&
+                postgresException.SqlState == "23505") // 23505 er koden for unique violation i PostgreSQL
+            {
+                // vi kaster InvalidOperationException med en sigende besked, der er brugervenlig
+                throw new InvalidOperationException($"En bruger findes allerede med følgende brugernavn {newUser.UserName}.");
+            }
+
+            // Hvis der ikke er tale om en unique constraint violation, rethrow'er vi den originale exception
+            throw;
+        }
     }
 
     public Users GetUserByUsername(string username)
@@ -401,7 +417,7 @@ public class DataService : IDataService
 
         var user = db.Users.FirstOrDefault(u => u.UserName == username);
 
-        return user;
+        return user; // todo: håndter null pointer
     }
 
     public bool VerifyPassword(Users user, string providedPassword)
