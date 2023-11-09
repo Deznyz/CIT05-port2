@@ -16,13 +16,35 @@ public class MovieTitlesController : BaseController
         : base(linkGenerator)
     {
         _dataService = dataService;
-
     }
+
+    [HttpGet("searchtitle/{userId}/{title}")]
+    public IActionResult SearchTitle(int userId, string title, int page = 0, int pageSize = 10)
+    {
+
+        (var searchTitleResult, var total) = _dataService.SearchTitle(userId, title, page, pageSize);
+        return Ok(searchTitleResult);
+    }
+
+    [HttpGet("castrating/titleid/{movieId}")]
+    public IActionResult GetCastRatingsMovieId(string movieId, int page = 0, int pageSize = 10)
+    {
+
+        (var castRatings, var total) = _dataService.GetCastRatingsMovieId(movieId, page, pageSize);
+        return Ok(castRatings);
+    }
+
+    [HttpGet("castrating/movietitle/{movieTitle}")]
+    public IActionResult GetCastRatingsMovieTitles(string movieTitle, int page = 0, int pageSize = 10)
+    {
+
+        (var castRatings, var total) = _dataService.GetCastRatingsMovieTitles(movieTitle, page, pageSize);
+        return Ok(castRatings);
+    }
+
 
     [HttpGet(Name = nameof(GetMovieTitles))]
     public IActionResult GetMovieTitles(int page = 0, int pageSize = 10)
-    {
-
 
         (var movieTitles, var total) = _dataService.GetMovieTitles(page, pageSize);
 
@@ -46,6 +68,7 @@ public class MovieTitlesController : BaseController
         return Ok(CreateMovieTitleModel(movieTitle));
     }
 
+
     private MovieTitlesModel CreateMovieTitleModel(MovieTitles movieTitle)
     {
         return new MovieTitlesModel
@@ -60,12 +83,5 @@ public class MovieTitlesController : BaseController
             RuntimeMinutes = movieTitle.RuntimeMinutes
         };
     }
-
-
-
-    //private string? GetUrl(string name, object values)
-    //{
-    //    return _linkGenerator.GetUriByName(HttpContext, name, values);
-    //}
 
 }

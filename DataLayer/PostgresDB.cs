@@ -32,6 +32,11 @@ namespace DataLayer
         public DbSet<Models.Wi> Wis { get; set; }
         public DbSet<PostgresModels.StructuredStringSearch> StructuredStringSearch { get; set; }
         public DbSet<PostgresModels.CoActors> CoActors { get; set; }
+        public DbSet<PostgresModels.NameSearchResult> NameSearchResults { get; set; }
+        public DbSet<PostgresModels.WeightedAverage> WeightedAverages { get; set; }
+        public DbSet<PostgresModels.CastRatingsMovieId> CastRatingsMovieIds { get; set; }
+        public DbSet<PostgresModels.CastRatingsMovieTitles> CastRatingsMovieTitles { get; set; }
+        public DbSet<PostgresModels.SearchTitleResult> SearchTitleResults { get; set; }
         public DbSet<PostgresModels.AssociatedWords> AssociatedWords { get; set; }
         public DbSet<PostgresModels.ExactSearch> ExactSearch { get; set; }
         public DbSet<PostgresModels.AssociatedTitle> AssociatedTitle { get; set; }
@@ -113,14 +118,6 @@ namespace DataLayer
                 .Property(x => x.SeasonNumber).HasColumnName("season_number");
             modelBuilder.Entity<Models.EpisodeBelongsTo>()
                 .Property(x => x.EpisodeNumber).HasColumnName("episode_number");
-            //modelBuilder.Entity<Models.EpisodeBelongsTo>()
-            //    .HasOne(episodeBelongsTo => episodeBelongsTo.MovieTitlesChild)
-            //    .WithMany()
-            //    .HasForeignKey(episodeBelongsTo => episodeBelongsTo.EpisodeTitleId);
-            //modelBuilder.Entity<Models.EpisodeBelongsTo>()
-            //    .HasOne(episodeBelongsTo => episodeBelongsTo.MovieTitlesParent)
-            //    .WithMany()
-            //    .HasForeignKey(episodeBelongsTo => episodeBelongsTo.ParentTvShowTitleId);
 
 
 
@@ -341,6 +338,59 @@ namespace DataLayer
                 .Property(x => x.NumberOfCoActors).HasColumnName("num_co_acted");
 
 
+            /*-------------------------------------------------------------------------------
+                                    ------NameSearchResult------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.NameSearchResult>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.NameSearchResult>()
+                .Property(x=>x.NameId).HasColumnName("name_id");
+            modelBuilder.Entity<PostgresModels.NameSearchResult>()
+                .Property(x => x.Name).HasColumnName("name");
+            modelBuilder.Entity<PostgresModels.NameSearchResult>()
+                .Property(x => x.Similarity).HasColumnName("similarity");
+
+
+            /*-------------------------------------------------------------------------------
+                                    ------WeightedAverage------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.WeightedAverage>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.WeightedAverage>()
+                .Property(x=>x.WeightedAverageForNameId).HasColumnName("get_weighted_average");
+
+
+            /*-------------------------------------------------------------------------------
+                                    ------CastRatingMovieId------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieId>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieId>()
+                .Property(x=>x.NameId).HasColumnName("name_id");
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieId>()
+                .Property(x=>x.Name).HasColumnName("name");
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieId>()
+                .Property(x => x.Rating).HasColumnName("rating");
+
+            /*-------------------------------------------------------------------------------
+                                    ------CastRatingMovieTitles------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieTitles>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieTitles>()
+                .Property(x => x.TitleOfMovie).HasColumnName("title_of_movie");
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieTitles>()
+                .Property(x => x.NameId).HasColumnName("name_id");
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieTitles>()
+                .Property(x => x.Name).HasColumnName("name");
+            modelBuilder.Entity<PostgresModels.CastRatingsMovieTitles>()
+                .Property(x => x.Rating).HasColumnName("rating");
+
+            /*-------------------------------------------------------------------------------
+                                    ------SearchTitleResults------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.SearchTitleResult>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.SearchTitleResult>()
+                .Property(x => x.TitleId).HasColumnName("title_id");
+            modelBuilder.Entity<PostgresModels.SearchTitleResult>()
+                .Property(x => x.PrimaryTitle).HasColumnName("primary_title");
+
 
 
             /*-------------------------------------------------------------------------------
@@ -372,6 +422,7 @@ namespace DataLayer
                 .Property(x => x.titleId).HasColumnName("titleId");
             modelBuilder.Entity<PostgresModels.AssociatedTitle>()
                 .Property(x => x.associatedTitle).HasColumnName("title");
+
 
         }
 

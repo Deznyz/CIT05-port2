@@ -5,7 +5,7 @@ using System.Text;
 using DataLayer.Models;
 using DataLayer.PostgresModels;
 using Microsoft.EntityFrameworkCore;
-
+using Npgsql;
 
 namespace DataLayer;
 
@@ -77,16 +77,11 @@ public class DataService : IDataService
     public bool UpdateAliases(string titleId, int ordering, Aliases updateInfo)
     {
         var db = new PostgresDB();
-        var alias = db.Aliases.FirstOrDefault(x => x.TitleId == titleId && x.Ordering == ordering);
+        var alias = db.Aliases
+            .FirstOrDefault(x => x.TitleId == titleId && x.Ordering == ordering);
         if (alias != null)
         {
-            if (updateInfo.TitleId != null){
-                alias.TitleId = updateInfo.TitleId;
-            }
-            if (updateInfo.Ordering != null)
-            {
-                alias.Ordering = updateInfo.Ordering;
-            }
+            
             if (updateInfo.Title != null)
             {
                 alias.Title = updateInfo.Title;
@@ -233,6 +228,7 @@ public class DataService : IDataService
         return false;
     }
 
+
     /*-------------------------------------------------------------------------------
                                     ------KnownFor------
     ---------------------------------------------------------------------------------*/
@@ -296,7 +292,6 @@ public class DataService : IDataService
         }
         return false;
     }
-
 
     /*-------------------------------------------------------------------------------
                                     ------BookmarksTitle------
@@ -574,6 +569,39 @@ public class DataService : IDataService
         return false;
     }
 
+    public bool UpdateEpisodeBelongsTo(string episodeTitleId, string parentTvShowTitleId, EpisodeBelongsTo updateInfo)
+    {
+        var db = new PostgresDB();
+        var episodeBelongsTo = db.EpisodeBelongsTos
+            .FirstOrDefault(x => x.EpisodeTitleId == episodeTitleId 
+                        && x.ParentTvShowTitleId == parentTvShowTitleId);
+        if (episodeBelongsTo != null)
+        {
+            if (updateInfo.EpisodeTitleId != null)
+            {
+                episodeBelongsTo.EpisodeTitleId = updateInfo.EpisodeTitleId;
+            }
+            if (updateInfo.ParentTvShowTitleId != null)
+            {
+                episodeBelongsTo.ParentTvShowTitleId = updateInfo.ParentTvShowTitleId;
+            }
+            if (updateInfo.SeasonNumber != null)
+            {
+                episodeBelongsTo.SeasonNumber = updateInfo.SeasonNumber;
+            }
+            if (updateInfo.EpisodeNumber != null)
+            {
+                episodeBelongsTo.EpisodeNumber = updateInfo.EpisodeNumber;
+            }
+            db.SaveChanges();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 
      /*-------------------------------------------------------------------------------
                                     ------NameWorkedAs------
@@ -629,7 +657,8 @@ public class DataService : IDataService
         }
         return false;
     }
-
+    
+    
     public bool UpdateNameWorkedAs(string nameId, NameWorkedAs updateInfo)
     {
         var db = new PostgresDB();
@@ -654,7 +683,6 @@ public class DataService : IDataService
             return false;
         }
     }
-
 
 
      /*-------------------------------------------------------------------------------
@@ -784,7 +812,26 @@ public class DataService : IDataService
         return false;
     }
 
-
+    public bool UpdateFrontend(string titleId, string poster, Frontend updateInfo)
+    {
+        var db = new PostgresDB();
+        var frontend = db.Frontends
+            .FirstOrDefault(x => x.TitleId == titleId
+                        && x.Poster == poster);
+        if (frontend != null)
+        {
+            if (updateInfo.Plot != null)
+            {
+                frontend.Plot = updateInfo.Plot;
+            }
+            db.SaveChanges();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     /*-------------------------------------------------------------------------------
                                     ------SearchHistory------
@@ -932,11 +979,9 @@ public class DataService : IDataService
         }
         return false;
     }
-
-
-
-
-
+    
+    
+    
     /*-------------------------------------------------------------------------------
                                     ------Users------
     ---------------------------------------------------------------------------------*/
@@ -1004,12 +1049,74 @@ public class DataService : IDataService
         }
         return false;
     }
-
-
-
+    
+   
     /*-------------------------------------------------------------------------------
                                     ------DB functions------
     ---------------------------------------------------------------------------------*/
+    //D1
+    public bool IsUsernameTaken(string username)
+    {
+        var db = new PostgresDB();
+        var connection = db.Database.GetDbConnection();
+        connection.Open();
+        var cmd = new NpgsqlCommand();
+        cmd.CommandText = $"select * from IsUsernameTaken('{username}')";
+        cmd.Connection=(NpgsqlConnection)connection;
+        var result = cmd.ExecuteScalar() as bool?;
+
+        return result??false;
+    }
+
+
+    public bool CreateUser(string username, string password) {
+        using var db = new PostgresDB();
+
+
+        if (!IsUsernameTaken(username) && password != null)
+        {
+            var connection = db.Database.GetDbConnection();
+            connection.Open();
+            var cmd = new NpgsqlCommand();
+            cmd.CommandText = $"select * from CreateUser('{username}', '{password}')";
+            cmd.Connection = (NpgsqlConnection)connection;
+            cmd.ExecuteScalar();
+            return true;
+        }
+        return false;
+    }
+
+    public bool UpdateUserPassword(int id, string newPassword) {
+        var db = new PostgresDB();
+        var connection = db.Database.GetDbConnection();
+        connection.Open();
+        var cmd = new NpgsqlCommand();
+        cmd.CommandText = $"select * from UpdateUserPassword('{id}', '{newPassword}')";
+        cmd.Connection = (NpgsqlConnection)connection;
+        var result = cmd.ExecuteScalar() as bool?;
+
+        return result ?? false;
+    }
+
+    //D2
+    public (IList<SearchTitleResult>, int count) SearchTitle(int userId, string queryString, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.SearchTitleResults
+            .FromSqlInterpolated($"select * from SearchTitle({userId}, {queryString})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.SearchTitleResults
+            .FromSqlInterpolated($"select * from SearchTitle({userId}, {queryString})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
+
     //D4
     public (IList<StructuredStringSearch>, int count) GetStructuredStringSearch(string tconst, int page, int pageSize)
     {
@@ -1017,10 +1124,11 @@ public class DataService : IDataService
 
         var query = db.StructuredStringSearch
             .FromSqlInterpolated($"StructuredStringSearch")
+
             .Skip(page * pageSize)
             .Take(pageSize)
             .ToList();
-
+            
         var totalCount = db.StructuredStringSearch
             .FromSqlInterpolated($"StructuredStringSearch")
             .Count();
@@ -1028,10 +1136,24 @@ public class DataService : IDataService
         return (query, totalCount);
     }
 
+    //D5
+    public (IList<NameSearchResult>, int count) NameSearch(string givenName, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
 
+        var query = db.NameSearchResults
+            .FromSqlInterpolated($"select * from name_search({givenName})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
 
+        var totalCount = db.NameSearchResults
+            .FromSqlInterpolated($"select * from name_search({givenName})")
+            .Count();
 
-
+        return (query, totalCount);
+    }
+    
     //D6
     public (IList<CoActors>, int count) GetCoActors(string givenName, int page, int pageSize)
     {
@@ -1039,20 +1161,66 @@ public class DataService : IDataService
 
         var query = db.CoActors
             .FromSqlInterpolated($"select * from get_co_actors({givenName})")
+
             .Skip(page * pageSize)
             .Take(pageSize)
             .ToList();
 
         var totalCount = db.CoActors
             .FromSqlInterpolated($"select * from get_co_actors({givenName})")
+
+            .Count();
+
+        return (query, totalCount);
+    }
+    
+    //D7
+    public WeightedAverage GetWeightedAverage(string nameId)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.WeightedAverages
+            .FromSqlInterpolated($"select * from get_weighted_average({nameId})").FirstOrDefault();
+
+        return query;
+    }
+
+    //D8.1
+    public (IList<CastRatingsMovieId>, int count) GetCastRatingsMovieId(string movieId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.CastRatingsMovieIds
+            .FromSqlInterpolated($"select * from get_cast_ratings_movie_id({movieId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.CastRatingsMovieIds
+            .FromSqlInterpolated($"select * from get_cast_ratings_movie_id({movieId})")
             .Count();
 
         return (query, totalCount);
     }
 
+    //D8.2
+    public (IList<CastRatingsMovieTitles>, int count) GetCastRatingsMovieTitles(string movieTitle, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
 
+        var query = db.CastRatingsMovieTitles
+            .FromSqlInterpolated($"select * from get_cast_ratings_movie_title({movieTitle})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+            
+        var totalCount = db.CastRatingsMovieTitles
+            .FromSqlInterpolated($"select * from get_cast_ratings_movie_title({movieTitle})")  
+            .Count();
 
-
+        return (query, totalCount);
+    }
+           
     //D10
     public (IList<AssociatedWords>, int count) GetAssociatedWords(string titleId, int page, int pageSize)
     {

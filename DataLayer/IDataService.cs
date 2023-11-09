@@ -47,6 +47,7 @@ namespace DataLayer
         EpisodeBelongsTo GetEpisodeBelongsTo(string episodeTitleId, string parentTvShowTitleId);
         EpisodeBelongsTo CreateEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
         bool DeleteEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
+        bool UpdateEpisodeBelongsTo(string episodeTitleId, string ParentTvShowTitleId, EpisodeBelongsTo updateInfo);
 
         /*-------------------------------------------------------------------------------
                                     ------Frontend------
@@ -56,9 +57,12 @@ namespace DataLayer
         Frontend GetFrontend(string titleId, string poster);
         Frontend CreateFrontend(Frontend frontend);
         bool DeleteFrontend(Frontend frontend);
+        bool UpdateFrontend(string titleId, string poster, Frontend frontend);
 
 
-        /*-------------------------------------------------------------------------------
+
+
+       /*-------------------------------------------------------------------------------
                                    ------GetStructuredStringSearch------
        ---------------------------------------------------------------------------------*/
         (IList<StructuredStringSearch>, int count) GetStructuredStringSearch(string tconst, int page, int pageSize);
@@ -66,9 +70,22 @@ namespace DataLayer
 
 
         /*-------------------------------------------------------------------------------
-                                    ------GetCoActors------
+                                    ------Actors------
         ---------------------------------------------------------------------------------*/
+
+        //D2
+        (IList<SearchTitleResult>, int count) SearchTitle(int userId, string queryString, int page, int pageSize);
+        //D5
+        (IList<NameSearchResult>, int count) NameSearch(string name, int page, int pageSize);
+        //D6
         (IList <CoActors>, int count) GetCoActors(string givenName, int page, int pageSize);
+        //D7
+        WeightedAverage GetWeightedAverage(string nameId);
+        //D8.1
+        (IList<CastRatingsMovieId>, int count) GetCastRatingsMovieId(string movieId, int page, int pageSize);
+        //D8.2
+        (IList<CastRatingsMovieTitles>, int count) GetCastRatingsMovieTitles(string movieTitle, int page, int pageSize);
+
 
 
 
@@ -80,13 +97,13 @@ namespace DataLayer
 
         /*-------------------------------------------------------------------------------
                          ------GetExactSearch------
----------------------------------------------------------------------------------*/
+        ---------------------------------------------------------------------------------*/
         (IList<AssociatedTitle>, int count) GetExactSearch(string titleId, int page, int pageSize);
 
 
         /*-------------------------------------------------------------------------------
                            ------GetAssociatedTitle------
----------------------------------------------------------------------------------*/
+        ---------------------------------------------------------------------------------*/
         (IList<AssociatedTitle>, int count) GetAssociatedTitle(string titleId, int page, int pageSize);
 
   
@@ -188,6 +205,9 @@ namespace DataLayer
         Users CreateUsers(Users users);
         bool DeleteUsers(Users users);
         bool UpdateUsers(int userId, Users updateInfo);
+        //D1
+        bool CreateUser(string username, string password);
+        bool UpdateUserPassword(int id, string newPassword);
 
 
     }

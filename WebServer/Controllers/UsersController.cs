@@ -19,6 +19,21 @@ public class UsersController : BaseController
 
     }
 
+    [HttpPost("createuser/{username}/{password}")]
+    public IActionResult CreateUser(string username, string password)
+    {
+        _dataService.CreateUser(username, password);
+
+        return Created(username, password);
+    }
+
+    [HttpPut("{id}/{newPassword}")]
+    public IActionResult UpdateUserPassword(int id, string password) { 
+        _dataService.UpdateUserPassword(id, password);
+        return Ok();
+    }
+
+   
     [HttpGet(Name = nameof(GetUsers))]
     public IActionResult GetUsers(int page = 0, int pageSize = 10)
     {
@@ -82,3 +97,4 @@ public class UsersController : BaseController
         };
     }
 }
+
