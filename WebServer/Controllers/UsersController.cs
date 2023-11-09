@@ -33,53 +33,68 @@ public class UsersController : BaseController
         return Ok();
     }
 
-    //[HttpGet(Name = nameof(GetUsers))]
-    //public IActionResult GetUsers(int page = 0, int pageSize = 10)
-    //{
-    //    (var users, var total) = _dataService.GetUsers(page, pageSize);
+   
+    [HttpGet(Name = nameof(GetUsers))]
+    public IActionResult GetUsers(int page = 0, int pageSize = 10)
+    {
+        (var users, var total) = _dataService.GetUsers(page, pageSize);
 
-    //    var items = users.Select(CreateUsersModel);
+        var items = users.Select(CreateUsersModel);
 
-    //    var result = Paging(items, total, page, pageSize, nameof(GetUsers));
+        var result = Paging(items, total, page, pageSize, nameof(GetUsers));
 
-    //    return Ok(result);
+        return Ok(result);
 
-    //}
+    }
 
-    //[HttpGet("{userId}")]
-    //public IActionResult GetUsers(int userId, int page, int pageSize)
-    //{
-    //    (var users, var total) = _dataService.GetUsers(userId, page, pageSize);
+    [HttpGet("{userId}")]
+    public IActionResult GetUsers(int userId, int page, int pageSize)
+    {
+        (var users, var total) = _dataService.GetUsers(userId, page, pageSize);
 
-    //    var items = users.Select(CreateUsersModel);
+        var items = users.Select(CreateUsersModel);
 
-    //    var result = Paging(items, total, page, pageSize, nameof(GetUsers));
+        var result = Paging(items, total, page, pageSize, nameof(GetUsers));
 
-    //    return Ok(result);
+        return Ok(result);
 
-    //}
+    }
 
-    //[HttpPost]
-    //public IActionResult CreateUsers(CreateUsersModel model)
-    //{
-    //    var users = new Users
-    //    {
-    //        UserId = model.UserId,
-    //    };
+    [HttpGet("{userId}", Name = nameof(GetUsers))]
+    public IActionResult GetUsers(int userId)
+    {
+        var users = _dataService.GetUsers(userId);
+        if (userId == null)
+        {
+            return NotFound();
+        }
 
-    //    _dataService.CreateUsers(users);
+        return Ok(CreateUsersModel(users));
+    }
 
-    //    var usersUri = Url.Link("GetUsers", new { userId = users.UserId });
 
-    //    return Created(usersUri, users);
-    //}
+    [HttpPost]
+    public IActionResult CreateUsers(CreateUsersModel model)
+    {
+        var users = new Users
+        {
+            UserId = model.UserId,
+        };
 
-    //private UsersModel CreateUsersModel(Users users)
-    //{
-    //    return new UsersModel
-    //    {
-    //        Url = GetUrl(nameof(GetUsers), new { users.UserId }),
-    //        UserId = users.UserId,
-    //    };
-    //}
+        _dataService.CreateUsers(users);
+
+        var usersUri = Url.Link("GetUsers", new { userId = users.UserId});
+
+        return Created(usersUri, users);
+    }
+
+    private UsersModel CreateUsersModel(Users users)
+    {
+        return new UsersModel
+        {
+            Url = GetUrl(nameof(GetUsers), new { users.UserId}),
+            UserId = users.UserId,
+        };
+    }
 }
+

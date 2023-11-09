@@ -16,7 +16,6 @@ public class MovieTitlesController : BaseController
         : base(linkGenerator)
     {
         _dataService = dataService;
-
     }
 
     [HttpGet("searchtitle/{userId}/{title}")]
@@ -43,53 +42,46 @@ public class MovieTitlesController : BaseController
         return Ok(castRatings);
     }
 
-    //[HttpGet(Name = nameof(GetMovieTitles))]
-    //public IActionResult GetMovieTitles(int page = 0, int pageSize = 10)
-    //{
+
+    [HttpGet(Name = nameof(GetMovieTitles))]
+    public IActionResult GetMovieTitles(int page = 0, int pageSize = 10)
+
+        (var movieTitles, var total) = _dataService.GetMovieTitles(page, pageSize);
+
+        var items = movieTitles.Select(CreateMovieTitleModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetMovieTitles));
+
+        return Ok(result);
+
+    }
+
+    [HttpGet("{Id}", Name = nameof(GetMovieTitle))]
+    public IActionResult GetMovieTitle(string movieTitleId)
+    {
+        var movieTitle = _dataService.GetMovieTitle(movieTitleId);
+        if (movieTitle == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(CreateMovieTitleModel(movieTitle));
+    }
 
 
-    //    (var movieTitles, var total) = _dataService.GetMovieTitles(page, pageSize);
-
-    //    var items = movieTitles.Select(CreateMovieTitleModel);
-
-    //    var result = Paging(items, total, page, pageSize, nameof(GetMovieTitles));
-
-    //    return Ok(result);
-
-    //}
-
-    //[HttpGet("{Id}", Name = nameof(GetMovieTitle))]
-    //public IActionResult GetMovieTitle(string movieTitleId)
-    //{
-    //    var movieTitle = _dataService.GetMovieTitle(movieTitleId);
-    //    if (movieTitle == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return Ok(CreateMovieTitleModel(movieTitle));
-    //}
-
-    //private MovieTitlesModel CreateMovieTitleModel(MovieTitles movieTitle)
-    //{
-    //    return new MovieTitlesModel
-    //    {
-    //        Url = GetUrl(nameof(GetMovieTitle), new { movieTitle.TitleId }),
-    //        TitleId = movieTitle.TitleId,
-    //        PrimaryTitle = movieTitle.PrimaryTitle,
-    //        OriginalTitle = movieTitle.OriginalTitle,
-    //        IsAdult = movieTitle.IsAdult,
-    //        StartYear = movieTitle.StartYear,
-    //        EndYear = movieTitle.EndYear,
-    //        RuntimeMinutes = movieTitle.RuntimeMinutes
-    //    };
-    //}
-
-
-
-    //private string? GetUrl(string name, object values)
-    //{
-    //    return _linkGenerator.GetUriByName(HttpContext, name, values);
-    //}
+    private MovieTitlesModel CreateMovieTitleModel(MovieTitles movieTitle)
+    {
+        return new MovieTitlesModel
+        {
+            Url = GetUrl(nameof(GetMovieTitle), new { movieTitle.TitleId }),
+            TitleId = movieTitle.TitleId,
+            PrimaryTitle = movieTitle.PrimaryTitle,
+            OriginalTitle = movieTitle.OriginalTitle,
+            IsAdult = movieTitle.IsAdult,
+            StartYear = movieTitle.StartYear,
+            EndYear = movieTitle.EndYear,
+            RuntimeMinutes = movieTitle.RuntimeMinutes
+        };
+    }
 
 }
