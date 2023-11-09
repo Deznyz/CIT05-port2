@@ -229,11 +229,6 @@ public class DataService : IDataService
 
         db.Database.ExecuteSqlInterpolated($"select CreateBookmarkTitle({UserId}, {titleId})");
 
-        var category = db.BookmarksTitles.Find(UserId, titleId);
-
-        Console.WriteLine($"{UserId}, {titleId}");
-
-
         db.SaveChanges();
         return newBookmarksTitle;
     }
@@ -638,6 +633,42 @@ public class DataService : IDataService
     /*-------------------------------------------------------------------------------
                                     ------DB functions------
     ---------------------------------------------------------------------------------*/
+
+    //D1
+    public (IList<BookmarksTitle>, int count) GetAllTitleBookmarksForUser(int userId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.BookmarksTitles
+            .FromSqlInterpolated($"select * from GetAllTitleBookmarksForUser({userId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.BookmarksTitles
+            .FromSqlInterpolated($"select * from GetAllTitleBookmarksForUser({userId})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
+    public (IList<BookmarksTitle>, int count) GetAllNameBookmarksForUser(int userId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.BookmarksNames
+            .FromSqlInterpolated($"select * from GetAllNameBookmarksForUser({userId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.BookmarksNames
+            .FromSqlInterpolated($"select * from GetAllTitleBookmarksForUser({userId})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
 
     //D6
     public (IList<CoActors>, int count) GetCoActors(string givenName, int page, int pageSize)

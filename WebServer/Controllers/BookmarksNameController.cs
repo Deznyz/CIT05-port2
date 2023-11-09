@@ -91,7 +91,13 @@ public class BookmarksNameController : BaseController
         };
     }
 
-    
+    [HttpGet("{userId}/GetAllNameBookmarksUser")]
+    public IActionResult GetAllNameBookmarksForUser(int userId)
+    {
+        (var AllNameBookmarksForUser, var total) = _dataService.GetAllNameBookmarksForUser(userId, 0, 10);
+        return Ok(AllNameBookmarksForUser);
+
+    }
 
 }
 

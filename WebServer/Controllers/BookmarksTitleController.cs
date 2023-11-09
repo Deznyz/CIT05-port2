@@ -90,7 +90,13 @@ public class BookmarksTitleController : BaseController
             UserId = bookmarksTitle.UserId
         };
     }
+    [HttpGet("{userId}/GetAllTitleBookmarksUser")]
+    public IActionResult GetAllNameBookmarksForUser(int userId)
+    {
+        (var AllTitleBookmarksUser, var total) = _dataService.GetAllTitleBookmarksForUser(userId, 0, 10);
+        return Ok(AllTitleBookmarksUser);
 
+    }
 
 
 }

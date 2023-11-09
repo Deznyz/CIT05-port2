@@ -27,6 +27,7 @@ namespace DataLayer
         bool DeleteBookmarksName(BookmarksName bookmarksName);
 
 
+
         /*-------------------------------------------------------------------------------
                                     ------BookmarksTitle------
         ---------------------------------------------------------------------------------*/
@@ -35,6 +36,8 @@ namespace DataLayer
         BookmarksTitle GetSpecificBookmarksTitle(int userId, string titleId);
         BookmarksTitle CreateBookmarksTitle(BookmarksTitle bookmarksTitle);
         bool DeleteBookmarksTitle(BookmarksTitle bookmarksTitle);
+        (IList<BookmarksTitle>, int count) GetAllTitleBookmarksForUser(int userId, int page, int pageSize);
+
 
 
         /*-------------------------------------------------------------------------------
@@ -46,6 +49,8 @@ namespace DataLayer
         EpisodeBelongsTo GetEpisodeBelongsTo(string episodeTitleId, string parentTvShowTitleId);
         EpisodeBelongsTo CreateEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
         bool DeleteEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
+        (IList<BookmarksTitle>, int count) GetAllNameBookmarksForUser(int userId, int page, int pageSize);
+
 
         /*-------------------------------------------------------------------------------
                                     ------Frontend------
@@ -81,6 +86,7 @@ namespace DataLayer
         MovieRatings GetMovieRating(string MovieRatingId);
         MovieRatings CreateMovieRating(MovieRatings movieRatings);
         bool DeleteMovieRating(MovieRatings movieRatings);
+
 
         /*-------------------------------------------------------------------------------
                                    ------MovieTitles------
