@@ -23,22 +23,35 @@ public class AuthController : BaseController
     }
 
     [HttpPost]
-    [Route("login")]
     public IActionResult Login([FromBody] LoginModel model)
     {
+        // Vi validerer modellen først - det er god stil at gøre det først
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        // Vi henter brugeren ud fra brugernavn
         var user = _dataService.GetUserByUsername(model.UserName);
 
+        // Hvis brugeren ikke findes returnes unauthorized response
         if (user == null)
         {
             return Unauthorized("Forkerte brugeroplysninger");
         }
 
+        // Verificerer om adgangskoden er korrekt
         bool isPasswordCorrect = _dataService.VerifyPassword(user, model.Password);
 
         if (isPasswordCorrect)
         {
+            // Hvis password er ok, oprettes or returneres en jwt token
             var token = GenerateJwtToken(user.UserName);
-            return Ok(new { Token = token });
+            return Ok(new { 
+                UserId = user.UserId,
+                Username = user.UserName,
+                Token = token
+            });
         }
         else
         {

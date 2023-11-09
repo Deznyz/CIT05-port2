@@ -43,7 +43,9 @@ public class UsersController : BaseController
         try
         {
             var createdUser = _dataService.CreateUser(user);
-            return Ok(new { createdUser.UserId, createdUser.UserName });
+            return Ok(new { 
+                UserId = createdUser.UserId, 
+                Username = createdUser.UserName });
         }
         catch (Exception ex)
         {

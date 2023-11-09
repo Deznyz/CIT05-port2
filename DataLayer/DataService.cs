@@ -417,7 +417,7 @@ public class DataService : IDataService
 
         var user = db.Users.FirstOrDefault(u => u.UserName == username);
 
-        return user; // todo: håndter null pointer
+        return user ?? throw new KeyNotFoundException($"Der findes ikke nogle brugere med brugernavn {username}");
     }
 
     public bool VerifyPassword(Users user, string providedPassword)
