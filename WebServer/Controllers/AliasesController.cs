@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebServer.Models;
 
 namespace WebServer.Controllers;
-
 [Route("api/aliases")]
 [ApiController]
 public class AliasesController : BaseController
