@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebServer.Models
 {
-    public class CreeateBookmarksTitleModel
+    public class CreateBookmarksTitleModel
     {
         public int UserId { get; set; }
         public string TitleId { get; set; }

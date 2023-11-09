@@ -30,6 +30,11 @@ namespace DataLayer
         public DbSet<Models.UserRatings> UserRatings { get; set; }
         public DbSet<Models.Users> Users { get; set; }
         public DbSet<Models.Wi> Wis { get; set; }
+        public DbSet<PostgresModels.StructuredStringSearch> StructuredStringSearch { get; set; }
+        public DbSet<PostgresModels.CoActors> CoActors { get; set; }
+        public DbSet<PostgresModels.AssociatedWords> AssociatedWords { get; set; }
+        public DbSet<PostgresModels.ExactSearch> ExactSearch { get; set; }
+        public DbSet<PostgresModels.AssociatedTitle> AssociatedTitle { get; set; }
 
 
 
@@ -108,6 +113,15 @@ namespace DataLayer
                 .Property(x => x.SeasonNumber).HasColumnName("season_number");
             modelBuilder.Entity<Models.EpisodeBelongsTo>()
                 .Property(x => x.EpisodeNumber).HasColumnName("episode_number");
+            //modelBuilder.Entity<Models.EpisodeBelongsTo>()
+            //    .HasOne(episodeBelongsTo => episodeBelongsTo.MovieTitlesChild)
+            //    .WithMany()
+            //    .HasForeignKey(episodeBelongsTo => episodeBelongsTo.EpisodeTitleId);
+            //modelBuilder.Entity<Models.EpisodeBelongsTo>()
+            //    .HasOne(episodeBelongsTo => episodeBelongsTo.MovieTitlesParent)
+            //    .WithMany()
+            //    .HasForeignKey(episodeBelongsTo => episodeBelongsTo.ParentTvShowTitleId);
+
 
 
 
@@ -299,6 +313,68 @@ namespace DataLayer
                 .Property(x => x.Field).HasColumnName("field");
             modelBuilder.Entity < Models.Wi> ()
                 .Property(x => x.Lexeme).HasColumnName("lexeme");
+
+
+            /*-------------------------------------------------------------------------------
+                                   ------StructuredStringSearch------
+           ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.StructuredStringSearch>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
+                .Property(x => x.User_id).HasColumnName("user_id");
+            modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
+                .Property(x => x.TitleSearchString).HasColumnName("title_search_string");
+            modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
+                .Property(x => x.CharactersSearchString).HasColumnName("characters_search_string");
+            modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
+                .Property(x => x.PlotSearchString).HasColumnName("plot_search_string");
+            modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
+                .Property(x => x.PersonsSearchString).HasColumnName("persons_search_string");
+
+
+            /*-------------------------------------------------------------------------------
+                                    ------CoActors------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.CoActors>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.CoActors> ()
+                .Property(x=> x.NameId).HasColumnName("name_id");
+            modelBuilder.Entity<PostgresModels.CoActors>()
+                .Property(x => x.NumberOfCoActors).HasColumnName("num_co_acted");
+
+
+
+
+            /*-------------------------------------------------------------------------------
+                                    ------AssociatedWords------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.AssociatedWords>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.AssociatedWords>()
+                .Property(x => x.titleId).HasColumnName("titleId");
+            modelBuilder.Entity<PostgresModels.AssociatedWords>()
+                .Property(x => x.associatedWord).HasColumnName("associated_word");
+
+
+            /*-------------------------------------------------------------------------------
+                                  ------ExactSearch------
+          ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.ExactSearch>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.ExactSearch>()
+                .Property(x => x.titleId).HasColumnName("titleId");
+            modelBuilder.Entity<PostgresModels.ExactSearch>()
+                .Property(x => x.title).HasColumnName("title");
+
+
+
+            /*-------------------------------------------------------------------------------
+                                    ------AssociatedTitle------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.AssociatedTitle>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.AssociatedTitle>()
+                .Property(x => x.titleId).HasColumnName("titleId");
+            modelBuilder.Entity<PostgresModels.AssociatedTitle>()
+                .Property(x => x.associatedTitle).HasColumnName("title");
+
         }
+
+
     }
 }

@@ -85,6 +85,34 @@ public class AliasesController : BaseController
         return Created(aliasUri, alias);
     }
 
+    [HttpPut("{titleId}/{ordering}", Name = nameof(UpdateAliases))]
+    public IActionResult UpdateAliases(string titleId, int ordering, CreateAliasesModel model)
+    {
+        var existAlias = _dataService.GetAlias(titleId, ordering);
+
+        if (existAlias != null)
+        {
+            var updateAlias = new Aliases
+            {
+                TitleId = model.TitleId,
+                Ordering = model.Ordering,
+                Title = model.Title,
+                Region = model.Region,
+                Language = model.Language,
+                IsOriginalTitle = model.IsOriginalTitle,
+                Types = model.Types,
+                Attributes = model.Attributes
+            };
+
+            _dataService.UpdateAliases(titleId, ordering, updateAlias);
+            return Ok(existAlias);
+        }
+        else
+        {
+            return NotFound();
+        }
+    }
+
     private AliasesModel CreateAliasesModel(Aliases aliases)
     {
         return new AliasesModel

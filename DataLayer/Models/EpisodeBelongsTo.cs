@@ -12,7 +12,8 @@ namespace DataLayer.Models
         public string ParentTvShowTitleId { get; set; }
         public string SeasonNumber { get; set; }
         public string EpisodeNumber { get; set;}
-        public MovieTitles MovieTitles { get; set; }
+        //public MovieTitles MovieTitlesChild { get; set; }
+        //public MovieTitles MovieTitlesParent { get; set; }
         //måske en MovieTitles mere
 
 

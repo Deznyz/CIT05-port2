@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Data.SqlTypes;
 using System.Linq;
+using System.Text;
 using DataLayer.Models;
+using DataLayer.PostgresModels;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -9,6 +11,10 @@ namespace DataLayer;
 
 public class DataService : IDataService
 {
+
+    /*-------------------------------------------------------------------------------
+                                         ------Aliases------
+    ---------------------------------------------------------------------------------*/
 
     public (IList<Aliases>, int count) GetAliases(int page, int pageSize)
     {
@@ -46,17 +52,7 @@ public class DataService : IDataService
     public Aliases CreateAliases(Aliases newAlias)
     {
         using var db = new PostgresDB();
-        //var newAlias = new Aliases
-        //{
-        //    TitleId = titleId,
-        //    Ordering = ordering,
-        //    Title = title,
-        //    Region = region,
-        //    Language = language,
-        //    IsOriginalTitle = isOriginalTitle,
-        //    Types = types,
-        //    Attributes = attributes
-        //};
+       
         db.Add(newAlias);
         db.SaveChanges();
         return newAlias;
@@ -68,7 +64,7 @@ public class DataService : IDataService
         var l = db.Aliases.Where(x => x.TitleId == alias.TitleId).ToList();
         var deleteAlias = db.Aliases
             .FirstOrDefault(x => x.TitleId == alias.TitleId && x.Ordering == alias.Ordering);
-        if (alias != null)
+        if (deleteAlias != null)
         {
             //db.Aliases.Update
             db.Aliases.Remove(alias);
@@ -76,6 +72,60 @@ public class DataService : IDataService
         }
         return false;
     }
+
+
+    public bool UpdateAliases(string titleId, int ordering, Aliases updateInfo)
+    {
+        var db = new PostgresDB();
+        var alias = db.Aliases.FirstOrDefault(x => x.TitleId == titleId && x.Ordering == ordering);
+        if (alias != null)
+        {
+            if (updateInfo.TitleId != null){
+                alias.TitleId = updateInfo.TitleId;
+            }
+            if (updateInfo.Ordering != null)
+            {
+                alias.Ordering = updateInfo.Ordering;
+            }
+            if (updateInfo.Title != null)
+            {
+                alias.Title = updateInfo.Title;
+            }
+            if (updateInfo.Region != null)
+            {
+                alias.Region = updateInfo.Region;
+            }
+            if (updateInfo.Language != null)
+            {
+                alias.Language = updateInfo.Language;
+            }
+            if (updateInfo.IsOriginalTitle != null)
+            {
+                alias.IsOriginalTitle = updateInfo.IsOriginalTitle;
+            }
+            if (updateInfo.Types != null)
+            {
+                alias.Types = updateInfo.Types;
+            }
+            if (updateInfo.Attributes != null)
+            {
+                alias.Attributes = updateInfo.Attributes;
+            }
+            db.SaveChanges();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+
+    /*-------------------------------------------------------------------------------
+                                    ------Genres------
+    ---------------------------------------------------------------------------------*/
+
     public (IList<Genres>, int count) GetGenres(int page, int pageSize)
     {
         var db = new PostgresDB();
@@ -112,17 +162,6 @@ public class DataService : IDataService
     public Genres CreateGenres(Genres newGenre)
     {
         using var db = new PostgresDB();
-        //var newAlias = new Aliases
-        //{
-        //    TitleId = titleId,
-        //    Ordering = ordering,
-        //    Title = title,
-        //    Region = region,
-        //    Language = language,
-        //    IsOriginalTitle = isOriginalTitle,
-        //    Types = types,
-        //    Attributes = attributes
-        //};
         db.Add(newGenre);
         db.SaveChanges();
         return newGenre;
@@ -142,12 +181,63 @@ public class DataService : IDataService
         }
         return false;
     }
-    public (IList<KnownFor>, int count) GetKnownFors(int page, int pageSize)
+
+
+    /*-------------------------------------------------------------------------------
+                                    ------BookmarksName------
+    ---------------------------------------------------------------------------------*/
+    public (IList<BookmarksName>, int count) GetBookmarksName(int page, int pageSize)
     {
         var db = new PostgresDB();
         //var result = db.Aliases.ToList();
         //return result;
 
+        var bookmarksName = db.BookmarksNames.Skip(page * pageSize).Take(pageSize).ToList();
+        return (bookmarksName, db.BookmarksNames.Count());
+    }
+
+    public (IList<BookmarksName>, int count) GetBookmarksName(int userId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.BookmarksNames.Where(x => x.UserId == userId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.BookmarksNames.Count());
+    }
+
+    public BookmarksName? GetSpecificBookmarksName(int userId, string nameId)
+    {
+        var db = new PostgresDB();
+        var result = db.BookmarksNames.FirstOrDefault(x => x.UserId == userId && x.NameId == nameId);
+     }
+
+        public BookmarksName CreateBookmarksName(BookmarksName newBookmarksName)
+    {
+        using var db = new PostgresDB();
+        db.Add(newBookmarksName);
+        db.SaveChanges();
+        return newBookmarksName;
+    }
+
+    public bool DeleteBookmarksName(BookmarksName bookmarksName)
+    {
+        var db = new PostgresDB();
+        var deleteBookmarksName = db.BookmarksNames
+            .FirstOrDefault(x => x.UserId == bookmarksName.UserId
+                            && x.NameId == bookmarksName.NameId);
+
+
+        if (deleteBookmarksName != null)
+        {
+            db.BookmarksNames.Remove(deleteBookmarksName);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+    /*-------------------------------------------------------------------------------
+                                    ------KnownFor------
+    ---------------------------------------------------------------------------------*/
+    public (IList<KnownFor>, int count) GetKnownFors(int page, int pageSize)
+    {
         var knownFor = db.KnownFors.Skip(page * pageSize).Take(pageSize).ToList();
         return (knownFor, db.Genres.Count());
     }
@@ -163,6 +253,7 @@ public class DataService : IDataService
     {
         var db = new PostgresDB();
         var result = db.KnownFors.Where(x => x.NameId == nameId).FirstOrDefault(x => x.TitleId == titleId);
+
         if (result != null)
         {
             return result;
@@ -172,6 +263,7 @@ public class DataService : IDataService
             return null;
         }
     }
+
 
     public KnownFor CreateKnownFor(KnownFor newKnownFor)
     {
@@ -199,19 +291,74 @@ public class DataService : IDataService
             .FirstOrDefault(x => x.TitleId == knownfor.TitleId && x.NameId == knownfor.NameId);
         if (knownfor != null)
         {
-            //db.Aliases.Update
             db.KnownFors.Remove(knownfor);
             return db.SaveChanges() > 0;
         }
         return false;
     }
 
-    public (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize)
+
+    /*-------------------------------------------------------------------------------
+                                    ------BookmarksTitle------
+    ---------------------------------------------------------------------------------*/
+    public (IList<BookmarksTitle>, int count) GetBookmarksTitles(int page, int pageSize)
+
     {
         var db = new PostgresDB();
-        //var result = db.Aliases.ToList();
-        //return result;
+        var bookmarksTitle = db.BookmarksTitles.Skip(page * pageSize).Take(pageSize).ToList();
+        return (bookmarksTitle, db.BookmarksTitles.Count());
+    }
 
+    public (IList<BookmarksTitle>, int count) GetBookmarksTitles(int userId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.BookmarksTitles.Where(x => x.UserId == userId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.BookmarksTitles.Count());
+    }
+
+    public BookmarksTitle? GetSpecificBookmarksTitle(int userId, string titleId)
+    {
+        var db = new PostgresDB();
+        var result = db.BookmarksTitles.FirstOrDefault(x => x.UserId == userId && x.TitleId == titleId);
+                if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    public BookmarksTitle CreateBookmarksTitle(BookmarksTitle newBookmarksTitle)
+    {
+        using var db = new PostgresDB();
+        db.Add(newBookmarksTitle);
+        db.SaveChanges();
+        return newBookmarksTitle;
+    }
+
+    public bool DeleteBookmarksTitle(BookmarksTitle bookmarksTitle)
+    {
+        var db = new PostgresDB();
+        var deleteBookmarksTitle = db.BookmarksTitles
+            .FirstOrDefault(x => x.UserId == bookmarksTitle.UserId
+                            && x.TitleId == bookmarksTitle.TitleId);
+
+
+        if (deleteBookmarksTitle != null)
+        {
+            db.BookmarksTitles.Remove(deleteBookmarksTitle);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+    /*-------------------------------------------------------------------------------
+                                    ------MovieRatings------
+    ---------------------------------------------------------------------------------*/
+    public (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize)
+    {
         var movieRatings = db.MoviesRatings.Skip(page * pageSize).Take(pageSize).ToList();
         return (movieRatings, db.MoviesRatings.Count());
     }
@@ -234,17 +381,6 @@ public class DataService : IDataService
     public MovieRatings CreateMovieRating(MovieRatings movieRating)
     {
         using var db = new PostgresDB();
-        //var newAlias = new Aliases
-        //{
-        //    TitleId = titleId,
-        //    Ordering = ordering,
-        //    Title = title,
-        //    Region = region,
-        //    Language = language,
-        //    IsOriginalTitle = isOriginalTitle,
-        //    Types = types,
-        //    Attributes = attributes
-        //};
         db.Add(movieRating);
         db.SaveChanges();
         return movieRating;
@@ -264,6 +400,10 @@ public class DataService : IDataService
         return false;
     }
 
+
+    /*-------------------------------------------------------------------------------
+                                    ------MovieTitles------
+    ---------------------------------------------------------------------------------*/
     public (IList<MovieTitles>, int count) GetMovieTitles(int page, int pageSize)
     {
         var db = new PostgresDB();
@@ -310,6 +450,11 @@ public class DataService : IDataService
         return false;
     }
 
+
+
+    /*-------------------------------------------------------------------------------
+                                    ------Names------
+    ---------------------------------------------------------------------------------*/
     public (IList<Names>, int count) GetNames(int page, int pageSize)
     {
         var db = new PostgresDB();
@@ -356,16 +501,83 @@ public class DataService : IDataService
 
 
 
+    /*-------------------------------------------------------------------------------
+                                    ------EpisodeBelongsTo------
+    ---------------------------------------------------------------------------------*/
+    public (IList<EpisodeBelongsTo>, int count) GetEpisodeBelongsTos(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+
+        var episodeBelongsTos = db.EpisodeBelongsTos.Skip(page * pageSize).Take(pageSize).ToList();
+        return (episodeBelongsTos, db.EpisodeBelongsTos.Count());
+    }
+
+    public (IList<EpisodeBelongsTo>, int count) GetEpisodeBelongsTosByParentTvShowTitleId(string parentTvShowTitleId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.EpisodeBelongsTos.Where(x => x.ParentTvShowTitleId == parentTvShowTitleId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.EpisodeBelongsTos.Count());
+    }
+
+    public EpisodeBelongsTo? GetEpisodeBelongsToParentTvShowId(string episodeTitleId)
+    {
+        var db = new PostgresDB();
+        var result = db.EpisodeBelongsTos.FirstOrDefault(x => x.ParentTvShowTitleId == episodeTitleId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    
+    
+    
+    public EpisodeBelongsTo? GetEpisodeBelongsTo(string episodeTitleId, string parentTvShowTitleId)
+    {
+        var db = new PostgresDB();
+        var result = db.EpisodeBelongsTos.FirstOrDefault(x => x.EpisodeTitleId == episodeTitleId && x.ParentTvShowTitleId == parentTvShowTitleId);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+        
+    public EpisodeBelongsTo CreateEpisodeBelongsTo(EpisodeBelongsTo newEpisodeBelongsTo)
+    {
+        using var db = new PostgresDB();
+        db.Add(newEpisodeBelongsTo);
+        db.SaveChanges();
+        return newEpisodeBelongsTo;
+    }
+
+    public bool DeleteEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo)
+    {
+        var db = new PostgresDB();
+        var deleteEpisodeBelongsTo = db.EpisodeBelongsTos
+            .FirstOrDefault(x => x.EpisodeTitleId == episodeBelongsTo.EpisodeTitleId
+                            && x.ParentTvShowTitleId == episodeBelongsTo.ParentTvShowTitleId);
 
 
+        if (deleteEpisodeBelongsTo != null)
+        {
+            db.EpisodeBelongsTos.Remove(deleteEpisodeBelongsTo);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
 
 
-
-
-
-
-
-    //NameWorkedAs
+     /*-------------------------------------------------------------------------------
+                                    ------NameWorkedAs------
+    ---------------------------------------------------------------------------------*/
 
     public (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize)
     {
@@ -445,8 +657,9 @@ public class DataService : IDataService
 
 
 
-    // Pricipals
-
+     /*-------------------------------------------------------------------------------
+                                    ------Principals------
+    ---------------------------------------------------------------------------------*/
     public (IList<Principals>, int count) GetPrincipals(int page, int pageSize)
     {
         var db = new PostgresDB();
@@ -469,6 +682,7 @@ public class DataService : IDataService
         }
     }
 
+
     public Principals CreatePrincipals(Principals principals)
     {
         using var db = new PostgresDB();
@@ -486,11 +700,12 @@ public class DataService : IDataService
         if (principals != null)
         {
             db.Principals.Remove(principals);
+
             return db.SaveChanges() > 0;
         }
         return false;
     }
-
+   
     public bool UpdatePrincipals(int principalsId, Principals updateInfo)
     {
         var db = new PostgresDB();
@@ -512,9 +727,68 @@ public class DataService : IDataService
         }
     }
 
+    /*-------------------------------------------------------------------------------
+                                    ------Frontend------
+    ---------------------------------------------------------------------------------*/
+    public (IList<Frontend>, int count) GetFrontends(int page, int pageSize)
+    {
+        var db = new PostgresDB();
+
+        var frontends = db.Frontends.Skip(page * pageSize).Take(pageSize).ToList();
+        return (frontends, db.Frontends.Count());
+    }
+
+    public (IList<Frontend>, int count) GetFrontendsByTitleId(string titleId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.Frontends.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.Frontends.Count());
+    }
+
+    public Frontend? GetFrontend(string titleId, string poster)
+    {
+        var db = new PostgresDB();
+        var result = db.Frontends.FirstOrDefault(x => x.TitleId == titleId && x.Poster == poster);
+        if (result != null)
+        {
+            return result;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    
+    public Frontend CreateFrontend(Frontend newFrontend)
+    {
+        using var db = new PostgresDB();
+        db.Add(newFrontend);
+        db.SaveChanges();
+        return newFrontend;
+    }
+
+    public bool DeleteFrontend(Frontend frontend)
+    {
+        var db = new PostgresDB();
+        var deleteFrontend = db.Frontends
+            .FirstOrDefault(x => x.TitleId == frontend.TitleId
+                            && x.Poster == frontend.Poster);
 
 
-    //Search History
+        if (deleteFrontend != null)
+        {
+            db.Frontends.Remove(deleteFrontend);
+            return db.SaveChanges() > 0;
+        }
+        return false;
+    }
+
+
+
+    /*-------------------------------------------------------------------------------
+                                    ------SearchHistory------
+    ---------------------------------------------------------------------------------*/
 
     public (IList<SearchHistory>, int count) GetSearchHistory(int page, int pageSize)
     {
@@ -538,6 +812,7 @@ public class DataService : IDataService
         }
     }
 
+
     public SearchHistory CreateSearchHistory(SearchHistory searchHistory)
     {
         using var db = new PostgresDB();
@@ -559,6 +834,8 @@ public class DataService : IDataService
         }
         return false;
     }
+    
+    
     public bool UpdateSearchHistory(int searchHistoryId, SearchHistory updateInfo)
     {
         var db = new PostgresDB();
@@ -581,7 +858,9 @@ public class DataService : IDataService
     }
 
 
-    //User Rating
+    /*-------------------------------------------------------------------------------
+                                    ------UserRating------
+    ---------------------------------------------------------------------------------*/
     public (IList<UserRatings>, int count) GetUserRating(int page, int pageSize)
     {
         var db = new PostgresDB();
@@ -658,7 +937,9 @@ public class DataService : IDataService
 
 
 
-    //Users
+    /*-------------------------------------------------------------------------------
+                                    ------Users------
+    ---------------------------------------------------------------------------------*/
     public (IList<Users>, int count) GetUsers(int page, int pageSize)
     {
         var db = new PostgresDB();
@@ -726,49 +1007,106 @@ public class DataService : IDataService
 
 
 
+    /*-------------------------------------------------------------------------------
+                                    ------DB functions------
+    ---------------------------------------------------------------------------------*/
+    //D4
+    public (IList<StructuredStringSearch>, int count) GetStructuredStringSearch(string tconst, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.StructuredStringSearch
+            .FromSqlInterpolated($"StructuredStringSearch")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.StructuredStringSearch
+            .FromSqlInterpolated($"StructuredStringSearch")
+            .Count();
+
+        return (query, totalCount);
+    }
 
 
-    //Jeg har problemer med de funktioner som ses nedenfor, jeg har virkelig prøvet at kigge alt igennem og da jeg lavede dem virkede de, så ved ikke om der er 
-    //blevet oploadet noget så de ikke virker? Det brude det bare ikke, når det er min egen Branch jeg kører på?
 
 
-    //public NameWorkedAs CreateNameWorkedAs(NameWorkedAs nameWorkedAs)
-    //{
-    //    throw new NotImplementedException();
-    //}
 
-    //public bool DeleteNameWorkedAs(NameWorkedAs nameWorkedAs)
-    //{
-    //    throw new NotImplementedException();
-    //}
+    //D6
+    public (IList<CoActors>, int count) GetCoActors(string givenName, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
 
-    //Names IDataService.GetPrincipals(int principalsId)
-    //{
-    //    throw new NotImplementedException();
-    //}
+        var query = db.CoActors
+            .FromSqlInterpolated($"select * from get_co_actors({givenName})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
 
-    //Names IDataService.CreatePrincipals(Principals principals)
-    //{
-    //    throw new NotImplementedException();
-    //}
+        var totalCount = db.CoActors
+            .FromSqlInterpolated($"select * from get_co_actors({givenName})")
+            .Count();
 
-    //public (IList<UserRatings>, int count) GetUserRatings(int page, int pageSize)
-    //{
-    //    throw new NotImplementedException();
-    //}
+        return (query, totalCount);
+    }
 
-    //public UserRatings UserRatings(UserRatings userRatings)
-    //{
-    //    throw new NotImplementedException();
-    //}
 
-    //public bool UpdateUserRatings(int userId, string? titleId, SearchHistory updateInfo)
-    //{
-    //    throw new NotImplementedException();
-    //}
 
-    //public bool UpdateUsers(int userId, Users updateInfo)
-    //{
-    //    throw new NotImplementedException();
-    //}
+
+    //D10
+    public (IList<AssociatedWords>, int count) GetAssociatedWords(string titleId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.AssociatedWords
+            .FromSqlInterpolated($"SELECT * FROM associated_words({titleId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.AssociatedWords
+            .FromSqlInterpolated($"SELECT * FROM associated_words({titleId})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
+    //D11  skal rettes i
+    public (IList<ExactSearch>, int count) GetExactSearch(string titleId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.ExactSearch
+            .FromSqlInterpolated($"SELECT wi.tconst, movie_titles.original_title({titleId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.ExactSearch
+            .FromSqlInterpolated($"SELECT wi.tconst, movie_titles.original_title({titleId})")
+            .Count();
+
+        return (query, totalCount);
+
+    }
+
+
+        //D12
+        public (IList<AssociatedTitle>, int count) GetAssociatedTitle(string titleId, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.AssociatedTitle
+            .FromSqlInterpolated($"SELECT a.title_id, a.title, count(a.title_id) as number_of_matches({titleId})")
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var totalCount = db.AssociatedTitle
+            .FromSqlInterpolated($"SELECT a.title_id, a.title, count(a.title_id) as number_of_matches({titleId})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
 }
