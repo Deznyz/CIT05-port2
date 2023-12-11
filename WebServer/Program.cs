@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddMvcCore();
 //builder.Services.AddScoped<DataLayer.DataService>();
 builder.Services.AddSingleton<IDataService, DataService>();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -18,5 +19,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+app.UseCors(
+  options => options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader());
 app.MapControllers();
 app.Run();
