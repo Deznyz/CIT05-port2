@@ -10,7 +10,7 @@ namespace DataLayer.Models
     {
         public string NameId { get; set; }
         public string Profession { get; set; }
-        public Names Names { get; set; }
+        //public Names Names { get; set; }
 
 
         public override string ToString()

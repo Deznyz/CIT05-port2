@@ -155,8 +155,8 @@ namespace DataLayer
                                     ------NameWorkedAs------
         ---------------------------------------------------------------------------------*/
         (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize);
-        (IList<NameWorkedAs>, int count) GetNameWorkedAs(string NameId, int page, int pageSize);
-        NameWorkedAs GetNameWorkedAs(string NameId, string? profession);
+        (IList<NameWorkedAs>, int count) GetNameWorkedAsByNameId(string nameId, int page, int pageSize);
+        NameWorkedAs GetSpecificNameWorkedAs(string nameId, string? profession);
         NameWorkedAs CreateNameWorkedAs(NameWorkedAs newNameWorkedas);
         bool DeleteNameworkedAs(NameWorkedAs nameWorkedAs);
         bool UpdateNameWorkedAs(string nameId, NameWorkedAs updateInfo);

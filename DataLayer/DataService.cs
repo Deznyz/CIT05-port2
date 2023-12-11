@@ -600,17 +600,17 @@ public class DataService : IDataService
         return (nameWorkedAs, db.NameWorkedAs.Count());
     }
 
-    public (IList<NameWorkedAs>, int count) GetNameWorkedAs(string NameId, int page, int pageSize)
+    public (IList<NameWorkedAs>, int count) GetNameWorkedAsByNameId(string nameId, int page, int pageSize)
     {
         var db = new PostgresDB();
-        var result = db.NameWorkedAs.Where(x => x.NameId == NameId).Skip(page * pageSize).Take(pageSize).ToList();
+        var result = db.NameWorkedAs.Where(x => x.NameId == nameId).Skip(page * pageSize).Take(pageSize).ToList();
         return (result, db.NameWorkedAs.Count());
     }
 
-    public NameWorkedAs? GetNameWorkedAs(string NameId, string? profession)
+    public NameWorkedAs? GetSpecificNameWorkedAs(string nameId, string? profession)
     {
         var db = new PostgresDB();
-        var result = db.NameWorkedAs.Where(x => x.NameId == NameId).FirstOrDefault(x => x.Profession == profession);
+        var result = db.NameWorkedAs.Where(x => x.NameId == nameId).FirstOrDefault(x => x.Profession == profession);
         if (result != null)
         {
             return result;
@@ -651,7 +651,7 @@ public class DataService : IDataService
         if (nameWorkedAs != null)
         {
 
-            if (updateInfo.Names != null)
+            if (updateInfo.NameId != null)
             {
                 nameWorkedAs.NameId = updateInfo.NameId;
             }

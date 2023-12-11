@@ -36,7 +36,7 @@ public class NameWorkedAsController : BaseController
         [HttpGet("{nameId}")]
         public IActionResult GetNameWorkedAs(string nameId, int page, int pageSize)
         {
-            (var nameWorkedAs, var total) = _dataService.GetNameWorkedAs(nameId, page, pageSize);
+            (var nameWorkedAs, var total) = _dataService.GetNameWorkedAsByNameId(nameId, page, pageSize);
 
             var items = nameWorkedAs.Select(CreateNameWorkedAsModel);
 
@@ -46,10 +46,10 @@ public class NameWorkedAsController : BaseController
 
         }
 
-        [HttpGet("{nameId}/{profession}")]
-        public IActionResult GetNameWorkedAs(string nameId, string? profession)
+        [HttpGet("{nameId}/{profession}", Name = nameof(GetSpecificNameWorkedAs))]
+        public IActionResult GetSpecificNameWorkedAs(string nameId, string? profession)
         {
-            var nameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);
+            var nameWorkedAs = _dataService.GetSpecificNameWorkedAs(nameId, profession);
             if (nameId == null)
             {
                 return NotFound();
@@ -60,10 +60,10 @@ public class NameWorkedAsController : BaseController
 
 
 
-    [HttpPut("update/{nameId}/profession", Name = nameof(UpdateNameWorkedAs))]
+    [HttpPut("update/{nameId}/{profession}", Name = nameof(UpdateNameWorkedAs))]
     public IActionResult UpdateNameWorkedAs(string nameId, string profession, CreateNameWorkedAsModel model)
     {
-        var existNameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);
+        var existNameWorkedAs = _dataService.GetSpecificNameWorkedAs(nameId, profession);
 
         if (existNameWorkedAs != null)
         {
@@ -103,7 +103,7 @@ public class NameWorkedAsController : BaseController
         {
             return new NameWorkedAsModel
             {
-                Url = GetUrl(nameof(GetNameWorkedAs), new { nameWorkedAs.NameId, nameWorkedAs.Profession }),
+                Url = GetUrl(nameof(GetSpecificNameWorkedAs), new { nameWorkedAs.NameId, nameWorkedAs.Profession }),
                 NameId = nameWorkedAs.NameId,
                 Profession = nameWorkedAs.Profession,
             };

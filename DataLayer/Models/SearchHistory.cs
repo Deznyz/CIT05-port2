@@ -11,7 +11,7 @@ namespace DataLayer.Models
         public int SearchHistoryId { get; set; }
         public int UserId { get; set; }
         public string Searched {  get; set; }
-        public Names Names { get; set; }
+        //public Names Names { get; set; }
 
 
         public override string ToString()

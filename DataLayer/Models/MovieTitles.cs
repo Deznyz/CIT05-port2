@@ -23,11 +23,11 @@ namespace DataLayer.Models
         //public ICollection<EpisodeBelongsTo> EpisodeBelongsToChild { get; set; }
         //public ICollection<EpisodeBelongsTo> EpisodeBelongsToParent { get; set; }
         //måske en EpisdodeBelongsTo mere
-        public ICollection<Principals> Principals { get; set; }
-        public ICollection<KnownFor> KnownFor { get; set; }
-        public ICollection<UserRatings> UserRatings { get; set; }
-        public ICollection<BookmarksTitle> BookmarksTitle { get; set; }
-        public ICollection<Aliases> Aliases { get; set; }
+        //public ICollection<Principals> Principals { get; set; }
+        //public ICollection<KnownFor> KnownFor { get; set; }
+        //public ICollection<UserRatings> UserRatings { get; set; }
+        //public ICollection<BookmarksTitle> BookmarksTitle { get; set; }
+        //public ICollection<Aliases> Aliases { get; set; }
 
 
         public override string ToString()
