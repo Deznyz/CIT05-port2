@@ -36,7 +36,7 @@ public class GenresController : BaseController
     }
 
     [HttpGet("{titleId}")]
-    public IActionResult GetGenres(string titleId, int page, int pageSize)
+    public IActionResult GetGenres(string titleId, int page = 0, int pageSize = 10)
     {
 
         (var genres, var total) = _dataService.GetGenres(titleId, page, pageSize);

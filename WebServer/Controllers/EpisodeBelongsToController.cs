@@ -36,7 +36,7 @@ public class EpisodeBelongsToController : BaseController
     }
 
     [HttpGet("{parentTvShowTitleId}")]
-    public IActionResult GetEpisodeBelongsTosByParentTvShowTitleId(string parentTvShowTitleId, int page, int pageSize)
+    public IActionResult GetEpisodeBelongsTosByParentTvShowTitleId(string parentTvShowTitleId, int page=0, int pageSize=10)
     {
         //var result = _dataService.GetAliases(titleId, 0, 10).Select(CreateAliasesModel);
         //return Ok(result);

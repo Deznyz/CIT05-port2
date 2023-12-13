@@ -35,7 +35,7 @@ public class KnownForController : BaseController
     }
 
     [HttpGet("titleid/{titleId}")]
-    public IActionResult GetKnownForTitle(string titleId, int page, int pageSize)
+    public IActionResult GetKnownForTitle(string titleId, int page=0, int pageSize=10)
     {
 
         (var knownFor, var total) = _dataService.GetKnownForTitle(titleId, page, pageSize);
@@ -49,7 +49,7 @@ public class KnownForController : BaseController
     }
 
     [HttpGet("nameid/{nameId}")]
-    public IActionResult GetKnownForName(string nameId, int page, int pageSize)
+    public IActionResult GetKnownForName(string nameId, int page=0, int pageSize=10)
     {
 
         (var knownFor, var total) = _dataService.GetKnownForName(nameId, page, pageSize);

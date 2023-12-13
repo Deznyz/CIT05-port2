@@ -65,7 +65,7 @@ public class MovieTitlesController : BaseController
             return NotFound();
         }
 
-        return Ok(CreateMovieTitleModel(movieTitle));
+        return Ok(movieTitle);
     }
 
 

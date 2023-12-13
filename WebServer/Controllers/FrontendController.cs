@@ -33,7 +33,7 @@ public class FrontendController : BaseController
     }
 
     [HttpGet("{titleId}")]
-    public IActionResult GetFrontendsByTitleId(string titleId, int page, int pageSize)
+    public IActionResult GetFrontendsByTitleId(string titleId, int page=0, int pageSize = 10)
     {
         (var frontends, var total) = _dataService.GetFrontendsByTitleId(titleId, page, pageSize);
 

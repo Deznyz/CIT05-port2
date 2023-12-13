@@ -36,7 +36,7 @@ public class BookmarksNameController : BaseController
     }
 
     [HttpGet("{userId}")]
-    public IActionResult GetBookmarksName(int userId, int page, int pageSize)
+    public IActionResult GetBookmarksName(int userId, int page=0, int pageSize=10)
     {
         //var result = _dataService.GetAliases(titleId, 0, 10).Select(CreateAliasesModel);
         //return Ok(result);

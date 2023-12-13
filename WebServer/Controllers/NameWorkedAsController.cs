@@ -34,7 +34,7 @@ public class NameWorkedAsController : BaseController
         }
 
         [HttpGet("{nameId}")]
-        public IActionResult GetNameWorkedAs(string nameId, int page, int pageSize)
+        public IActionResult GetNameWorkedAs(string nameId, int page=0, int pageSize=10)
         {
             (var nameWorkedAs, var total) = _dataService.GetNameWorkedAsByNameId(nameId, page, pageSize);
 
