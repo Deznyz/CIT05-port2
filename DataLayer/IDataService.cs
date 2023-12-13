@@ -118,7 +118,8 @@ namespace DataLayer
                                     ------KnownFor------
         ---------------------------------------------------------------------------------*/
         (IList<KnownFor>, int count) GetKnownFors(int page, int pageSize);
-        (IList<KnownFor>, int count) GetKnownFors(string titleId, int page, int pageSize);
+        (IList<KnownFor>, int count) GetKnownForTitle(string titleId, int page, int pageSize);
+        (IList<KnownFor>, int count) GetKnownForName(string nameId, int page, int pageSize);
         KnownFor GetKnownFor(string titleId, string nameId);
         KnownFor CreateKnownFor(KnownFor knownfor);
         bool DeleteKnownFor(KnownFor knownfor);

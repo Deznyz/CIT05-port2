@@ -233,14 +233,21 @@ public class DataService : IDataService
     {
         var db = new PostgresDB();
         var knownFor = db.KnownFors.Skip(page * pageSize).Take(pageSize).ToList();
-        return (knownFor, db.Genres.Count());
+        return (knownFor, db.KnownFors.Count());
     }
 
-    public (IList<KnownFor>, int count) GetKnownFors(string titleId, int page, int pageSize)
+    public (IList<KnownFor>, int count) GetKnownForTitle(string titleId, int page, int pageSize)
     {
         var db = new PostgresDB();
         var result = db.KnownFors.Where(x => x.TitleId == titleId).Skip(page * pageSize).Take(pageSize).ToList();
-        return (result, db.Genres.Count());
+        return (result, db.KnownFors.Count());
+    }
+
+    public (IList<KnownFor>, int count) GetKnownForName(string nameId, int page, int pageSize)
+    {
+        var db = new PostgresDB();
+        var result = db.KnownFors.Where(x => x.NameId == nameId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.KnownFors.Where(x => x.NameId == nameId).Count());
     }
 
     public KnownFor? GetKnownFor(string titleId, string nameId)

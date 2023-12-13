@@ -34,11 +34,11 @@ public class KnownForController : BaseController
 
     }
 
-    [HttpGet("{titleId}")]
-    public IActionResult GetKnownFors(string titleId, int page, int pageSize)
+    [HttpGet("titleid/{titleId}")]
+    public IActionResult GetKnownForTitle(string titleId, int page, int pageSize)
     {
 
-        (var knownFor, var total) = _dataService.GetKnownFors(titleId, page, pageSize);
+        (var knownFor, var total) = _dataService.GetKnownForTitle(titleId, page, pageSize);
 
         var items = knownFor.Select(CreateKnownforModel);
 
@@ -48,7 +48,21 @@ public class KnownForController : BaseController
 
     }
 
-    [HttpGet("{titleId}/{nameId}", Name = nameof(GetKnownFor))]
+    [HttpGet("nameid/{nameId}")]
+    public IActionResult GetKnownForName(string nameId, int page, int pageSize)
+    {
+
+        (var knownFor, var total) = _dataService.GetKnownForName(nameId, page, pageSize);
+
+        var items = knownFor.Select(CreateKnownforModel);
+
+        var result = Paging(items, total, page, pageSize, nameof(GetKnownFors));
+
+        return Ok(result);
+
+    }
+
+    [HttpGet("specific/{titleId}/{nameId}", Name = nameof(GetKnownFor))]
     public IActionResult GetKnownFor(string titleId, string genreData)
     {
         var knownFor = _dataService.GetKnownFor(titleId, genreData);
