@@ -402,7 +402,7 @@ public class DataService : IDataService
     }
 
 
-    public MovieTitles? GetMovieTitle(string movieTitleId)
+    public MovieTitles GetMovieTitle(string movieTitleId)
     {
         var db = new PostgresDB();
         var result = db.MoviesTitles.FirstOrDefault(x => x.TitleId == movieTitleId);
