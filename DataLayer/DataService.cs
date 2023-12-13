@@ -49,7 +49,7 @@ public class DataService : IDataService
     public Aliases CreateAliases(Aliases newAlias)
     {
         using var db = new PostgresDB();
-       
+
         db.Add(newAlias);
         db.SaveChanges();
         return newAlias;
@@ -77,7 +77,7 @@ public class DataService : IDataService
             .FirstOrDefault(x => x.TitleId == titleId && x.Ordering == ordering);
         if (alias != null)
         {
-            
+
             if (updateInfo.Title != null)
             {
                 alias.Title = updateInfo.Title;
@@ -199,9 +199,9 @@ public class DataService : IDataService
         var db = new PostgresDB();
         var result = db.BookmarksNames.FirstOrDefault(x => x.UserId == userId && x.NameId == nameId);
         return result;
-     }
+    }
 
-        public BookmarksName CreateBookmarksName(BookmarksName newBookmarksName)
+    public BookmarksName CreateBookmarksName(BookmarksName newBookmarksName)
     {
         using var db = new PostgresDB();
         db.Add(newBookmarksName);
@@ -309,7 +309,7 @@ public class DataService : IDataService
     {
         var db = new PostgresDB();
         var result = db.BookmarksTitles.FirstOrDefault(x => x.UserId == userId && x.TitleId == titleId);
-                if (result != null)
+        if (result != null)
         {
             return result;
         }
@@ -318,7 +318,7 @@ public class DataService : IDataService
             return null;
         }
     }
-    
+
     public BookmarksTitle CreateBookmarksTitle(BookmarksTitle newBookmarksTitle)
     {
         using var db = new PostgresDB();
@@ -519,10 +519,10 @@ public class DataService : IDataService
             return null;
         }
     }
-    
-    
-    
-    
+
+
+
+
     public EpisodeBelongsTo? GetEpisodeBelongsTo(string episodeTitleId, string parentTvShowTitleId)
     {
         var db = new PostgresDB();
@@ -536,7 +536,7 @@ public class DataService : IDataService
             return null;
         }
     }
-        
+
     public EpisodeBelongsTo CreateEpisodeBelongsTo(EpisodeBelongsTo newEpisodeBelongsTo)
     {
         using var db = new PostgresDB();
@@ -565,7 +565,7 @@ public class DataService : IDataService
     {
         var db = new PostgresDB();
         var episodeBelongsTo = db.EpisodeBelongsTos
-            .FirstOrDefault(x => x.EpisodeTitleId == episodeTitleId 
+            .FirstOrDefault(x => x.EpisodeTitleId == episodeTitleId
                         && x.ParentTvShowTitleId == parentTvShowTitleId);
         if (episodeBelongsTo != null)
         {
@@ -595,9 +595,9 @@ public class DataService : IDataService
     }
 
 
-     /*-------------------------------------------------------------------------------
-                                    ------NameWorkedAs------
-    ---------------------------------------------------------------------------------*/
+    /*-------------------------------------------------------------------------------
+                                   ------NameWorkedAs------
+   ---------------------------------------------------------------------------------*/
 
     public (IList<NameWorkedAs>, int count) GetNameWorkedAs(int page, int pageSize)
     {
@@ -648,8 +648,8 @@ public class DataService : IDataService
         }
         return false;
     }
-    
-    
+
+
     public bool UpdateNameWorkedAs(string nameId, NameWorkedAs updateInfo)
     {
         var db = new PostgresDB();
@@ -676,9 +676,9 @@ public class DataService : IDataService
     }
 
 
-     /*-------------------------------------------------------------------------------
-                                    ------Principals------
-    ---------------------------------------------------------------------------------*/
+    /*-------------------------------------------------------------------------------
+                                   ------Principals------
+   ---------------------------------------------------------------------------------*/
     public (IList<Principals>, int count) GetPrincipals(int page, int pageSize)
     {
         var db = new PostgresDB();
@@ -724,7 +724,7 @@ public class DataService : IDataService
         }
         return false;
     }
-   
+
     public bool UpdatePrincipals(int principalsId, Principals updateInfo)
     {
         var db = new PostgresDB();
@@ -777,8 +777,8 @@ public class DataService : IDataService
             return null;
         }
     }
-    
-    
+
+
     public Frontend CreateFrontend(Frontend newFrontend)
     {
         using var db = new PostgresDB();
@@ -828,6 +828,7 @@ public class DataService : IDataService
                                     ------SearchHistory------
     ---------------------------------------------------------------------------------*/
 
+
     public (IList<SearchHistory>, int count) GetSearchHistory(int page, int pageSize)
     {
         var db = new PostgresDB();
@@ -836,10 +837,18 @@ public class DataService : IDataService
         return (searchHistory, db.SearchHistories.Count());
     }
 
-    public SearchHistory? GetSearchHistory(int searchHistoryId)
+    public (IList<SearchHistory>, int count) GetSearchHistory(int searchHistoryId, int page, int pageSize)
     {
         var db = new PostgresDB();
-        var result = db.SearchHistories.FirstOrDefault(x => x.SearchHistoryId == searchHistoryId);
+        var result = db.SearchHistories.Where(x => x.SearchHistoryId == searchHistoryId).Skip(page * pageSize).Take(pageSize).ToList();
+        return (result, db.SearchHistories.Count());
+
+    }
+
+    public SearchHistory? GetSearchHistoryId(int searchHistoryId, int userId)
+    {
+        var db = new PostgresDB();
+        var result = db.SearchHistories.Where(x => x.SearchHistoryId == searchHistoryId).FirstOrDefault(x => x.UserId == userId);
         if (result != null)
         {
             return result;
@@ -848,6 +857,7 @@ public class DataService : IDataService
         {
             return null;
         }
+
     }
 
 

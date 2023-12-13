@@ -178,7 +178,8 @@ namespace DataLayer
                                     ------SearchHistory------
         ---------------------------------------------------------------------------------*/
         (IList<SearchHistory>, int count) GetSearchHistory(int page, int pageSize);
-        SearchHistory GetSearchHistory(int searchHistoryId);
+        (IList<SearchHistory>, int count) GetSearchHistory(int searchHistoryId, int page, int pageSize);
+        SearchHistory GetSearchHistoryId(int searchHistoryId, int userId);
         SearchHistory CreateSearchHistory(SearchHistory searchHistory);
         bool DeleteSearchHistory(SearchHistory searchHistory);
         bool UpdateSearchHistory(int searchHistoryId, SearchHistory updateInfo);

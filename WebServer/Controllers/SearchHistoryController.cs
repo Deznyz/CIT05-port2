@@ -32,24 +32,24 @@ public class SearchHistoryController : BaseController
 
         }
 
-    //[HttpGet("{searchHistoryId}")]
-    //public IActionResult GetSearchHistory(int searchHistoryId, int page = 0, int pageSize = 10)
-    //{
-    //    (var searchHistory, var total) = _dataService.GetSearchHistory(searchHistoryId, page, pageSize);
+    [HttpGet("{searchHistoryId}")]
+    public IActionResult GetSearchHistory(int searchHistoryId, int page = 0, int pageSize = 10)
+    {
+        (var searchHistory, var total) = _dataService.GetSearchHistory(searchHistoryId, page, pageSize);
 
-    //    var items = searchHistory.Select(CreateSearchHistoryModel);
+        var items = searchHistory.Select(CreateSearchHistoryModel);
 
-    //    var result = Paging(items, total, page, pageSize, nameof(GetSearchHistory));
+        var result = Paging(items, total, page, pageSize, nameof(GetSearchHistory));
 
-    //    return Ok(result);
+        return Ok(result);
 
-    //}
+    }
 
-    [HttpGet("{SearchHistoryId}")]
-        public IActionResult GetSearchHistoryId(int SearchHistoryId)
+    [HttpGet("{SearchHistoryId}/{nameId}", Name = nameof(GetSearchHistoryId))]
+        public IActionResult GetSearchHistoryId(int SearchHistoryId, int userId)
         {
-            var searchHistory = _dataService.GetSearchHistory(SearchHistoryId);
-            if (SearchHistoryId == null)
+            var searchHistory = _dataService.GetSearchHistoryId(SearchHistoryId, userId);
+            if (searchHistory == null)
             {
                 return NotFound();
             }
@@ -58,10 +58,10 @@ public class SearchHistoryController : BaseController
         }
 
 
-    [HttpPut("{searchHistoryd}", Name = nameof(UpdateSearchHistory))]
-    public IActionResult UpdateSearchHistory(int searchHistoryId, CreateSearchHistoryModel model)
+    [HttpPut("{searchHistoryId}/{nameId}", Name = nameof(UpdateSearchHistory))]
+    public IActionResult UpdateSearchHistory(int searchHistoryId, int userId, CreateSearchHistoryModel model)
     {
-        var existSearchHistory = _dataService.GetSearchHistory(searchHistoryId);
+        var existSearchHistory = _dataService.GetSearchHistoryId(searchHistoryId, userId);
 
         if (existSearchHistory != null)
         {
@@ -82,9 +82,8 @@ public class SearchHistoryController : BaseController
         }
     }
 
-
-            [HttpPost]
-        public IActionResult GetSearchHistory(CreateSearchHistoryModel model)
+    [HttpPost]
+        public IActionResult CreateSearchHistory(CreateSearchHistoryModel model)
         {
             var searchHistory = new SearchHistory
             {
@@ -95,12 +94,13 @@ public class SearchHistoryController : BaseController
 
             _dataService.CreateSearchHistory(searchHistory);
 
-            var searchHistoryUri = Url.Link("GetSearchHistory", new { searchHistoryId = searchHistory.SearchHistoryId});
+            var searchHistoryUri = Url.Link("GetSearchHistory", new { searchHistoryId = searchHistory.SearchHistoryId, userId = searchHistory.UserId});
 
             return Created(searchHistoryUri, searchHistory);
         }
 
-        private SearchHistoryModel CreateSearchHistoryModel(SearchHistory searchHistory)
+
+    private SearchHistoryModel CreateSearchHistoryModel(SearchHistory searchHistory)
         {
             return new SearchHistoryModel
             {

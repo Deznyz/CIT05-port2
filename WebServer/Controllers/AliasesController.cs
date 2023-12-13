@@ -22,8 +22,6 @@ public class AliasesController : BaseController
     [HttpGet(Name = nameof(GetAliases))]
     public IActionResult GetAliases(int page=0, int pageSize=10)
     {
-        //var result = _dataService.GetAliases().Select(CreateAliasesModel);
-        //return Ok( result);
 
         (var aliases, var total) = _dataService.GetAliases(page, pageSize);
 
@@ -38,8 +36,6 @@ public class AliasesController : BaseController
     [HttpGet("{titleId}")]
     public IActionResult GetAliases(string titleId, int page, int pageSize)
     {
-            //var result = _dataService.GetAliases(titleId, 0, 10).Select(CreateAliasesModel);
-            //return Ok(result);
 
         (var aliases, var total) = _dataService.GetAliases(titleId, page, pageSize);
 
