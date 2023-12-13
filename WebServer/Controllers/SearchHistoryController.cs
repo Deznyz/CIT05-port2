@@ -45,7 +45,7 @@ public class SearchHistoryController : BaseController
 
     }
 
-    [HttpGet("{SearchHistoryId}/{nameId}", Name = nameof(GetSearchHistoryId))]
+    [HttpGet("{SearchHistoryId}/{userId}", Name = nameof(GetSearchHistoryId))]
         public IActionResult GetSearchHistoryId(int SearchHistoryId, int userId)
         {
             var searchHistory = _dataService.GetSearchHistoryId(SearchHistoryId, userId);
@@ -58,7 +58,7 @@ public class SearchHistoryController : BaseController
         }
 
 
-    [HttpPut("{searchHistoryId}/{nameId}", Name = nameof(UpdateSearchHistory))]
+    [HttpPut("{searchHistoryId}/{userId}", Name = nameof(UpdateSearchHistory))]
     public IActionResult UpdateSearchHistory(int searchHistoryId, int userId, CreateSearchHistoryModel model)
     {
         var existSearchHistory = _dataService.GetSearchHistoryId(searchHistoryId, userId);
@@ -94,7 +94,7 @@ public class SearchHistoryController : BaseController
 
             _dataService.CreateSearchHistory(searchHistory);
 
-            var searchHistoryUri = Url.Link("GetSearchHistory", new { searchHistoryId = searchHistory.SearchHistoryId, userId = searchHistory.UserId});
+            var searchHistoryUri = Url.Link("GetSearchHistoryId", new { searchHistoryId = searchHistory.SearchHistoryId, userId = searchHistory.UserId});
 
             return Created(searchHistoryUri, searchHistory);
         }
@@ -104,7 +104,7 @@ public class SearchHistoryController : BaseController
         {
             return new SearchHistoryModel
             {
-                Url = GetUrl(nameof(GetSearchHistory), new { searchHistory.SearchHistoryId}),
+                Url = GetUrl(nameof(GetSearchHistoryId), new { searchHistory.SearchHistoryId}),
                 SearchHistoryId = searchHistory.SearchHistoryId,
                 UserId = searchHistory.UserId,
                 Searched = searchHistory.Searched
