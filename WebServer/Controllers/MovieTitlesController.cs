@@ -75,6 +75,7 @@ public class MovieTitlesController : BaseController
         {
             Url = GetUrl(nameof(GetMovieTitle), new { movieTitle.TitleId }),
             TitleId = movieTitle.TitleId,
+            TitleType = movieTitle.TitleType,
             PrimaryTitle = movieTitle.PrimaryTitle,
             OriginalTitle = movieTitle.OriginalTitle,
             IsAdult = movieTitle.IsAdult,
