@@ -687,10 +687,10 @@ public class DataService : IDataService
         return (principals, db.Principals.Count());
     }
 
-    public Principals? GetPrincipals(int principalsId)
-    {
+    public Principals? GetPrincipal(int principalsId)
+    { 
         var db = new PostgresDB();
-        var result = db.Principals.FirstOrDefault(x => x.PrincipalsId == principalsId);
+    var result = db.Principals.FirstOrDefault(x => x.PrincipalsId == principalsId);
         if (result != null)
         {
             return result;
