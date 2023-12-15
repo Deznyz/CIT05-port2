@@ -349,7 +349,7 @@ public class DataService : IDataService
     public (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize)
     {
         var db = new PostgresDB();
-        var movieRatings = db.MoviesRatings.Skip(page * pageSize).Take(pageSize).ToList();
+        var movieRatings = db.MoviesRatings.OrderByDescending(p => p.AverageRating ?? double.MinValue).Skip(page * pageSize).Take(pageSize).ToList();
         return (movieRatings, db.MoviesRatings.Count());
     }
 
@@ -397,7 +397,7 @@ public class DataService : IDataService
     public (IList<MovieTitles>, int count) GetMovieTitles(int page, int pageSize)
     {
         var db = new PostgresDB();
-        var movieTitles = db.MoviesTitles.Skip(page * pageSize).Take(pageSize).OrderBy(p => p.MovieRatings).ToList();
+        var movieTitles = db.MoviesTitles.Skip(page * pageSize).Take(pageSize).ToList();
         return (movieTitles, db.MoviesTitles.Count());
     }
 
