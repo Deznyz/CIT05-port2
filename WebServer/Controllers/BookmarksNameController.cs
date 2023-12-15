@@ -79,7 +79,7 @@ public class BookmarksNameController : BaseController
         return Created(bookmarksNameUri, bookmarksName);
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete]
     public IActionResult DeleteBookmarksName(BookmarksName bookmarksName)
     {
 
