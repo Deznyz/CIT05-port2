@@ -166,7 +166,7 @@ namespace DataLayer
                                     ------Principals------
         ---------------------------------------------------------------------------------*/
         (IList<Principals>, int count) GetPrincipals(int page, int pageSize);
-        Principals? GetPrincipals(int principalsId);
+        Principals? GetPrincipal(int principalsId);
         Principals CreatePrincipals(Principals principals);
         bool DeletePrincipals(Principals principals);
         bool UpdatePrincipals(int principalsId, Principals updateInfo);

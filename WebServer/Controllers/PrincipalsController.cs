@@ -2,6 +2,7 @@ using DataLayer;
 using DataLayer.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Data;
 using WebServer.Models;
 
@@ -33,35 +34,23 @@ public class PrincipalsController : BaseController
 
     }
 
-    //[HttpGet("{principalsId}")]
-    //public IActionResult GePrincipals(int principalsId, int page, int pageSize)
-    //{
-    //    (var principals, var total) = _dataService.GetPrincipals(principalsId, page, pageSize);
 
-    //    var items = principals.Select(CreatePrincipalsModel);
+    [HttpGet("{principalsId}", Name = nameof(GetPrincipal))]
+    public IActionResult GetPrincipal(int principalsId)
+    {
+        var principal = _dataService.GetPrincipal(principalsId);
+        if (principal == null)
+        {
+            return NotFound();
+        }
 
-    //    var result = Paging(items, total, page, pageSize, nameof(GetPrincipals));
-
-    //    return Ok(result);
-
-    //}
-
-    //[HttpGet("{principalsId}", Name = nameof(GetPrincipals))]
-    //public IActionResult GetNameWorkedAs(string nameId, string? profession)
-    //{
-    //    var nameWorkedAs = _dataService.GetNameWorkedAs(nameId, profession);
-    //    if (nameId == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return Ok(CreatePrincipalsModel(principals));
-    //}
+        return Ok(principal);
+    }
 
     [HttpPut("{principalsId}", Name = nameof(UpdatePrincipals))]
     public IActionResult UpdatePrincipals(int principalsId, CreatePrincipalsModel model)
     {
-        var existPrincipals = _dataService.GetPrincipals(principalsId);
+        var existPrincipals = _dataService.GetPrincipal(principalsId);
 
         if (existPrincipals != null)
         {
@@ -101,7 +90,7 @@ public class PrincipalsController : BaseController
 
         _dataService.CreatePrincipals(principals);
 
-        var principalsUri = Url.Link("GetPrincipals", new { principalsId = principals.PrincipalsId});
+        var principalsUri = Url.Link("GetPrincipals", new { principalsId = principals.PrincipalsId });
 
         return Created(principalsUri, principals);
     }
@@ -110,9 +99,18 @@ public class PrincipalsController : BaseController
     {
         return new PrincipalsModel
         {
-            Url = GetUrl(nameof(GetPrincipals), new { principals.PrincipalsId}),
+            Url = GetUrl(nameof(GetPrincipal), new { principals.PrincipalsId}),
             PrincipalsId = principals.PrincipalsId,
+            TitleId = principals.TitleId,
+            Ordering = principals.Ordering,
+            NameId = principals.NameId,
+            JobCategory = principals.JobCategory,
+            Job = principals.Job,
+            Role = principals.Role
         };
     }
+
+
+
 }
 
