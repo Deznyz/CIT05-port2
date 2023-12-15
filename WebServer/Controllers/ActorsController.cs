@@ -25,13 +25,14 @@ public class ActorsController : BaseController
     public IActionResult NameSearch(string name, int page = 0, int pageSize =10)
     {
         (var nameSearchResult, var total) = _dataService.NameSearch(name, page, pageSize);
+
         return Ok(nameSearchResult);
 
     }
 
     [HttpGet("{name}/coactors")]
-    public IActionResult GetCoActors(string name) {
-        (var coActors, var total) = _dataService.GetCoActors(name, 0, 10);
+    public IActionResult GetCoActors(string name, int page = 0, int pageSize = 10) {
+        (var coActors, var total) = _dataService.GetCoActors(name, page, pageSize);
         return Ok(coActors);
 
     }
