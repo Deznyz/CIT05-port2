@@ -79,6 +79,14 @@ public class BookmarksNameController : BaseController
         return Created(bookmarksNameUri, bookmarksName);
     }
 
+    [HttpDelete("{id}")]
+    public IActionResult DeleteBookmarksName(BookmarksName bookmarksName)
+    {
+
+        return Ok();
+
+    }
+
     private BookmarksNameModel CreateBookmarksNameModel(BookmarksName bookmarksName)
     {
         return new BookmarksNameModel
