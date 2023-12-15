@@ -40,6 +40,7 @@ namespace DataLayer
         public DbSet<PostgresModels.AssociatedWords> AssociatedWords { get; set; }
         public DbSet<PostgresModels.ExactSearch> ExactSearch { get; set; }
         public DbSet<PostgresModels.AssociatedTitle> AssociatedTitle { get; set; }
+        public DbSet<PostgresModels.BestMatchSearch> BestMatchSearch { get; set; }
 
 
 
@@ -419,6 +420,16 @@ namespace DataLayer
                 .Property(x => x.associatedTitle).HasColumnName("title");
 
 
+            /*-------------------------------------------------------------------------------
+                                    ------BestMatchSearch------
+            ---------------------------------------------------------------------------------*/
+            modelBuilder.Entity<PostgresModels.BestMatchSearch>().HasNoKey();
+            modelBuilder.Entity<PostgresModels.BestMatchSearch>()
+                .Property(x => x.TitleId).HasColumnName("title_id");
+            modelBuilder.Entity<PostgresModels.BestMatchSearch>()
+                .Property(x => x.Title).HasColumnName("title");
+            modelBuilder.Entity<PostgresModels.BestMatchSearch>()
+                .Property(x => x.NumberOfMatches).HasColumnName("number_of_matches");
         }
 
 

@@ -21,7 +21,7 @@ public class ExactSearchController : BaseController
 
     }
 
-    [HttpGet("{title}/ExactSearch")]
+    [HttpGet("{titleId}")]
     public IActionResult GetExactSearch(string titleId)
     {
         (var exactSearch, var total) = _dataService.GetExactSearch(titleId, 0, 10);

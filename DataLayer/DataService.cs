@@ -1326,4 +1326,24 @@ public class DataService : IDataService
         return (query, totalCount);
     }
 
+        public (IList<BestMatchSearch>, int count) GetBestMatchSearch(string searchString, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.BestMatchSearch
+    .FromSqlInterpolated($"SELECT * from best_match_search({searchString})")
+    .Skip(page * pageSize)
+    .Take(pageSize)
+    .ToList();
+
+
+
+
+        var totalCount = db.BestMatchSearch
+            .FromSqlInterpolated($"SELECT * from best_match_search({searchString})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
 }

@@ -21,10 +21,10 @@ public class AssociatedWordsController : BaseController
 
     }
 
-    [HttpGet("{title}/associatedwords")]
-    public IActionResult GetAssociatedWords(string titleId)
+    [HttpGet("{word}")]
+    public IActionResult GetAssociatedWords(string word)
     {
-        (var associatedWords, var total) = _dataService.GetAssociatedWords(titleId, 0, 10);
+        (var associatedWords, var total) = _dataService.GetAssociatedWords(word, 0, 10);
         return Ok(associatedWords);
 
     }

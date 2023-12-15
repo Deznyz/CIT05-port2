@@ -210,7 +210,14 @@ namespace DataLayer
         Users GetUserByUsername(string username);
         bool VerifyPassword(Users user, string providedPassword);
 
+        /*-------------------------------------------------------------------------------
+                                    ------Users------
+        ---------------------------------------------------------------------------------*/
+        (IList<BestMatchSearch>, int count) GetBestMatchSearch(string searchString, int page, int pageSize);
+
+
     }
+
 
 
 }
