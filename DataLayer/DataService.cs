@@ -446,10 +446,9 @@ public class DataService : IDataService
     {
         var db = new PostgresDB();
 
-        var names = db.Names.Skip(page * pageSize).Take(pageSize).OrderBy(p => p.AvgNameRating).ToList();
+        var names = db.Names.OrderByDescending(p => p.AvgNameRating ?? double.MinValue).Skip(page * pageSize).Take(pageSize).ToList();
         return (names, db.Names.Count());
     }
-
 
     public Names? GetName(string nameId)
     {
