@@ -349,7 +349,7 @@ public class DataService : IDataService
     public (IList<MovieRatings>, int count) GetMovieRatings(int page, int pageSize)
     {
         var db = new PostgresDB();
-        var movieRatings = db.MoviesRatings.Skip(page * pageSize).Take(pageSize).ToList();
+        var movieRatings = db.MoviesRatings.OrderByDescending(p => p.AverageRating ?? double.MinValue).Skip(page * pageSize).Take(pageSize).ToList();
         return (movieRatings, db.MoviesRatings.Count());
     }
 
