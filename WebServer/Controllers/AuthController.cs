@@ -34,34 +34,37 @@ public class AuthController : BaseController
             return BadRequest(ModelState);
         }
 
-        // Vi henter brugeren ud fra brugernavn
-        var user = _dataService.GetUserByUsername(model.UserName);
-
-        // Hvis brugeren ikke findes returnes unauthorized response
-        if (user == null)
+        try
         {
-            return Unauthorized("Forkerte brugeroplysninger");
-        }
+            // Vi henter brugeren ud fra brugernavn
+            var user = _dataService.GetUserByUsername(model.UserName);
 
-        // Verificerer om adgangskoden er korrekt
-        bool isPasswordCorrect = VerifyPassword(user, model.Password);
+            // Verificerer om adgangskoden er korrekt
+            bool isPasswordCorrect = VerifyPassword(user, model.Password);
 
-        if (isPasswordCorrect)
-        {
-            // Hvis password er ok, oprettes or returneres en jwt token
-            var token = GenerateJwtToken(user.UserName);
-            return Ok(new
+            if (isPasswordCorrect)
             {
-                UserId = user.UserId,
-                Username = user.UserName,
-                Token = token
-            });
+                // Hvis password er ok, oprettes or returneres en jwt token
+                var token = GenerateJwtToken(user.UserName);
+                return Ok(new
+                {
+                    UserId = user.UserId,
+                    Username = user.UserName,
+                    Token = token
+                });
+            }
+            else
+            {
+                return Unauthorized("Forkerte brugeroplysninger");
+            }
         }
-        else
+        catch (KeyNotFoundException)
         {
-            return Unauthorized("Forkerte brugeroplysninger");
+            // Hvis brugeren ikke findes, sender vi en "HTTP 404 Not Found" retur
+            return NotFound("Brugeren blev ikke fundet");
         }
     }
+
 
     /*
      * GenerateJwtToken og VerifyPassword bør ikke være i AuthControlleren, da det er godt praksis at flytte "hjælpemetoder" til seperate klasser.
