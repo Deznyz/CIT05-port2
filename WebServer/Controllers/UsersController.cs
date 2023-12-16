@@ -1,6 +1,7 @@
 using DataLayer;
 using DataLayer.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Models;
 
@@ -64,10 +65,6 @@ public class UsersController : BaseController
     [HttpPost]
     public IActionResult CreateUser(CreateUsersModel model)
     {
-        // todo: man kunne med fordel bruge PasswordHasher, men det vil kræve at man udvider antal tilladte karakter i db
-        // i test-fasen kan vi dog udelade det helt
-        // var hasher = new PasswordHasher<Users>();
-
         var user = new Users
         {
             UserName = model.UserName,
@@ -76,6 +73,9 @@ public class UsersController : BaseController
 
         try
         {
+            var hasher = new PasswordHasher<Users>();
+            user.Password = hasher.HashPassword(user, model.Password);
+
             var createdUser = _dataService.CreateUser(user);
             return Ok(new
             {
