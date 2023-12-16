@@ -1,4 +1,6 @@
 ﻿using DataLayer;
+using DataLayer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -42,7 +44,7 @@ public class AuthController : BaseController
         }
 
         // Verificerer om adgangskoden er korrekt
-        bool isPasswordCorrect = _dataService.VerifyPassword(user, model.Password);
+        bool isPasswordCorrect = VerifyPassword(user, model.Password);
 
         if (isPasswordCorrect)
         {
@@ -60,6 +62,12 @@ public class AuthController : BaseController
             return Unauthorized("Forkerte brugeroplysninger");
         }
     }
+
+    /*
+     * GenerateJwtToken og VerifyPassword bør ikke være i AuthControlleren, da det er godt praksis at flytte "hjælpemetoder" til seperate klasser.
+     * Man kunne f.eks. lave en klasse der hedder JwtTokenGenerator, der sørger for oprette en token,
+     * og man kunne f.eks. lave en klasse der hedder PasswordHasherService, som sørger for at hashe og verificere adgangskoder
+     */
 
     private string GenerateJwtToken(string userName)
     {
@@ -83,5 +91,14 @@ public class AuthController : BaseController
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-   
+
+    public bool VerifyPassword(Users user, string enteredPassword)
+    {
+        var hasher = new PasswordHasher<Users>();
+        var result = hasher.VerifyHashedPassword(user, user.Password, enteredPassword);
+
+        return result == PasswordVerificationResult.Success;
+    }
+
+
 }

@@ -208,7 +208,6 @@ namespace DataLayer
         Users CreateUser(Users user);
         bool UpdateUserPassword(int id, string newPassword);
         Users GetUserByUsername(string username);
-        bool VerifyPassword(Users user, string providedPassword);
 
         /*-------------------------------------------------------------------------------
                                     ------Users------

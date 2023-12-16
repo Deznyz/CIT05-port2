@@ -1079,12 +1079,6 @@ public class DataService : IDataService
         return user ?? throw new KeyNotFoundException($"Der findes ikke nogle brugere med brugernavn {username}");
     }
 
-    public bool VerifyPassword(Users user, string providedPassword)
-    {
-        // todo: vi bør overveje at gøre brug af hashing her. Vi kan med fordel bruge PasswordHasher
-        // man vil aldrig gemme plain text adgangskoder i produktion
-        return user.Password == providedPassword;
-    }
 
     public bool DeleteUsers(Users users)
     {
