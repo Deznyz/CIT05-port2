@@ -1,6 +1,5 @@
 using DataLayer;
 using DataLayer.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Models;
 
@@ -22,9 +21,6 @@ public class BookmarksNameController : BaseController
     [HttpGet(Name = nameof(GetBookmarksName))]
     public IActionResult GetBookmarksName(int page = 0, int pageSize = 10)
     {
-        //var result = _dataService.GetAliases().Select(CreateAliasesModel);
-        //return Ok( result);
-
         (var bookmarksNames, var total) = _dataService.GetBookmarksName(page, pageSize);
 
         var items = bookmarksNames.Select(CreateBookmarksNameModel);
@@ -38,9 +34,6 @@ public class BookmarksNameController : BaseController
     [HttpGet("{userId}")]
     public IActionResult GetBookmarksName(int userId, int page=0, int pageSize=10)
     {
-        //var result = _dataService.GetAliases(titleId, 0, 10).Select(CreateAliasesModel);
-        //return Ok(result);
-
         (var bookmarksName, var total) = _dataService.GetBookmarksName(userId, page, pageSize);
 
         var items = bookmarksName.Select(CreateBookmarksNameModel);
@@ -74,9 +67,23 @@ public class BookmarksNameController : BaseController
 
         _dataService.CreateBookmarksName(bookmarksName);
 
-        var bookmarksNameUri = Url.Link("GetBookmarksName", new { userId = bookmarksName.UserId, nameId = bookmarksName.NameId });
+        var bookmarksNameUri = Url.Link("GetSpecificBookmarksName", new { userId = bookmarksName.UserId, nameId = bookmarksName.NameId });
 
         return Created(bookmarksNameUri, bookmarksName);
+    }
+
+    [HttpDelete]
+    public IActionResult DeleteBookmarksName(CreateBookmarksNameModel model)
+    {
+        var bookmarksName = new BookmarksName
+        {
+            UserId = model.UserId,
+            NameId = model.NameId
+        };
+
+        _dataService.DeleteBookmarksName(bookmarksName);
+
+        return Ok();
     }
 
     private BookmarksNameModel CreateBookmarksNameModel(BookmarksName bookmarksName)

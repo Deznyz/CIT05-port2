@@ -1,9 +1,10 @@
 ﻿using DataLayer;
+using DataLayer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using WebServer.Models;
 
@@ -32,34 +33,43 @@ public class AuthController : BaseController
             return BadRequest(ModelState);
         }
 
-        // Vi henter brugeren ud fra brugernavn
-        var user = _dataService.GetUserByUsername(model.UserName);
-
-        // Hvis brugeren ikke findes returnes unauthorized response
-        if (user == null)
+        try
         {
-            return Unauthorized("Forkerte brugeroplysninger");
-        }
+            // Vi henter brugeren ud fra brugernavn
+            var user = _dataService.GetUserByUsername(model.UserName);
 
-        // Verificerer om adgangskoden er korrekt
-        bool isPasswordCorrect = _dataService.VerifyPassword(user, model.Password);
+            // Verificerer om adgangskoden er korrekt
+            bool isPasswordCorrect = VerifyPassword(user, model.Password);
 
-        if (isPasswordCorrect)
-        {
-            // Hvis password er ok, oprettes or returneres en jwt token
-            var token = GenerateJwtToken(user.UserName);
-            return Ok(new
+            if (isPasswordCorrect)
             {
-                UserId = user.UserId,
-                Username = user.UserName,
-                Token = token
-            });
+                // Hvis password er ok, oprettes or returneres en jwt token
+                var token = GenerateJwtToken(user.UserName);
+                return Ok(new
+                {
+                    UserId = user.UserId,
+                    Username = user.UserName,
+                    Token = token
+                });
+            }
+            else
+            {
+                return Unauthorized("Forkerte brugeroplysninger");
+            }
         }
-        else
+        catch (KeyNotFoundException)
         {
-            return Unauthorized("Forkerte brugeroplysninger");
+            // Hvis brugeren ikke findes, sender vi en "HTTP 404 Not Found" retur
+            return NotFound("Brugeren blev ikke fundet");
         }
     }
+
+
+    /*
+     * GenerateJwtToken og VerifyPassword bør ikke være i AuthControlleren, da det er godt praksis at flytte "hjælpemetoder" til seperate klasser.
+     * Man kunne f.eks. lave en klasse der hedder JwtTokenGenerator, der sørger for oprette en token,
+     * og man kunne f.eks. lave en klasse der hedder PasswordHasherService, som sørger for at hashe og verificere adgangskoder
+     */
 
     private string GenerateJwtToken(string userName)
     {
@@ -83,5 +93,14 @@ public class AuthController : BaseController
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-   
+
+    public bool VerifyPassword(Users user, string enteredPassword)
+    {
+        var hasher = new PasswordHasher<Users>();
+        var result = hasher.VerifyHashedPassword(user, user.Password, enteredPassword);
+
+        return result == PasswordVerificationResult.Success;
+    }
+
+
 }

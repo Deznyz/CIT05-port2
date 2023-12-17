@@ -1,8 +1,4 @@
-﻿using System.ComponentModel;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using DataLayer.Models;
+﻿using DataLayer.Models;
 using DataLayer.PostgresModels;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -62,7 +58,6 @@ public class DataService : IDataService
             .FirstOrDefault(x => x.TitleId == alias.TitleId && x.Ordering == alias.Ordering);
         if (deleteAlias != null)
         {
-            //db.Aliases.Update
             db.Aliases.Remove(deleteAlias);
             return db.SaveChanges() > 0;
         }
@@ -120,8 +115,6 @@ public class DataService : IDataService
     public (IList<Genres>, int count) GetGenres(int page, int pageSize)
     {
         var db = new PostgresDB();
-        //var result = db.Aliases.ToList();
-        //return result;
 
         var genres = db.Genres.Skip(page * pageSize).Take(pageSize).ToList();
         return (genres, db.Genres.Count());
@@ -148,8 +141,6 @@ public class DataService : IDataService
         }
     }
 
-
-
     public Genres CreateGenres(Genres newGenre)
     {
         using var db = new PostgresDB();
@@ -166,7 +157,6 @@ public class DataService : IDataService
             .FirstOrDefault(x => x.TitleId == genre.TitleId && x.Genre == genre.Genre);
         if (genre != null)
         {
-            //db.Aliases.Update
             db.Genres.Remove(genre);
             return db.SaveChanges() > 0;
         }
@@ -180,8 +170,6 @@ public class DataService : IDataService
     public (IList<BookmarksName>, int count) GetBookmarksName(int page, int pageSize)
     {
         var db = new PostgresDB();
-        //var result = db.Aliases.ToList();
-        //return result;
 
         var bookmarksName = db.BookmarksNames.Skip(page * pageSize).Take(pageSize).ToList();
         return (bookmarksName, db.BookmarksNames.Count());
@@ -385,7 +373,6 @@ public class DataService : IDataService
             .FirstOrDefault(x => x.TitleId == movieRating.TitleId);
         if (movieRating != null)
         {
-            //db.Aliases.Update
             db.MoviesRatings.Remove(movieRating);
             return db.SaveChanges() > 0;
         }
@@ -520,9 +507,6 @@ public class DataService : IDataService
             return null;
         }
     }
-
-
-
 
     public EpisodeBelongsTo? GetEpisodeBelongsTo(string episodeTitleId, string parentTvShowTitleId)
     {
@@ -702,7 +686,6 @@ public class DataService : IDataService
         }
     }
 
-
     public Principals CreatePrincipals(Principals principals)
     {
         using var db = new PostgresDB();
@@ -860,7 +843,6 @@ public class DataService : IDataService
         }
 
     }
-
 
     public SearchHistory CreateSearchHistory(SearchHistory searchHistory)
     {
@@ -1079,12 +1061,6 @@ public class DataService : IDataService
         return user ?? throw new KeyNotFoundException($"Der findes ikke nogle brugere med brugernavn {username}");
     }
 
-    public bool VerifyPassword(Users user, string providedPassword)
-    {
-        // todo: vi bør overveje at gøre brug af hashing her. Vi kan med fordel bruge PasswordHasher
-        // man vil aldrig gemme plain text adgangskoder i produktion
-        return user.Password == providedPassword;
-    }
 
     public bool DeleteUsers(Users users)
     {
@@ -1288,7 +1264,7 @@ public class DataService : IDataService
         return (query, totalCount);
     }
 
-    //D11  skal rettes i
+    //D11
     public (IList<ExactSearch>, int count) GetExactSearch(string titleId, int page, int pageSize)
     {
         using var db = new PostgresDB();
@@ -1324,6 +1300,41 @@ public class DataService : IDataService
             .Count();
 
         return (query, totalCount);
+    }
+
+        public (IList<BestMatchSearch>, int count) GetBestMatchSearch(string searchString, int page, int pageSize)
+    {
+        using var db = new PostgresDB();
+
+        var query = db.BestMatchSearch
+    .FromSqlInterpolated($"SELECT * from best_match_search({searchString})")
+    .Skip(page * pageSize)
+    .Take(pageSize)
+    .ToList();
+
+
+
+
+        var totalCount = db.BestMatchSearch
+            .FromSqlInterpolated($"SELECT * from best_match_search({searchString})")
+            .Count();
+
+        return (query, totalCount);
+    }
+
+    public void CreateOrUpdateUserRating(UserRatings model)
+    {
+        using var db = new PostgresDB();
+
+        try
+        {
+            db.Database.ExecuteSqlRaw("SELECT * FROM createorupdateuserrating({0}, {1}, {2})", model.UserId, model.UserRating, model.TitleId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fejlbesked: {ex.Message}");
+            throw;
+        }
     }
 
 }

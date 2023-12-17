@@ -1,10 +1,5 @@
 using DataLayer;
-using DataLayer.Models;
-using DataLayer.PostgresModels;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using WebServer.Models;
 
 namespace WebServer.Controllers;
 
@@ -21,7 +16,7 @@ public class ExactSearchController : BaseController
 
     }
 
-    [HttpGet("{title}/ExactSearch")]
+    [HttpGet("{titleId}")]
     public IActionResult GetExactSearch(string titleId)
     {
         (var exactSearch, var total) = _dataService.GetExactSearch(titleId, 0, 10);

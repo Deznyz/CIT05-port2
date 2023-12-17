@@ -1,4 +1,5 @@
-﻿namespace DataLayer.Models
+﻿
+namespace DataLayer.Models
 {
     public class MovieTitles
     {
@@ -14,6 +15,7 @@
         public ICollection<Genres> Genres { get; set; }
         public ICollection<Wi> Wi { get; set; }
         public ICollection<Frontend> Frontend { get; set; }
+      
         public override string ToString()
         {
             return $"{TitleId}, {TitleType}, {PrimaryTitle}, {OriginalTitle}, {IsAdult}, {StartYear}, {EndYear}, {RuntimeMinutes}";

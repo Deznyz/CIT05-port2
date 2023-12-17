@@ -1,6 +1,4 @@
-﻿
-
-namespace DataLayer.Models
+﻿namespace DataLayer.Models
 {
     public class Principals
     {
@@ -11,6 +9,7 @@ namespace DataLayer.Models
         public string JobCategory {  get; set; }
         public string Job {  get; set; }
         public string Role {  get; set; }
+     
         public override string ToString()
         {
             return $"{PrincipalsId}, {TitleId}, {Ordering}, {NameId}, {JobCategory}, {Job}, {Role}";

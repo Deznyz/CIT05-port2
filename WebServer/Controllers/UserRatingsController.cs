@@ -1,6 +1,5 @@
 using DataLayer;
 using DataLayer.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Models;
 
@@ -45,18 +44,6 @@ public class UserRatingsController : BaseController
 
     }
 
-    //[HttpGet("{userId}/{titleId}", Name = nameof(GetUserRatings))]
-    //public IActionResult GetNameWorkedAs(int userId, string? titleId)
-    //{
-    //    var nameWorkedAs = _dataService.GetNameWorkedAs(userId, titleId);
-    //    if (userId == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return Ok(CreateUserRatingsModel(userRatings));
-    //}
-
     [HttpGet("{userId}/{titleId}", Name = nameof(GetUserRatings))]
     public IActionResult GetUserRatings(int userId, string titleId)
     {
@@ -75,12 +62,13 @@ public class UserRatingsController : BaseController
         var userRatings = new UserRatings
         {
             UserId = model.UserId,
-            TitleId = model.TitleId
+            TitleId = model.TitleId,
+            UserRating = model.UserRating
         };
 
-        _dataService.CreateUserRatings(userRatings);
+        _dataService.CreateOrUpdateUserRating(userRatings);
 
-        var userRatingsUri = Url.Link("GetUserRatings", new { userId = userRatings.UserId, titleId = userRatings.TitleId });
+        var userRatingsUri = Url.Link("GetUserRatings", new { userId = userRatings.UserId, titleId = userRatings.TitleId, userRating = userRatings.UserRating });
 
         return Created(userRatingsUri, userRatings);
     }
