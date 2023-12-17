@@ -50,6 +50,7 @@ namespace DataLayer
             optionsBuilder
                 .LogTo(Console.Out.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
             optionsBuilder.UseNpgsql("host=cit.ruc.dk;db=cit05;uid=cit05;pwd=qiez7UcmvbMq;port=5432");
+
         }
 
 
