@@ -17,19 +17,6 @@ public class WiController : ControllerBase
     }
 
 
-
-    //private WiModel CreateWiModel(Wi wi)
-    //{
-    //    return new WiModel
-    //    {
-    //        Url = GetUrl(nameof(GetWi), new { wi.TitleId, wi.Word, wi.Field }),
-    //        TitleId = wi.TitleId,
-    //        Word = wi.Word,
-    //        Field = wi.Field,
-    //        Lexeme = wi.Lexeme
-    //    };
-    //}
-
     private string? GetUrl(string name, object values)
     {
         return _linkGenerator.GetUriByName(HttpContext, name, values);
