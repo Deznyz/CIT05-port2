@@ -192,6 +192,7 @@ namespace DataLayer
         (IList<UserRatings>, int count) GetUserRatings(int? userId, int page, int pageSize);
         UserRatings GetUserRatings(int userId, string? titleId);
         UserRatings CreateUserRatings(UserRatings userRatings);
+        void CreateOrUpdateUserRating(UserRatings model);
         bool DeleteUserRatings(UserRatings userRatings);
         bool UpdateUserRating(int userId, string titleId, UserRatings updateInfo);
 

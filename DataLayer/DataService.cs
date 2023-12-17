@@ -1340,4 +1340,19 @@ public class DataService : IDataService
         return (query, totalCount);
     }
 
+    public void CreateOrUpdateUserRating(UserRatings model)
+    {
+        using var db = new PostgresDB();
+
+        try
+        {
+            db.Database.ExecuteSqlRaw("SELECT * FROM createorupdateuserrating({0}, {1}, {2})", model.UserId, model.UserRating, model.TitleId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fejlbesked: {ex.Message}");
+            throw;
+        }
+    }
+
 }
