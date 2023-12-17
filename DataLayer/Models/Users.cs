@@ -11,11 +11,6 @@ namespace DataLayer.Models
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
-        //public ICollection<BookmarksName> BookmarksName { get; set; }
-        //public ICollection<UserRatings> UserRatings { get; set; }
-        //public ICollection<BookmarksTitle> BookmarksTitles { get; set; }
-        //public ICollection<SearchHistory> SearchHistory { get; set; }
-
 
         public override string ToString()
         {

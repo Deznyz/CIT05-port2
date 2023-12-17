@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace DataLayer.Models
 {
@@ -15,10 +11,6 @@ namespace DataLayer.Models
         public string JobCategory {  get; set; }
         public string Job {  get; set; }
         public string Role {  get; set; }
-        //public Names Names { get; set; }
-        //public MovieTitles MovieTitles { get; set; }
-
-
         public override string ToString()
         {
             return $"{PrincipalsId}, {TitleId}, {Ordering}, {NameId}, {JobCategory}, {Job}, {Role}";
