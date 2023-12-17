@@ -22,8 +22,7 @@ namespace DataLayer
         public DbSet<Models.Principals> Principals { get; set; }
         public DbSet<Models.SearchHistory> SearchHistories { get; set; }
         public DbSet<Models.UserRatings> UserRatings { get; set; }
-        public DbSet<Models.Users> Users { get; set; }
-   //   public DbSet<Models.Wi> Wis { get; set; }  
+        public DbSet<Models.Users> Users { get; set; } 
         public DbSet<PostgresModels.StructuredStringSearch> StructuredStringSearch { get; set; }
         public DbSet<PostgresModels.CoActors> CoActors { get; set; }
         public DbSet<PostgresModels.NameSearchResult> NameSearchResults { get; set; }
@@ -160,7 +159,7 @@ namespace DataLayer
             ---------------------------------------------------------------------------------*/
             modelBuilder.Entity<Models.MovieRatings>().ToTable("movie_ratings");
             modelBuilder.Entity<Models.MovieRatings>().HasKey(x => new { x.TitleId });
-            
+
             modelBuilder.Entity<Models.MovieRatings>()
                 .Property(x => x.TitleId).HasColumnName("title_id");
             modelBuilder.Entity<Models.MovieRatings>()
@@ -169,7 +168,7 @@ namespace DataLayer
                 .Property(x => x.NumVotes).HasColumnName("num_votes");
             modelBuilder.Entity<Models.MovieRatings>()
                 .HasOne(rating => rating.MovieTitles)
-                .WithOne(title => title.MovieRatings)  
+                .WithOne(title => title.MovieRatings)
                 .HasForeignKey<Models.MovieRatings>(rating => rating.TitleId);
 
 
@@ -221,7 +220,7 @@ namespace DataLayer
             modelBuilder.Entity<Models.NameWorkedAs>().HasKey(x => new { x.NameId, x.Profession });
             modelBuilder.Entity<Models.NameWorkedAs>()
                 .Property(x => x.NameId).HasColumnName("name_id");
-            modelBuilder.Entity < Models.NameWorkedAs> ()
+            modelBuilder.Entity<Models.NameWorkedAs>()
                 .Property(x => x.Profession).HasColumnName("profession");
 
 
@@ -229,21 +228,21 @@ namespace DataLayer
             /*-------------------------------------------------------------------------------
                                     ------Principals------
             ---------------------------------------------------------------------------------*/
-            modelBuilder.Entity < Models.Principals> ().ToTable("principals");
+            modelBuilder.Entity<Models.Principals>().ToTable("principals");
             modelBuilder.Entity<Models.Principals>().HasKey(x => new { x.PrincipalsId });
             modelBuilder.Entity<Models.Principals>()
                 .Property(x => x.PrincipalsId).HasColumnName("principals_id");
-            modelBuilder.Entity < Models.Principals> ()
+            modelBuilder.Entity<Models.Principals>()
                 .Property(x => x.TitleId).HasColumnName("title_id");
-            modelBuilder.Entity < Models.Principals> ()
+            modelBuilder.Entity<Models.Principals>()
                 .Property(x => x.Ordering).HasColumnName("ordering");
-            modelBuilder.Entity < Models.Principals> ()
+            modelBuilder.Entity<Models.Principals>()
                 .Property(x => x.NameId).HasColumnName("name_id");
-            modelBuilder.Entity < Models.Principals> ()
+            modelBuilder.Entity<Models.Principals>()
                 .Property(x => x.JobCategory).HasColumnName("job_category");
-            modelBuilder.Entity < Models.Principals> ()
+            modelBuilder.Entity<Models.Principals>()
                 .Property(x => x.Job).HasColumnName("job");
-            modelBuilder.Entity < Models.Principals> ()
+            modelBuilder.Entity<Models.Principals>()
                 .Property(x => x.Role).HasColumnName("role");
 
 
@@ -252,13 +251,13 @@ namespace DataLayer
             /*-------------------------------------------------------------------------------
                                     ------SearchHistory------
             ---------------------------------------------------------------------------------*/
-            modelBuilder.Entity < Models.SearchHistory> ().ToTable("search_history");
+            modelBuilder.Entity<Models.SearchHistory>().ToTable("search_history");
             modelBuilder.Entity<Models.SearchHistory>().HasKey(x => new { x.SearchHistoryId });
-            modelBuilder.Entity < Models.SearchHistory> ()
+            modelBuilder.Entity<Models.SearchHistory>()
                 .Property(x => x.SearchHistoryId).HasColumnName("sh_id");
-            modelBuilder.Entity < Models.SearchHistory> ()
+            modelBuilder.Entity<Models.SearchHistory>()
                 .Property(x => x.UserId).HasColumnName("user_id");
-            modelBuilder.Entity < Models.SearchHistory> ()
+            modelBuilder.Entity<Models.SearchHistory>()
                 .Property(x => x.Searched).HasColumnName("searched");
 
 
@@ -266,13 +265,13 @@ namespace DataLayer
             /*-------------------------------------------------------------------------------
                                     ------UserRatings------
             ---------------------------------------------------------------------------------*/
-            modelBuilder.Entity < Models.UserRatings> ().ToTable("user_ratings");
+            modelBuilder.Entity<Models.UserRatings>().ToTable("user_ratings");
             modelBuilder.Entity<Models.UserRatings>().HasKey(x => new { x.TitleId, x.UserId });
-            modelBuilder.Entity < Models.UserRatings> ()
+            modelBuilder.Entity<Models.UserRatings>()
                 .Property(x => x.UserId).HasColumnName("user_id");
-            modelBuilder.Entity < Models.UserRatings> ()
+            modelBuilder.Entity<Models.UserRatings>()
                 .Property(x => x.UserRating).HasColumnName("user_rating");
-            modelBuilder.Entity < Models.UserRatings> ()
+            modelBuilder.Entity<Models.UserRatings>()
                 .Property(x => x.TitleId).HasColumnName("title_id");
 
 
@@ -281,13 +280,13 @@ namespace DataLayer
             /*-------------------------------------------------------------------------------
                                     ------Users------
             ---------------------------------------------------------------------------------*/
-            modelBuilder.Entity < Models.Users> ().ToTable("users");
+            modelBuilder.Entity<Models.Users>().ToTable("users");
             modelBuilder.Entity<Models.Users>().HasKey(x => new { x.UserId });
-            modelBuilder.Entity < Models.Users> ()
+            modelBuilder.Entity<Models.Users>()
                 .Property(x => x.UserId).HasColumnName("user_id");
-            modelBuilder.Entity < Models.Users> ()
+            modelBuilder.Entity<Models.Users>()
                 .Property(x => x.UserName).HasColumnName("username");
-            modelBuilder.Entity < Models.Users> ()
+            modelBuilder.Entity<Models.Users>()
                 .Property(x => x.Password).HasColumnName("password");
 
 
@@ -296,15 +295,15 @@ namespace DataLayer
             /*-------------------------------------------------------------------------------
                                     ------Wi------
             ---------------------------------------------------------------------------------*/
-            modelBuilder.Entity < Models.Wi> ().ToTable("wi");
+            modelBuilder.Entity<Models.Wi>().ToTable("wi");
             modelBuilder.Entity<Models.Wi>().HasKey(x => new { x.TitleId, x.Word, x.Field });
-            modelBuilder.Entity < Models.Wi> ()
+            modelBuilder.Entity<Models.Wi>()
                 .Property(x => x.TitleId).HasColumnName("tconst");
-            modelBuilder.Entity < Models.Wi> ()
+            modelBuilder.Entity<Models.Wi>()
                 .Property(x => x.Word).HasColumnName("word");
-            modelBuilder.Entity < Models.Wi> ()
+            modelBuilder.Entity<Models.Wi>()
                 .Property(x => x.Field).HasColumnName("field");
-            modelBuilder.Entity < Models.Wi> ()
+            modelBuilder.Entity<Models.Wi>()
                 .Property(x => x.Lexeme).HasColumnName("lexeme");
 
 
@@ -316,15 +315,15 @@ namespace DataLayer
                 .Property(x => x.TitleId).HasColumnName("tconst");
             modelBuilder.Entity<PostgresModels.StructuredStringSearch>()
                 .Property(x => x.PrimaryTitle).HasColumnName("primary_title");
-            
+
 
 
             /*-------------------------------------------------------------------------------
                                     ------CoActors------
             ---------------------------------------------------------------------------------*/
             modelBuilder.Entity<PostgresModels.CoActors>().HasNoKey();
-            modelBuilder.Entity<PostgresModels.CoActors> ()
-                .Property(x=> x.NameId).HasColumnName("name_id");
+            modelBuilder.Entity<PostgresModels.CoActors>()
+                .Property(x => x.NameId).HasColumnName("name_id");
             modelBuilder.Entity<PostgresModels.CoActors>()
                 .Property(x => x.NumberOfCoActors).HasColumnName("num_co_acted");
 
@@ -334,7 +333,7 @@ namespace DataLayer
             ---------------------------------------------------------------------------------*/
             modelBuilder.Entity<PostgresModels.NameSearchResult>().HasNoKey();
             modelBuilder.Entity<PostgresModels.NameSearchResult>()
-                .Property(x=>x.NameId).HasColumnName("name_id");
+                .Property(x => x.NameId).HasColumnName("name_id");
             modelBuilder.Entity<PostgresModels.NameSearchResult>()
                 .Property(x => x.Name).HasColumnName("name");
             modelBuilder.Entity<PostgresModels.NameSearchResult>()
@@ -346,7 +345,7 @@ namespace DataLayer
             ---------------------------------------------------------------------------------*/
             modelBuilder.Entity<PostgresModels.WeightedAverage>().HasNoKey();
             modelBuilder.Entity<PostgresModels.WeightedAverage>()
-                .Property(x=>x.WeightedAverageForNameId).HasColumnName("get_weighted_average");
+                .Property(x => x.WeightedAverageForNameId).HasColumnName("get_weighted_average");
 
 
             /*-------------------------------------------------------------------------------
@@ -354,9 +353,9 @@ namespace DataLayer
             ---------------------------------------------------------------------------------*/
             modelBuilder.Entity<PostgresModels.CastRatingsMovieId>().HasNoKey();
             modelBuilder.Entity<PostgresModels.CastRatingsMovieId>()
-                .Property(x=>x.NameId).HasColumnName("name_id");
+                .Property(x => x.NameId).HasColumnName("name_id");
             modelBuilder.Entity<PostgresModels.CastRatingsMovieId>()
-                .Property(x=>x.Name).HasColumnName("name");
+                .Property(x => x.Name).HasColumnName("name");
             modelBuilder.Entity<PostgresModels.CastRatingsMovieId>()
                 .Property(x => x.Rating).HasColumnName("rating");
 
@@ -426,7 +425,6 @@ namespace DataLayer
             modelBuilder.Entity<PostgresModels.BestMatchSearch>()
                 .Property(x => x.NumberOfMatches).HasColumnName("number_of_matches");
         }
-
 
     }
 }
