@@ -79,6 +79,20 @@ public class BookmarksTitleController : BaseController
         return Created(bookmarksTitleUri, bookmarksTitle);
     }
 
+    [HttpDelete]
+    public IActionResult DeleteBookmarksTitle(CreateBookmarksTitleModel model)
+    {
+        var bookmarksTitle = new BookmarksTitle
+        {
+            UserId = model.UserId,
+            TitleId = model.TitleId
+        };
+
+        _dataService.DeleteBookmarksTitle(bookmarksTitle);
+
+        return Ok();
+    }
+
 
 
     private BookmarksTitleModel CreateBookmarksTitleModel(BookmarksTitle bookmarksTitle)
