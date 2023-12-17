@@ -1,6 +1,5 @@
 using DataLayer;
 using DataLayer.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Data;
@@ -109,8 +108,5 @@ public class PrincipalsController : BaseController
             Role = principals.Role
         };
     }
-
-
-
 }
 

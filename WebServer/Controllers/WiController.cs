@@ -1,8 +1,5 @@
 using DataLayer;
-using DataLayer.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using WebServer.Models;
 
 namespace WebServer.Controllers;
 

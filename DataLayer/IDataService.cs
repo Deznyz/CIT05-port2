@@ -1,7 +1,5 @@
 ﻿using DataLayer.Models;
 using DataLayer.PostgresModels;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
-using System.Collections.Generic;
 
 namespace DataLayer
 {
@@ -49,6 +47,7 @@ namespace DataLayer
         bool DeleteEpisodeBelongsTo(EpisodeBelongsTo episodeBelongsTo);
         bool UpdateEpisodeBelongsTo(string episodeTitleId, string ParentTvShowTitleId, EpisodeBelongsTo updateInfo);
 
+
         /*-------------------------------------------------------------------------------
                                     ------Frontend------
         ---------------------------------------------------------------------------------*/
@@ -58,8 +57,6 @@ namespace DataLayer
         Frontend CreateFrontend(Frontend frontend);
         bool DeleteFrontend(Frontend frontend);
         bool UpdateFrontend(string titleId, string poster, Frontend frontend);
-
-
 
 
        /*-------------------------------------------------------------------------------
@@ -83,7 +80,6 @@ namespace DataLayer
         (IList<CastRatingsMovieId>, int count) GetCastRatingsMovieId(string movieId, int page, int pageSize);
         //D8.2
         (IList<CastRatingsMovieTitles>, int count) GetCastRatingsMovieTitles(string movieTitle, int page, int pageSize);
-
 
 
 
@@ -204,8 +200,8 @@ namespace DataLayer
         Users CreateUsers(Users users);
         bool DeleteUsers(Users users);
         bool UpdateUser(int userId, Users updateInfo);
+
         //D1
-        //bool CreateUser(string username, string password);
         Users CreateUser(Users user);
         bool UpdateUserPassword(int id, string newPassword);
         Users GetUserByUsername(string username);
