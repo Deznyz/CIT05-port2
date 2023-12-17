@@ -51,7 +51,7 @@ public class BookmarksTitleController : BaseController
 
     }
 
-    [HttpGet("{userId}/{nameId}", Name = nameof(GetSpecificBookmarksTitle))]
+    [HttpGet("{userId}/{titleId}", Name = nameof(GetSpecificBookmarksTitle))]
     public IActionResult GetSpecificBookmarksTitle(int userId, string titleId)
     {
         var bookmarksTitle = _dataService.GetSpecificBookmarksTitle(userId, titleId);
@@ -74,9 +74,23 @@ public class BookmarksTitleController : BaseController
 
         _dataService.CreateBookmarksTitle(bookmarksTitle);
 
-        var bookmarksTitleUri = Url.Link("GetBookmarksTitle", new { userId = bookmarksTitle.UserId, nameId = bookmarksTitle.TitleId });
+        var bookmarksTitleUri = Url.Link("GetSpecificBookmarksTitle", new { userId = bookmarksTitle.UserId, titleId = bookmarksTitle.TitleId });
 
         return Created(bookmarksTitleUri, bookmarksTitle);
+    }
+
+    [HttpDelete]
+    public IActionResult DeleteBookmarksTitle(CreateBookmarksTitleModel model)
+    {
+        var bookmarksTitle = new BookmarksTitle
+        {
+            UserId = model.UserId,
+            TitleId = model.TitleId
+        };
+
+        _dataService.DeleteBookmarksTitle(bookmarksTitle);
+
+        return Ok();
     }
 
 

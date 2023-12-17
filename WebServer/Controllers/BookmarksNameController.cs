@@ -74,9 +74,23 @@ public class BookmarksNameController : BaseController
 
         _dataService.CreateBookmarksName(bookmarksName);
 
-        var bookmarksNameUri = Url.Link("GetBookmarksName", new { userId = bookmarksName.UserId, nameId = bookmarksName.NameId });
+        var bookmarksNameUri = Url.Link("GetSpecificBookmarksName", new { userId = bookmarksName.UserId, nameId = bookmarksName.NameId });
 
         return Created(bookmarksNameUri, bookmarksName);
+    }
+
+    [HttpDelete]
+    public IActionResult DeleteBookmarksName(CreateBookmarksNameModel model)
+    {
+        var bookmarksName = new BookmarksName
+        {
+            UserId = model.UserId,
+            NameId = model.NameId
+        };
+
+        _dataService.DeleteBookmarksName(bookmarksName);
+
+        return Ok();
     }
 
     private BookmarksNameModel CreateBookmarksNameModel(BookmarksName bookmarksName)
