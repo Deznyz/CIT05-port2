@@ -1,6 +1,5 @@
 using DataLayer;
 using DataLayer.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Models;
 
@@ -99,10 +98,4 @@ public class KnownForController : BaseController
             NameId = knownFor.NameId
         };
     }
-
-    //private string? GetUrl(string name, object values)
-    //{
-    //    return _linkGenerator.GetUriByName(HttpContext, name, values);
-    //}
-
 }

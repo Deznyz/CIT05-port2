@@ -1,6 +1,5 @@
 using DataLayer;
 using DataLayer.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Models;
 
@@ -22,9 +21,6 @@ public class EpisodeBelongsToController : BaseController
     [HttpGet(Name = nameof(GetEpisodeBelongsTos))]
     public IActionResult GetEpisodeBelongsTos(int page = 0, int pageSize = 10)
     {
-        //var result = _dataService.GetAliases().Select(CreateAliasesModel);
-        //return Ok( result);
-
         (var episodeBelongsTo, var total) = _dataService.GetEpisodeBelongsTos(page, pageSize);
 
         var items = episodeBelongsTo.Select(CreateEpisodeBelongsToModel);
@@ -38,9 +34,6 @@ public class EpisodeBelongsToController : BaseController
     [HttpGet("{parentTvShowTitleId}")]
     public IActionResult GetEpisodeBelongsTosByParentTvShowTitleId(string parentTvShowTitleId, int page=0, int pageSize=10)
     {
-        //var result = _dataService.GetAliases(titleId, 0, 10).Select(CreateAliasesModel);
-        //return Ok(result);
-
         (var episodeBelongsTo, var total) = _dataService.GetEpisodeBelongsTosByParentTvShowTitleId(parentTvShowTitleId, page, pageSize);
 
         var items = episodeBelongsTo.Select(CreateEpisodeBelongsToModel);

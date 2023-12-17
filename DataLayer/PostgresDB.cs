@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 
 namespace DataLayer
@@ -29,7 +23,7 @@ namespace DataLayer
         public DbSet<Models.SearchHistory> SearchHistories { get; set; }
         public DbSet<Models.UserRatings> UserRatings { get; set; }
         public DbSet<Models.Users> Users { get; set; }
-        public DbSet<Models.Wi> Wis { get; set; }
+   //   public DbSet<Models.Wi> Wis { get; set; }  
         public DbSet<PostgresModels.StructuredStringSearch> StructuredStringSearch { get; set; }
         public DbSet<PostgresModels.CoActors> CoActors { get; set; }
         public DbSet<PostgresModels.NameSearchResult> NameSearchResults { get; set; }

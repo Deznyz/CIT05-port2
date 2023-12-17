@@ -1,6 +1,5 @@
 using DataLayer;
 using DataLayer.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebServer.Models;
 
@@ -22,9 +21,6 @@ public class BookmarksTitleController : BaseController
     [HttpGet(Name = nameof(GetBookmarksTitles))]
     public IActionResult GetBookmarksTitles(int page = 0, int pageSize = 10)
     {
-        //var result = _dataService.GetAliases().Select(CreateAliasesModel);
-        //return Ok( result);
-
         (var bookmarksTitle, var total) = _dataService.GetBookmarksTitles(page, pageSize);
 
         var items = bookmarksTitle.Select(CreateBookmarksTitleModel);
@@ -38,9 +34,6 @@ public class BookmarksTitleController : BaseController
     [HttpGet("{userId}")]
     public IActionResult GetBookmarksTitles(int userId, int page=0, int pageSize=10)
     {
-        //var result = _dataService.GetAliases(titleId, 0, 10).Select(CreateAliasesModel);
-        //return Ok(result);
-
         (var bookmarksTitles, var total) = _dataService.GetBookmarksTitles(userId, page, pageSize);
 
         var items = bookmarksTitles.Select(CreateBookmarksTitleModel);
@@ -90,7 +83,4 @@ public class BookmarksTitleController : BaseController
             UserId = bookmarksTitle.UserId
         };
     }
-
-
-
 }
