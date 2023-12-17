@@ -1,10 +1,5 @@
 using DataLayer;
-using DataLayer.Models;
-using DataLayer.PostgresModels;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using WebServer.Models;
 
 namespace WebServer.Controllers;
 
